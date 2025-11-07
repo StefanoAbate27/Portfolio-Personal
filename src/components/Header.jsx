@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Download } from "lucide-react"; // Importamos ícono Download
+import { Menu, X, Download } from "lucide-react";
 import { Link } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
@@ -54,9 +54,10 @@ export default function Header() {
     },
   };
 
-  // Función para abrir PDF en nueva pestaña
+  // ✅ Función corregida: abre el PDF desde la ruta absoluta del sitio (funciona en Vercel)
   const openCV = () => {
-    window.open("/cv.pdf", "_blank", "noopener,noreferrer");
+    const url = `${window.location.origin}/cv.pdf`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -119,15 +120,16 @@ export default function Header() {
             {texts[language].contacto}
           </Link>
 
-          {/* Botón CV con vista previa en nueva pestaña */}
+          {/* --- Botón CV escritorio --- */}
           <button
-          onClick={openCV}
-          className="ml-3 flex items-center gap-1 px-4 py-1.5 rounded-full bg-gray-900 hover:bg-blue-600 text-white text-sm font-medium shadow-md transition-all whitespace-nowrap"
+            onClick={openCV}
+            className="ml-3 flex items-center gap-1 px-4 py-1.5 rounded-full bg-gray-900 hover:bg-blue-600 text-white text-sm font-medium shadow-md transition-all whitespace-nowrap"
           >
-          <Download size={16} />
-          {texts[language].descargarCV}
+            <Download size={16} />
+            {texts[language].descargarCV}
           </button>
 
+          {/* --- Cambiar idioma --- */}
           <div className="flex items-center gap-3">
             <img
               src={spainFlag}
@@ -155,7 +157,7 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* --- Botón Hamburguesa flotante (solo móvil) --- */}
+      {/* --- Botón Hamburguesa (móvil) --- */}
       <button
         className="md:hidden fixed top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-gray-900 text-white shadow-lg z-50"
         onClick={() => setMenuOpen(true)}
@@ -163,7 +165,7 @@ export default function Header() {
         <Menu size={26} />
       </button>
 
-      {/* --- Overlay móvil pantalla completa --- */}
+      {/* --- Menú móvil --- */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -181,70 +183,37 @@ export default function Header() {
               <X size={22} />
             </button>
 
-            {/* Links menú */}
+            {/* Navegación móvil */}
             <nav className="flex flex-col gap-8 text-2xl font-semibold">
-              <Link
-                to="inicio"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                spy={true}
-                activeClass={activeClass}
-                onClick={() => setMenuOpen(false)}
-                className="hover:text-blue-500 cursor-pointer"
-              >
-                {texts[language].inicio}
-              </Link>
-              <Link
-                to="proyectos"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                spy={true}
-                activeClass={activeClass}
-                onClick={() => setMenuOpen(false)}
-                className="hover:text-blue-500 cursor-pointer"
-              >
-                {texts[language].proyectos}
-              </Link>
-              <Link
-                to="skills"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                spy={true}
-                activeClass={activeClass}
-                onClick={() => setMenuOpen(false)}
-                className="hover:text-blue-500 cursor-pointer"
-              >
-                {texts[language].skills}
-              </Link>
-              <Link
-                to="contacto"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                spy={true}
-                activeClass={activeClass}
-                onClick={() => setMenuOpen(false)}
-                className="hover:text-blue-500 cursor-pointer"
-              >
-                {texts[language].contacto}
-              </Link>
+              {["inicio", "proyectos", "skills", "contacto"].map((section) => (
+                <Link
+                  key={section}
+                  to={section}
+                  smooth={true}
+                  duration={700}
+                  offset={-80}
+                  spy={true}
+                  activeClass={activeClass}
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-blue-500 cursor-pointer"
+                >
+                  {texts[language][section]}
+                </Link>
+              ))}
 
-              {/* Botón CV móvil */}
+              {/* --- Botón CV móvil --- */}
               <button
-              onClick={() => {
-              openCV();
-              setMenuOpen(false);
-              }}
-              className="flex items-center gap-1 px-6 py-2 rounded-full bg-gray-900 text-white hover:bg-blue-600 text-lg font-medium shadow-md transition-all whitespace-nowrap"
+                onClick={() => {
+                  openCV();
+                  setMenuOpen(false);
+                }}
+                className="flex items-center gap-1 px-6 py-2 rounded-full bg-gray-900 text-white hover:bg-blue-600 text-lg font-medium shadow-md transition-all whitespace-nowrap"
               >
-              <Download size={18} />
-              {texts[language].descargarCV}
+                <Download size={18} />
+                {texts[language].descargarCV}
               </button>
 
-              {/* Idiomas */}
+              {/* --- Cambio de idioma móvil --- */}
               <div className="flex items-center gap-4 mt-6">
                 <img
                   src={spainFlag}
