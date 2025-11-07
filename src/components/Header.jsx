@@ -54,11 +54,11 @@ export default function Header() {
     },
   };
 
-  // ✅ Función corregida: abre el PDF desde la ruta absoluta del sitio (funciona en Vercel)
-  const openCV = () => {
-    const url = `${window.location.origin}/cv.pdf`;
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+ // Función para abrir PDF en nueva pestaña (compatible con Vercel)
+const openCV = () => {
+  const cvUrl = `${import.meta.env.BASE_URL}cv.pdf`;
+  window.open(cvUrl, "_blank", "noopener,noreferrer");
+};
 
   return (
     <div
