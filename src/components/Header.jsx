@@ -54,11 +54,12 @@ export default function Header() {
     },
   };
 
- // Función para abrir PDF en nueva pestaña (compatible con Vercel)
-const openCV = () => {
-  const cvUrl = `${import.meta.env.BASE_URL}cv.pdf`;
-  window.open(cvUrl, "_blank", "noopener,noreferrer");
-};
+  // ✅ Abre la vista previa de tu CV en Google Drive
+  const openCV = () => {
+    const driveURL =
+      "https://drive.google.com/file/d/110GdOL-oia0HA4YWln-85SQ2LK3kLlSD/view?usp=sharing";
+    window.open(driveURL, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div
