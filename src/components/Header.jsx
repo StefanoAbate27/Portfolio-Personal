@@ -1,254 +1,133 @@
-import React, { useState, useEffect } from "react";
-import { Menu, X, Download } from "lucide-react";
-import { Link } from "react-scroll";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { Sun, Moon, Menu, X, ArrowUpRight } from "lucide-react";
+import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from "../context/LanguageContext";
-
-import spainFlag from "../assets/spain.png";
-import usaFlag from "../assets/usa.png";
+import { useTheme } from "../context/ThemeContext";
+import { scrollToId } from "../hooks/useSmoothScroll";
+import SaaeLogo from "./SaaeLogo";
 
 export default function Header() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [hovering, setHovering] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const { language, toggleLanguage } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+  const [open, setOpen] = useState(false);
+  const overlayRef = useRef(null);
+  const tl = useRef(null);
+
+  const nav = {
+    es: { fundador: "Fundador", nosotros: "Nosotros", proyectos: "Proyectos", contacto: "Contacto", cta: "Empecemos" },
+    en: { fundador: "Founder", nosotros: "About", proyectos: "Work", contacto: "Contact", cta: "Start" },
+  }[language];
+
+  const links = [
+    ["fundador", nav.fundador],
+    ["nosotros", nav.nosotros],
+    ["proyectos", nav.proyectos],
+    ["contacto", nav.contacto],
+  ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      const inicioSection = document.getElementById("inicio");
-      if (!inicioSection) return;
+    const ctx = gsap.context(() => {
+      tl.current = gsap
+        .timeline({ paused: true })
+        .set(overlayRef.current, { pointerEvents: "auto" })
+        .fromTo(overlayRef.current, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.6, ease: "power4.inOut" })
+        .fromTo(".menu-link-inner", { yPercent: 120 }, { yPercent: 0, stagger: 0.06, duration: 0.6, ease: "power3.out" }, "-=0.25")
+        .fromTo(".menu-foot", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3");
+    });
+    return () => ctx.revert();
+  }, [language]);
 
-      const rect = inicioSection.getBoundingClientRect();
-      const inView = rect.top <= 0 && rect.bottom > window.innerHeight / 2;
+  useEffect(() => {
+    if (!tl.current) return;
+    if (open) { tl.current.play(); window.__lenis && window.__lenis.stop(); }
+    else { tl.current.reverse(); window.__lenis && window.__lenis.start(); }
+  }, [open]);
 
-      setIsVisible(inView);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const linkClass =
-    "cursor-pointer transition-colors duration-300 px-2 py-1 rounded-md text-base sm:text-sm";
-  const activeClass = "text-blue-500 font-semibold";
-
-  const texts = {
-    es: {
-      inicio: "Inicio",
-      proyectos: "Proyectos",
-      skills: "Habilidades",
-      contacto: "Contacto",
-      descargarCV: "Descargar CV",
-    },
-    en: {
-      inicio: "Home",
-      proyectos: "Projects",
-      skills: "Skills",
-      contacto: "Contact",
-      descargarCV: "Download CV",
-    },
-  };
-
-  // ✅ Abre la vista previa de tu CV en Google Drive
-  const openCV = () => {
-    const driveURL =
-      "https://drive.google.com/file/d/110GdOL-oia0HA4YWln-85SQ2LK3kLlSD/view?usp=sharing";
-    window.open(driveURL, "_blank", "noopener,noreferrer");
-  };
+  const go = (id) => { setOpen(false); setTimeout(() => scrollToId(id, -20), 120); };
 
   return (
-    <div
-      className="fixed top-0 left-0 w-full z-50"
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-    >
-      {/* --- Vista Escritorio --- */}
-      <header
-        className={`hidden md:block fixed top-4 left-1/2 transform -translate-x-1/2 transition-all duration-500 z-40 ${
-          isVisible || hovering
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-10"
-        }`}
-      >
-        <nav className="bg-white/90 backdrop-blur-md rounded-full shadow-lg px-6 py-3 border border-slate-200 flex items-center gap-6">
-          <Link
-            to="inicio"
-            smooth={true}
-            duration={700}
-            offset={-80}
-            spy={true}
-            activeClass={activeClass}
-            className={`${linkClass} text-slate-800 hover:text-blue-500`}
-          >
-            {texts[language].inicio}
-          </Link>
-          <Link
-            to="proyectos"
-            smooth={true}
-            duration={700}
-            offset={-80}
-            spy={true}
-            activeClass={activeClass}
-            className={`${linkClass} text-slate-700 hover:text-blue-500`}
-          >
-            {texts[language].proyectos}
-          </Link>
-          <Link
-            to="skills"
-            smooth={true}
-            duration={700}
-            offset={-80}
-            spy={true}
-            activeClass={activeClass}
-            className={`${linkClass} text-slate-700 hover:text-blue-500`}
-          >
-            {texts[language].skills}
-          </Link>
-          <Link
-            to="contacto"
-            smooth={true}
-            duration={700}
-            offset={-80}
-            spy={true}
-            activeClass={activeClass}
-            className={`${linkClass} text-slate-700 hover:text-blue-500`}
-          >
-            {texts[language].contacto}
-          </Link>
-
-          {/* --- Botón CV escritorio --- */}
-          <button
-            onClick={openCV}
-            className="ml-3 flex items-center gap-1 px-4 py-1.5 rounded-full bg-gray-900 hover:bg-blue-600 text-white text-sm font-medium shadow-md transition-all whitespace-nowrap"
-          >
-            <Download size={16} />
-            {texts[language].descargarCV}
+    <>
+      <header className="fixed inset-x-0 top-0 z-[95] flex justify-center px-4 py-4">
+        <div className="flex items-center gap-1 rounded-full border border-line/12 bg-bg/75 px-2 py-1.5 shadow-[0_10px_40px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+          {/* brand */}
+          <button onClick={() => go("inicio")} data-cursor="Top" className="group flex items-center gap-2 rounded-full px-2.5 py-1.5 text-ink">
+            <SaaeLogo size={22} tone="auto" className="transition-transform duration-500 ease-expo group-hover:scale-110" />
+            <span className="font-display text-sm font-semibold tracking-[0.14em]">SAAE</span>
           </button>
 
-          {/* --- Cambiar idioma --- */}
-          <div className="flex items-center gap-3">
-            <img
-              src={spainFlag}
-              alt="Español"
-              title="Español"
-              onClick={() => language !== "es" && toggleLanguage()}
-              className={`w-6 h-6 rounded-md border ${
-                language === "es"
-                  ? "border-blue-500 opacity-100"
-                  : "border-transparent opacity-50 hover:opacity-80"
-              } transition-opacity cursor-pointer`}
-            />
-            <img
-              src={usaFlag}
-              alt="English"
-              title="English"
-              onClick={() => language !== "en" && toggleLanguage()}
-              className={`w-6 h-6 rounded-md border ${
-                language === "en"
-                  ? "border-blue-500 opacity-100"
-                  : "border-transparent opacity-50 hover:opacity-80"
-              } transition-opacity cursor-pointer`}
-            />
+          {/* desktop inline nav */}
+          <span className="mx-1 hidden h-4 w-px bg-line/15 md:block" />
+          <nav className="hidden items-center md:flex">
+            {links.map(([id, label]) => (
+              <button key={id} onClick={() => go(id)}
+                className="group relative rounded-full px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.14em] text-ink/70 transition-colors hover:text-ink">
+                {label}
+                <span className="absolute inset-x-3.5 -bottom-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-expo group-hover:scale-x-100" />
+              </button>
+            ))}
+          </nav>
+
+          <span className="mx-1 hidden h-4 w-px bg-line/15 sm:block" />
+
+          {/* language unicolor */}
+          <div className="hidden items-center sm:flex">
+            <button onClick={() => language !== "es" && toggleLanguage()}
+              className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "es" ? "text-ink" : "text-muted hover:text-ink"}`}>ES</button>
+            <button onClick={() => language !== "en" && toggleLanguage()}
+              className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "en" ? "text-ink" : "text-muted hover:text-ink"}`}>EN</button>
           </div>
-        </nav>
+
+          {/* theme */}
+          <button onClick={toggleTheme} aria-label="Theme"
+            className="grid h-8 w-8 place-items-center rounded-full text-ink transition-colors hover:text-accent">
+            {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
+
+          {/* mobile menu */}
+          <button onClick={() => setOpen((v) => !v)} aria-label="Menu"
+            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg md:hidden">
+            {open ? <X size={15} /> : <Menu size={15} />}
+          </button>
+        </div>
       </header>
 
-      {/* --- Botón Hamburguesa (móvil) --- */}
-      <button
-        className="md:hidden fixed top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-gray-900 text-white shadow-lg z-50"
-        onClick={() => setMenuOpen(true)}
+      {/* Mobile expandable overlay */}
+      <div
+        ref={overlayRef}
+        style={{ clipPath: "inset(0 0 100% 0)", pointerEvents: "none" }}
+        className="fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 pb-8 pt-24 md:hidden"
       >
-        <Menu size={26} />
-      </button>
-
-      {/* --- Menú móvil --- */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="fixed inset-0 bg-white text-gray-900 flex flex-col items-center justify-center z-50"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.4 }}
-          >
-            {/* Botón cerrar */}
-            <button
-              className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 text-white shadow-md"
-              onClick={() => setMenuOpen(false)}
-            >
-              <X size={22} />
+        <nav className="flex flex-col">
+          {links.map(([id, label], i) => (
+            <button key={id} onClick={() => go(id)}
+              className="group flex items-center justify-between overflow-hidden border-b border-line/12 py-4 text-left">
+              <span className="menu-link-inner block">
+                <span className="display-hero text-5xl text-ink transition-colors duration-300 group-hover:text-accent">{label}</span>
+              </span>
+              <span className="menu-link-inner block label text-muted">0{i + 1}</span>
             </button>
+          ))}
+        </nav>
 
-            {/* Navegación móvil */}
-            <nav className="flex flex-col gap-8 text-2xl font-semibold">
-              {["inicio", "proyectos", "skills", "contacto"].map((section) => (
-                <Link
-                  key={section}
-                  to={section}
-                  smooth={true}
-                  duration={700}
-                  offset={-80}
-                  spy={true}
-                  activeClass={activeClass}
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-blue-500 cursor-pointer"
-                >
-                  {texts[language][section]}
-                </Link>
-              ))}
-
-              {/* --- Botón CV móvil --- */}
-              <button
-                onClick={() => {
-                  openCV();
-                  setMenuOpen(false);
-                }}
-                className="flex items-center gap-1 px-6 py-2 rounded-full bg-gray-900 text-white hover:bg-blue-600 text-lg font-medium shadow-md transition-all whitespace-nowrap"
-              >
-                <Download size={18} />
-                {texts[language].descargarCV}
-              </button>
-
-              {/* --- Cambio de idioma móvil --- */}
-              <div className="flex items-center gap-4 mt-6">
-                <img
-                  src={spainFlag}
-                  alt="Español"
-                  title="Español"
-                  onClick={() => {
-                    if (language !== "es") toggleLanguage();
-                    setMenuOpen(false);
-                  }}
-                  className={`w-8 h-8 rounded-md border ${
-                    language === "es"
-                      ? "border-blue-500 opacity-100"
-                      : "border-transparent opacity-50 hover:opacity-80"
-                  } transition-opacity cursor-pointer`}
-                />
-                <img
-                  src={usaFlag}
-                  alt="English"
-                  title="English"
-                  onClick={() => {
-                    if (language !== "en") toggleLanguage();
-                    setMenuOpen(false);
-                  }}
-                  className={`w-8 h-8 rounded-md border ${
-                    language === "en"
-                      ? "border-blue-500 opacity-100"
-                      : "border-transparent opacity-50 hover:opacity-80"
-                  } transition-opacity cursor-pointer`}
-                />
-              </div>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        <div className="menu-foot flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <span className="label text-muted">{language === "es" ? "Escríbenos" : "Reach us"}</span>
+            <a href="mailto:stefanoabate.dev@gmail.com" className="font-display text-lg text-ink">stefanoabate.dev@gmail.com</a>
+          </div>
+          <div className="flex items-center gap-3">
+            {[[FaLinkedinIn, "https://www.linkedin.com/in/stefano-abate-75b362345"], [FaGithub, "https://github.com/StefanoAbate27"], [FaWhatsapp, "https://wa.me/584247582675"]].map(([Icon, href], i) => (
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                className="grid h-11 w-11 place-items-center rounded-full border border-line/15 text-ink">
+                <Icon size={16} />
+              </a>
+            ))}
+            <button onClick={() => go("contacto")} className="ml-auto inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 label text-bg">
+              {nav.cta} <ArrowUpRight size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

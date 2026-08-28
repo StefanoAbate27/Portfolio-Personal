@@ -1,25 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-
-:root{
-  --accent: #00c2a8;
-  --muted: #6b7280;
+/* ============================================================
+   SAAE · MANUAL DE MARCA 2026
+   Azul Marino #1B2A4A · Crema #E9E4D6 · Ocre #C99A46 · Arena #E0DAC8
+   El ocre SOLO como punto focal y micro-acentos.
+   Light  = fondo crema, identidad azul
+   Dark   = fondo azul (como el logo), identidad crema
+   ============================================================ */
+:root {
+  --bg: 233 228 214;        /* #E9E4D6 crema papel */
+  --surface: 224 218 200;   /* #E0DAC8 arena (superficies secundarias) */
+  --elevated: 240 236 225;  /* crema clara para tarjetas */
+  --ink: 27 42 74;          /* #1B2A4A azul marino · identidad y texto */
+  --muted: 92 103 128;      /* azul desaturado para texto secundario */
+  --accent: 201 154 70;     /* #C99A46 ocre · SOLO punto y micro-acentos */
+  --line: 27 42 74;         /* hairlines (azul a baja opacidad) */
+  --cursor: 201 154 70;
+  color-scheme: light;
 }
 
-html,body,#root{height:100%;}
-
-body{
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+.dark {
+  --bg: 18 28 51;           /* #121C33 navy profundo (más contraste para el dorado) */
+  --surface: 26 40 71;      /* #1A2847 */
+  --elevated: 33 50 88;     /* #213258 */
+  --ink: 234 229 216;       /* crema (texto) */
+  --muted: 150 162 186;     /* crema-azul apagado */
+  --accent: 214 168 86;     /* #D6A856 dorado vivo — protagonista en oscuro */
+  --line: 234 229 216;      /* hairlines crema */
+  --cursor: 214 168 86;
+  color-scheme: dark;
 }
 
+/* Dark theme = navy + dorado protagonista + detalles crema.
+   Los titulares display pasan a dorado; el resto del texto queda crema. */
+.dark .display-hero { color: rgb(var(--accent)); }
+.dark .text-stroke {
+  -webkit-text-stroke: 1px rgb(var(--accent) / 0.7);
+  color: transparent;
+}
 
-.card-hover{transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;}
-.card-hover:hover{transform: translateY(-8px); box-shadow: 0 20px 40px rgba(15,23,42,0.08);}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
 
-.social-bar{position:fixed; right:1.25rem; bottom:3.25rem; display:flex; flex-direction:column; gap:0.5rem; z-index:60;}
+body {
+  margin: 0;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  background: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-x: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.custom-cursor, body.custom-cursor * { cursor: none !important; }
+}
+
+::selection { background: rgb(var(--ink)); color: rgb(var(--bg)); }
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(var(--muted) / 0.4); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--ink) / 0.6); }
+
+/* ============================================================
+   COMPONENT UTILITIES
+   ============================================================ */
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-[1360px] px-6 md:px-10 lg:px-14; }
+
+  /* Cinzel — serif lapidaria: marca, titulares, cifras */
+  .font-display { font-family: 'Cinzel', serif; }
+
+  .display-hero {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 0.98;
+    text-transform: uppercase;
+  }
+
+  /* Jost versalitas espaciadas — labels / UI */
+  .eyebrow {
+    font-family: 'Jost', sans-serif;
+    @apply text-[11px] md:text-xs font-medium uppercase tracking-[0.32em] text-muted;
+  }
+  .label {
+    font-family: 'Jost', sans-serif;
+    @apply text-[11px] font-medium uppercase tracking-[0.28em];
+  }
+
+  .btn-primary {
+    font-family: 'Jost', sans-serif;
+    @apply relative inline-flex items-center gap-2.5 rounded-full bg-ink px-7 py-3.5
+           text-[12px] font-medium uppercase tracking-[0.2em] text-bg
+           transition-transform duration-500 ease-expo hover:-translate-y-0.5;
+  }
+
+  .btn-ghost {
+    font-family: 'Jost', sans-serif;
+    @apply relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5
+           text-[12px] font-medium uppercase tracking-[0.2em] text-ink
+           transition-colors duration-300 hover:border-ink;
+    border: 1px solid rgb(var(--line) / 0.25);
+  }
+
+  .card-surface {
+    @apply rounded-2xl bg-elevated/70 backdrop-blur-sm;
+    border: 1px solid rgb(var(--line) / 0.12);
+  }
+}
+
+/* Outline serif for large type accents */
+.text-stroke {
+  -webkit-text-stroke: 1px rgb(var(--ink) / 0.45);
+  color: transparent;
+}
+.dark .text-stroke { -webkit-text-stroke: 1px rgb(var(--ink) / 0.4); }
+
+/* Gold focal dot helper */
+.dot-gold { color: rgb(var(--accent)); }
+
+/* Filled title with soft depth shadow */
+.title-depth { text-shadow: 0 6px 22px rgba(8, 12, 22, 0.22); }
+.dark .title-depth { text-shadow: 0 6px 26px rgba(0, 0, 0, 0.5); }
+
+/* Subtle paper grain */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+.dark .grain::before { mix-blend-mode: overlay; opacity: 0.22; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+.clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ===== 3D tech cubes ===== */
+.scene { perspective: 640px; width: var(--cs); height: var(--cs); }
+.cube {
+  position: relative;
+  width: var(--cs);
+  height: var(--cs);
+  transform-style: preserve-3d;
+  transform: rotateX(-18deg) rotateY(0deg);
+  animation: cubeSpin 10s linear infinite;
+}
+.cube:hover { animation-duration: 3.5s; }
+.cube-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(var(--line) / 0.16);
+  background: rgb(var(--elevated));
+  box-shadow: inset 0 0 24px rgb(var(--ink) / 0.06);
+  border-radius: 12px;
+  color: rgb(var(--ink));
+  transition: color .3s, border-color .3s;
+}
+.cube:hover .cube-face { color: rgb(var(--accent)); border-color: rgb(var(--accent) / 0.6); }
+.cube-face.f { transform: translateZ(calc(var(--cs) / 2)); }
+.cube-face.b { transform: rotateY(180deg) translateZ(calc(var(--cs) / 2)); }
+.cube-face.r { transform: rotateY(90deg) translateZ(calc(var(--cs) / 2)); }
+.cube-face.l { transform: rotateY(-90deg) translateZ(calc(var(--cs) / 2)); }
+.cube-face.t { transform: rotateX(90deg) translateZ(calc(var(--cs) / 2)); }
+.cube-face.d { transform: rotateX(-90deg) translateZ(calc(var(--cs) / 2)); }
+@keyframes cubeSpin {
+  from { transform: rotateX(-18deg) rotateY(0deg); }
+  to { transform: rotateX(-18deg) rotateY(360deg); }
+}
+
+/* smoke reveal for project previews */
+@keyframes smokeIn {
+  0% { opacity: 0; filter: blur(14px); transform: scale(1.06); }
+  100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

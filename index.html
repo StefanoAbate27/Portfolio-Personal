@@ -3,26 +3,40 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Portafolio | Stefano Abate</title>
+
+    <title>SAAE — Estudio de Desarrollo Web</title>
+    <meta name="description" content="SAAE · Estudio de Desarrollo Web. Sistemas a medida, construidos con oficio. Diseñamos y desarrollamos plataformas web que modernizan la manera en que tu organización trabaja." />
+    <meta name="author" content="Stefano Abate · SAAE" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SAAE — Estudio de Desarrollo Web" />
+    <meta property="og:description" content="Sistemas a medida, construidos con oficio." />
+    <meta property="og:type" content="website" />
 
     <!-- FAVICONS -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#000000" />
-
-    <!-- Fallback para navegadores antiguos -->
     <link rel="shortcut icon" href="/Saae.ico" type="image/x-icon" />
+    <meta name="theme-color" content="#E9E4D6" />
 
-    <!-- Preload opcional (mejor tiempo de carga del icono principal) -->
-    <link rel="preload" as="image" href="/favicon.png" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- React App -->
+    <!-- No-flash theme init (brand default = light / cream) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "dark") document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </head>
 
-  <body class="antialiased bg-white text-slate-900">
+  <body>
     <div id="root"></div>
   </body>
 </html>

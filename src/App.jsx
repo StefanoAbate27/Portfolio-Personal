@@ -1,75 +1,104 @@
-import React from 'react'
-import Particles from 'react-tsparticles'
-import { loadFull } from 'tsparticles'
-import Header from './components/Header.jsx'
-import SocialBar from './components/SocialBar.jsx'
-import Hero from './components/Hero.jsx'
-import Projects from './components/Projects.jsx'
-import Skills from './components/Skills.jsx'
-import Contact from './components/Contact.jsx'
-import Footer from './components/Footer.jsx'
+import React, { useState } from "react";
+import { LanguageProvider, useLanguage } from "./context/LanguageContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import useSmoothScroll from "./hooks/useSmoothScroll";
+import useReveal from "./hooks/useReveal";
 
-import { LanguageProvider } from './context/LanguageContext'
+import Preloader from "./components/Preloader";
+import CustomCursor from "./components/CustomCursor";
+import ParticleField from "./components/ParticleField";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Skills from "./components/Skills";
+import Projects from "./components/Projects";
+import Process from "./components/Process";
+import WhySaae from "./components/WhySaae";
+import Founder from "./components/Founder";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import SectionDivider from "./components/SectionDivider";
 
-export default function App() {
-  const particlesInit = async (engine) => {
-    await loadFull(engine)
-  }
+function Site() {
+  const { language } = useLanguage();
+  useSmoothScroll();
+  useReveal();
+
+  const D = language === "es"
+    ? {
+        a: ["Estudio de Desarrollo Web", "Sistemas a medida", "Construido con maestría", "SAAE"],
+        b: ["El Fundador", "Stefano Abate", "CEO & Fundador", "Desde 2025"],
+        c: ["Sobre Nosotros", "Diseño", "Desarrollo", "Producto", "SAAE"],
+        d: ["Cómo trabajamos", "Del boceto al lanzamiento", "Entrega ágil", "SAAE"],
+        e: ["Trabajo seleccionado", "Web · Data · E-commerce", "Enviado a producción", "SAAE"],
+      }
+    : {
+        a: ["Web Development Studio", "Bespoke systems", "Built with mastery", "SAAE"],
+        b: ["The Founder", "Stefano Abate", "CEO & Founder", "Since 2025"],
+        c: ["About Us", "Design", "Development", "Product", "SAAE"],
+        d: ["How we work", "Sketch to launch", "Agile delivery", "SAAE"],
+        e: ["Selected work", "Web · Data · E-commerce", "Shipped to production", "SAAE"],
+      };
 
   return (
-    <LanguageProvider>
-      <div className="relative min-h-screen overflow-x-hidden">
-        {/* Fondo de partículas global y continuo */}
-        <Particles
-  id="tsparticles"
-  init={particlesInit}
-  options={{
-    background: { color: 'transparent' },
-    fpsLimit: 60,
-    interactivity: {
-      events: {
-        onHover: { enable: true, mode: 'repulse' },
-        onClick: { enable: true, mode: 'push' }, // Activar click
-        resize: true
-      },
-      modes: {
-        repulse: { distance: 120 },
-        push: { quantity: 3 } // Número de partículas que se generan al hacer click
-      }
-    },
-    particles: {
-      color: { value: '#161718ff' },
-      links: { color: '#1b1c1dff', distance: 150, enable: true, opacity: 0.3, width: 1 },
-      move: { enable: true, speed: 1, direction: 'none', outModes: { default: 'out' } },
-      number: { value: 50, density: { enable: true, area: 800 } },
-      opacity: { value: 0.4 },
-      shape: { type: 'circle' },
-      size: { value: { min: 1, max: 4 } },
-    },
-    detectRetina: true
-  }}
-  style={{ position: 'fixed', inset: 0, zIndex: -50, pointerEvents: 'none' }}
-/>
-        <Header />
-        <SocialBar />
+    <div className="grain relative min-h-screen">
+      <ParticleField />
+      <CustomCursor />
+      <Header />
 
-        <main className="relative z-10">
-          <section id="inicio">
-            <Hero />
-          </section>
-          <section id="proyectos">
-            <Projects />
-          </section>
-          <section id="skills">
-            <Skills />
-          </section>
-          <section id="contacto">
-            <Contact />
-          </section>
-        </main>
+      <main className="relative z-10">
+        <section id="inicio">
+          <Hero />
+        </section>
 
-        <Footer />
-      </div>
-    </LanguageProvider>
-  )
+        <SectionDivider items={D.a} />
+
+        <section id="fundador">
+          <Founder />
+        </section>
+
+        <SectionDivider items={D.c} reverse />
+
+        <section id="nosotros">
+          <Skills />
+        </section>
+
+        <SectionDivider items={D.d} />
+
+        <section id="proceso">
+          <Process />
+        </section>
+
+        <SectionDivider items={D.e} reverse />
+
+        <section id="proyectos">
+          <Projects />
+        </section>
+
+        <SectionDivider items={D.a} />
+
+        <section id="por-que">
+          <WhySaae />
+        </section>
+
+        <section id="contacto">
+          <Contact />
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+export default function App() {
+  const [ready, setReady] = useState(false);
+
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        {!ready && <Preloader onDone={() => setReady(true)} />}
+        <Site />
+      </LanguageProvider>
+    </ThemeProvider>
+  );
 }
