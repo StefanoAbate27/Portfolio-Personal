@@ -146,13 +146,14 @@ export default function Skills() {
     clearTimeout(reorderTimer.current);
     reorderTimer.current = setTimeout(() => setReorderTick((n) => n + 1), delay);
   };
-  useEffect(() => {
-    scheduleReorder(2200); // settle into the grid after the disordered entrance
-    return () => clearTimeout(reorderTimer.current);
-  }, []); // eslint-disable-line
+  useEffect(() => () => clearTimeout(reorderTimer.current), []);
 
+  const orderNow = () => {
+    clearTimeout(reorderTimer.current);
+    setReorderTick((n) => n + 1);
+  };
   const onGrab = () => clearTimeout(reorderTimer.current);
-  const onRelease = () => scheduleReorder(3000); // reorder after 3s of inactivity
+  const onRelease = () => scheduleReorder(3000); // reorder 3s after the last throw
   const labelsOn = reorderTick > 0;
 
   return (
@@ -227,13 +228,14 @@ export default function Skills() {
         </div>
         <div className="mb-3 flex items-center gap-2 text-[11px] italic text-muted/70">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-          {language === "es"
-            ? "· Arrástralos y lánzalos como dados — se reordenan solos ·"
-            : "· Drag & throw them like dice — they tidy up on their own ·"}
+          {reorderTick === 0
+            ? (language === "es" ? "· Haz clic para ordenarlos ·" : "· Click to arrange them ·")
+            : (language === "es" ? "· Arrástralos y lánzalos — se reordenan solos ·" : "· Drag & throw them — they tidy up on their own ·")}
         </div>
         <div
           ref={cubesRef}
-          className="relative grid grid-cols-2 justify-items-center gap-y-14 overflow-visible pt-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+          onClick={orderNow}
+          className="relative grid cursor-pointer grid-cols-2 justify-items-center gap-y-14 overflow-visible pt-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
         >
           {stack.map(({ name, icon: Icon }, i) => (
             <div key={name} className="flex flex-col items-center gap-4">
