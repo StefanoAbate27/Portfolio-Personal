@@ -23,12 +23,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- No-flash theme init (brand default = light / cream) -->
+    <!-- No-flash theme init: manual choice, else device theme -->
     <script>
       (function () {
         try {
           var t = localStorage.getItem("theme");
-          if (t === "dark") document.documentElement.classList.add("dark");
+          var dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (dark) document.documentElement.classList.add("dark");
         } catch (e) {}
       })();
     </script>

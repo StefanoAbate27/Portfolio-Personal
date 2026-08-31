@@ -6,14 +6,13 @@ import { useTheme } from "../context/ThemeContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 import SaaeLogo from "./SaaeLogo";
 
-const container = {
-  closed: { opacity: 0, y: -12, scale: 0.9, transition: { when: "afterChildren", staggerChildren: 0.03, staggerDirection: -1, duration: 0.25 } },
+const layoutT = { type: "spring", stiffness: 320, damping: 30 };
+
+const listVariants = {
+  closed: { opacity: 0, y: -12, scale: 0.9, transition: { when: "afterChildren", staggerChildren: 0.03, staggerDirection: -1, duration: 0.2 } },
   open: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 320, damping: 26, when: "beforeChildren", staggerChildren: 0.05 } },
 };
-const item = {
-  closed: { opacity: 0, y: 10 },
-  open: { opacity: 1, y: 0 },
-};
+const itemVariants = { closed: { opacity: 0, y: 10 }, open: { opacity: 1, y: 0 } };
 
 export default function Header() {
   const { language, toggleLanguage } = useLanguage();
@@ -53,42 +52,66 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-[95] flex justify-center px-4 py-4">
-        <div className="flex items-center gap-1 rounded-full border border-line/12 bg-bg/75 px-2 py-1.5 shadow-[0_10px_40px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-          {/* brand */}
-          <button onClick={() => go("inicio")} data-cursor="Top" className="group flex items-center gap-2 rounded-full px-2.5 py-1.5 text-ink">
-            <SaaeLogo size={22} tone="auto" className="transition-transform duration-500 ease-expo group-hover:scale-110" />
-            <span className="font-display text-sm font-semibold tracking-[0.14em]">SAAE</span>
-          </button>
+        <motion.div
+          layout
+          transition={layoutT}
+          className="flex items-center gap-1 rounded-full border border-line/12 bg-bg/80 p-1.5 shadow-[0_10px_40px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+        >
+          {/* brand — appears on the left when open */}
+          <AnimatePresence mode="popLayout">
+            {open && (
+              <motion.button
+                key="brand" layout
+                initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
+                transition={layoutT}
+                onClick={() => go("inicio")} data-cursor="Top"
+                className="group flex items-center gap-2 whitespace-nowrap rounded-full px-2.5 py-1.5 text-ink"
+              >
+                <SaaeLogo size={22} tone="auto" className="transition-transform duration-500 ease-expo group-hover:scale-110" />
+                <span className="font-display text-sm font-semibold tracking-[0.14em]">SAAE</span>
+              </motion.button>
+            )}
+          </AnimatePresence>
 
-          <span className="mx-1 hidden h-4 w-px bg-line/15 sm:block" />
-
-          {/* language */}
-          <div className="hidden items-center sm:flex">
-            <button onClick={() => language !== "es" && toggleLanguage()}
-              className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "es" ? "text-ink" : "text-muted hover:text-ink"}`}>ES</button>
-            <button onClick={() => language !== "en" && toggleLanguage()}
-              className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "en" ? "text-ink" : "text-muted hover:text-ink"}`}>EN</button>
-          </div>
-
-          {/* theme */}
-          <button onClick={toggleTheme} aria-label="Theme"
-            className="grid h-8 w-8 place-items-center rounded-full text-ink transition-colors hover:text-accent">
-            {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-
-          {/* hamburger (all sizes) */}
-          <button onClick={() => setOpen((v) => !v)} data-cursor={nav.menu} aria-label="Menu"
-            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg">
+          {/* hamburger — always visible, stays centered */}
+          <motion.button
+            layout onClick={() => setOpen((v) => !v)} data-cursor={nav.menu} aria-label="Menu"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-ink text-bg"
+          >
             <span className="relative flex h-3.5 w-4 flex-col justify-center gap-[3px]">
               <span className={`h-[1.7px] w-full origin-center bg-bg transition-transform duration-300 ease-expo ${open ? "translate-y-[4.7px] rotate-45" : ""}`} />
               <span className={`h-[1.7px] w-full bg-bg transition-opacity duration-200 ${open ? "opacity-0" : ""}`} />
               <span className={`h-[1.7px] w-full origin-center bg-bg transition-transform duration-300 ease-expo ${open ? "-translate-y-[4.7px] -rotate-45" : ""}`} />
             </span>
-          </button>
-        </div>
+          </motion.button>
+
+          {/* language + theme — appear on the right when open */}
+          <AnimatePresence mode="popLayout">
+            {open && (
+              <motion.div
+                key="ctrls" layout
+                initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
+                transition={layoutT}
+                className="flex items-center gap-1 whitespace-nowrap pl-1"
+              >
+                <div className="flex items-center">
+                  <button onClick={() => language !== "es" && toggleLanguage()}
+                    className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "es" ? "text-ink" : "text-muted hover:text-ink"}`}>ES</button>
+                  <button onClick={() => language !== "en" && toggleLanguage()}
+                    className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "en" ? "text-ink" : "text-muted hover:text-ink"}`}>EN</button>
+                </div>
+                <span className="mx-0.5 h-4 w-px bg-line/15" />
+                <button onClick={toggleTheme} aria-label="Theme"
+                  className="grid h-8 w-8 place-items-center rounded-full text-ink transition-colors hover:text-accent">
+                  {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </header>
 
-      {/* backdrop + expanding pill menu */}
+      {/* backdrop + expanding section dropdown */}
       <AnimatePresence>
         {open && (
           <>
@@ -98,14 +121,14 @@ export default function Header() {
               className="fixed inset-0 z-[91] bg-bg/40 backdrop-blur-[2px]"
             />
             <motion.div
-              variants={container} initial="closed" animate="open" exit="closed"
+              variants={listVariants} initial="closed" animate="open" exit="closed"
               style={{ transformOrigin: "top center" }}
-              className="fixed left-1/2 top-[74px] z-[92] w-[min(90vw,320px)] -translate-x-1/2"
+              className="fixed left-1/2 top-[78px] z-[92] w-[min(90vw,320px)] -translate-x-1/2"
             >
               <div className="flex flex-col gap-0.5 rounded-[1.8rem] border border-line/12 bg-bg/90 p-2.5 shadow-[0_30px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-xl">
                 {links.map(([id, label], i) => (
                   <motion.button
-                    key={id} variants={item} onClick={() => go(id)}
+                    key={id} variants={itemVariants} onClick={() => go(id)}
                     className="group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-ink/[0.05]"
                   >
                     <span className="font-mono text-[10px] text-accent">0{i + 1}</span>
@@ -114,7 +137,7 @@ export default function Header() {
                   </motion.button>
                 ))}
                 <motion.a
-                  variants={item} href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer"
+                  variants={itemVariants} href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                   className="mt-1.5 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-ink px-5 py-3.5 text-[12px] font-medium uppercase tracking-[0.14em] text-bg"
                 >
