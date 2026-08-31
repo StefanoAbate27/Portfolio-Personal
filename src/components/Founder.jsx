@@ -65,7 +65,7 @@ export default function Founder() {
         {/* Bio */}
         <div className="lg:col-span-7">
           <span className="reveal eyebrow">— {t.eyebrow}</span>
-          <h2 className="reveal mt-4 font-display text-3xl font-semibold leading-tight text-ink md:text-5xl" data-delay="60">
+          <h2 className="reveal title-glow mt-4 font-display text-3xl font-semibold leading-tight text-ink md:text-5xl" data-delay="60">
             {t.name}
           </h2>
           <p className="reveal mt-6 max-w-xl font-display text-lg italic text-ink/80 md:text-xl" data-delay="120">

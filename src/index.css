@@ -133,9 +133,16 @@ html.lenis, html.lenis body { height: auto; }
 /* Gold focal dot helper */
 .dot-gold { color: rgb(var(--accent)); }
 
-/* Filled title with soft depth shadow */
-.title-depth { text-shadow: 0 6px 22px rgba(8, 12, 22, 0.22); }
-.dark .title-depth { text-shadow: 0 6px 26px rgba(0, 0, 0, 0.5); }
+/* Title with soft golden glow (gentle illumination) + a touch of depth */
+.title-glow {
+  text-shadow: 0 0 26px rgb(var(--accent) / 0.28), 0 4px 16px rgb(var(--accent) / 0.20);
+}
+.dark .title-glow {
+  text-shadow: 0 0 32px rgb(var(--accent) / 0.42), 0 4px 18px rgb(var(--accent) / 0.30);
+}
+/* keep old name working as an alias */
+.title-depth { text-shadow: 0 0 26px rgb(var(--accent) / 0.28), 0 4px 16px rgb(var(--accent) / 0.20); }
+.dark .title-depth { text-shadow: 0 0 32px rgb(var(--accent) / 0.42), 0 4px 18px rgb(var(--accent) / 0.30); }
 
 /* Subtle paper grain */
 .grain::before {

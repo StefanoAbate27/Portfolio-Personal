@@ -68,7 +68,7 @@ export default function Projects() {
         <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
           <div className="reveal">
             <span className="eyebrow">— {t.eyebrow}</span>
-            <h2 className="display-hero mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+            <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
           </div>
           <p className="reveal max-w-xs text-sm leading-relaxed text-muted" data-delay="100">{t.lead}</p>
         </div>

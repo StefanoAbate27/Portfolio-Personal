@@ -15,14 +15,16 @@ export default function Header() {
   const tl = useRef(null);
 
   const nav = {
-    es: { fundador: "Fundador", nosotros: "Nosotros", proyectos: "Proyectos", contacto: "Contacto", cta: "Empecemos" },
-    en: { fundador: "Founder", nosotros: "About", proyectos: "Work", contacto: "Contact", cta: "Start" },
+    es: { inicio: "Inicio", fundador: "Fundador", nosotros: "Nosotros", proceso: "Proceso", proyectos: "Proyectos", porque: "Por qué", contacto: "Contacto", cta: "Empecemos" },
+    en: { inicio: "Home", fundador: "Founder", nosotros: "About", proceso: "Process", proyectos: "Work", porque: "Why", contacto: "Contact", cta: "Start" },
   }[language];
 
   const links = [
     ["fundador", nav.fundador],
     ["nosotros", nav.nosotros],
+    ["proceso", nav.proceso],
     ["proyectos", nav.proyectos],
+    ["por-que", nav.porque],
     ["contacto", nav.contacto],
   ];
 
@@ -57,13 +59,13 @@ export default function Header() {
           </button>
 
           {/* desktop inline nav */}
-          <span className="mx-1 hidden h-4 w-px bg-line/15 md:block" />
-          <nav className="hidden items-center md:flex">
+          <span className="mx-1 hidden h-4 w-px bg-line/15 lg:block" />
+          <nav className="hidden items-center lg:flex">
             {links.map(([id, label]) => (
               <button key={id} onClick={() => go(id)}
-                className="group relative rounded-full px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.14em] text-ink/70 transition-colors hover:text-ink">
+                className="group relative rounded-full px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-ink/70 transition-colors hover:text-ink">
                 {label}
-                <span className="absolute inset-x-3.5 -bottom-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-expo group-hover:scale-x-100" />
+                <span className="absolute inset-x-2.5 -bottom-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-expo group-hover:scale-x-100" />
               </button>
             ))}
           </nav>
@@ -84,9 +86,9 @@ export default function Header() {
             {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
           </button>
 
-          {/* mobile menu */}
+          {/* menu button (below lg) */}
           <button onClick={() => setOpen((v) => !v)} aria-label="Menu"
-            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg md:hidden">
+            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg lg:hidden">
             {open ? <X size={15} /> : <Menu size={15} />}
           </button>
         </div>
@@ -96,14 +98,14 @@ export default function Header() {
       <div
         ref={overlayRef}
         style={{ clipPath: "inset(0 0 100% 0)", pointerEvents: "none" }}
-        className="fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 pb-8 pt-24 md:hidden"
+        className="fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 pb-8 pt-24 lg:hidden"
       >
         <nav className="flex flex-col">
           {links.map(([id, label], i) => (
             <button key={id} onClick={() => go(id)}
-              className="group flex items-center justify-between overflow-hidden border-b border-line/12 py-4 text-left">
+              className="group flex items-center justify-between overflow-hidden border-b border-line/12 py-3 text-left sm:py-4">
               <span className="menu-link-inner block">
-                <span className="display-hero text-5xl text-ink transition-colors duration-300 group-hover:text-accent">{label}</span>
+                <span className="display-hero text-4xl text-ink transition-colors duration-300 group-hover:text-accent sm:text-5xl">{label}</span>
               </span>
               <span className="menu-link-inner block label text-muted">0{i + 1}</span>
             </button>

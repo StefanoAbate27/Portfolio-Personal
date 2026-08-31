@@ -162,7 +162,7 @@ export default function Skills() {
         {/* Header */}
         <div className="mb-14 reveal">
           <span className="eyebrow">— {t.eyebrow}</span>
-          <h2 className="display-hero mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+          <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
         </div>
 
         {/* Intro + vector */}
