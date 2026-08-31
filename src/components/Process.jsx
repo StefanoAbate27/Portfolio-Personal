@@ -6,27 +6,27 @@ const content = {
   es: {
     eyebrow: "Cómo trabajamos",
     title: "Proceso",
-    lead: "Un método claro y sin sorpresas. Del boceto al lanzamiento en un máximo de 4 semanas, con entregas y validación en cada fase.",
+    lead: "Un método claro, sin sorpresas. Entregas y validación en cada fase.",
     weekLabel: "Semana",
     steps: [
       {
         w: "01", week: "Semana 1", title: "Descubrimiento",
-        desc: "Entendemos tu operación, objetivos y usuarios. Definimos el alcance, las prioridades y los criterios de éxito.",
+        desc: "Entendemos tu operación y definimos el alcance.",
         items: ["Reunión de kickoff", "Definición de alcance", "Requisitos y prioridades"],
       },
       {
         w: "02", week: "Semana 1–2", title: "Diseño",
-        desc: "Prototipamos la interfaz y el flujo. Validamos contigo antes de escribir una sola línea de código.",
+        desc: "Prototipamos y validamos antes de programar.",
         items: ["Wireframes y prototipo", "Identidad e interfaz", "Validación con el cliente"],
       },
       {
         w: "03", week: "Semana 2–4", title: "Desarrollo",
-        desc: "Construimos con componentes reutilizables, código limpio y revisiones continuas. Avances visibles cada semana.",
+        desc: "Construimos con avances visibles cada semana.",
         items: ["Frontend + backend", "Integraciones y pagos", "Revisiones semanales"],
       },
       {
         w: "04", week: "Semana 4", title: "Lanzamiento",
-        desc: "Desplegamos a producción, medimos y te entregamos todo listo. Acompañamos la evolución del sistema.",
+        desc: "Desplegamos, medimos y damos soporte.",
         items: ["Deploy a producción", "Pruebas y ajustes", "Entrega y soporte"],
       },
     ],
@@ -36,27 +36,27 @@ const content = {
   en: {
     eyebrow: "How we work",
     title: "Process",
-    lead: "A clear method, no surprises. From sketch to launch in 4 weeks max, with deliverables and validation at every phase.",
+    lead: "A clear method, no surprises. Deliverables and validation at every phase.",
     weekLabel: "Week",
     steps: [
       {
         w: "01", week: "Week 1", title: "Discovery",
-        desc: "We understand your operation, goals and users. We define scope, priorities and success criteria.",
+        desc: "We understand your operation and define scope.",
         items: ["Kickoff meeting", "Scope definition", "Requirements & priorities"],
       },
       {
         w: "02", week: "Week 1–2", title: "Design",
-        desc: "We prototype the interface and flow. We validate with you before writing a single line of code.",
+        desc: "We prototype and validate before coding.",
         items: ["Wireframes & prototype", "Identity & interface", "Client validation"],
       },
       {
         w: "03", week: "Week 2–4", title: "Development",
-        desc: "We build with reusable components, clean code and continuous reviews. Visible progress every week.",
+        desc: "We build with visible progress every week.",
         items: ["Frontend + backend", "Integrations & payments", "Weekly reviews"],
       },
       {
         w: "04", week: "Week 4", title: "Launch",
-        desc: "We deploy to production, measure and hand everything over ready. We support the system's evolution.",
+        desc: "We deploy, measure and provide support.",
         items: ["Production deploy", "Testing & tweaks", "Handover & support"],
       },
     ],

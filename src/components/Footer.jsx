@@ -27,8 +27,8 @@ export default function Footer() {
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
               {language === "es"
-                ? "Estudio de Desarrollo Web. Sistemas a medida, construidos con maestría."
-                : "Web Development Studio. Tailor-made systems, built with mastery."}
+                ? "Sistemas web a medida, construidos con maestría."
+                : "Bespoke web systems, built with mastery."}
             </p>
             <a href="mailto:stefanoabate.dev@gmail.com" className="mt-4 inline-block font-display text-ink hover:text-accent">stefanoabate.dev@gmail.com</a>
           </div>
