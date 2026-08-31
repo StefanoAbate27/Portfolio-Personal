@@ -7,8 +7,8 @@ import { scrollToId } from "../hooks/useSmoothScroll";
 const content = {
   es: {
     eyebrow: "¿Por qué SAAE?",
-    h1: "Tu próximo proyecto,",
-    h2: "entregado en 4 semanas.",
+    h1: "Tu proyecto,",
+    h2: "listo en 4 semanas.",
     desc: "Nada de plantillas ni promesas vacías. Software a medida, trato directo y precio claro.",
     cta: "Empezar ahora",
     reasons: [
@@ -20,8 +20,8 @@ const content = {
   },
   en: {
     eyebrow: "Why SAAE?",
-    h1: "Your next project,",
-    h2: "delivered in 4 weeks.",
+    h1: "Your project,",
+    h2: "ready in 4 weeks.",
     desc: "No templates, no empty promises. Bespoke software, direct contact, clear pricing.",
     cta: "Start now",
     reasons: [
