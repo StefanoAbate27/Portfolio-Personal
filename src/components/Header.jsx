@@ -1,22 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { Sun, Moon, Menu, X, ArrowUpRight } from "lucide-react";
-import { FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sun, Moon, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 import SaaeLogo from "./SaaeLogo";
 
+const container = {
+  closed: { opacity: 0, y: -12, scale: 0.9, transition: { when: "afterChildren", staggerChildren: 0.03, staggerDirection: -1, duration: 0.25 } },
+  open: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 320, damping: 26, when: "beforeChildren", staggerChildren: 0.05 } },
+};
+const item = {
+  closed: { opacity: 0, y: 10 },
+  open: { opacity: 1, y: 0 },
+};
+
 export default function Header() {
   const { language, toggleLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
-  const overlayRef = useRef(null);
-  const tl = useRef(null);
 
   const nav = {
-    es: { inicio: "Inicio", fundador: "Fundador", nosotros: "Nosotros", proceso: "Proceso", proyectos: "Proyectos", porque: "Por qué", contacto: "Contacto", cta: "Empecemos" },
-    en: { inicio: "Home", fundador: "Founder", nosotros: "About", proceso: "Process", proyectos: "Work", porque: "Why", contacto: "Contact", cta: "Start" },
+    es: { fundador: "Fundador", nosotros: "Nosotros", proceso: "Proceso", proyectos: "Proyectos", porque: "Por qué", contacto: "Contacto", cta: "Empecemos", menu: "Menú" },
+    en: { fundador: "Founder", nosotros: "About", proceso: "Process", proyectos: "Work", porque: "Why", contacto: "Contact", cta: "Start", menu: "Menu" },
   }[language];
 
   const links = [
@@ -29,24 +35,20 @@ export default function Header() {
   ];
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      tl.current = gsap
-        .timeline({ paused: true })
-        .set(overlayRef.current, { pointerEvents: "auto" })
-        .fromTo(overlayRef.current, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.6, ease: "power4.inOut" })
-        .fromTo(".menu-link-inner", { yPercent: 120 }, { yPercent: 0, stagger: 0.06, duration: 0.6, ease: "power3.out" }, "-=0.25")
-        .fromTo(".menu-foot", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3");
-    });
-    return () => ctx.revert();
-  }, [language]);
-
-  useEffect(() => {
-    if (!tl.current) return;
-    if (open) { tl.current.play(); window.__lenis && window.__lenis.stop(); }
-    else { tl.current.reverse(); window.__lenis && window.__lenis.start(); }
+    if (open) window.__lenis && window.__lenis.stop();
+    else window.__lenis && window.__lenis.start();
   }, [open]);
 
-  const go = (id) => { setOpen(false); setTimeout(() => scrollToId(id, -20), 120); };
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const go = (id) => {
+    setOpen(false);
+    setTimeout(() => scrollToId(id, -20), 140);
+  };
 
   return (
     <>
@@ -58,21 +60,9 @@ export default function Header() {
             <span className="font-display text-sm font-semibold tracking-[0.14em]">SAAE</span>
           </button>
 
-          {/* desktop inline nav */}
-          <span className="mx-1 hidden h-4 w-px bg-line/15 lg:block" />
-          <nav className="hidden items-center lg:flex">
-            {links.map(([id, label]) => (
-              <button key={id} onClick={() => go(id)}
-                className="group relative rounded-full px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-ink/70 transition-colors hover:text-ink">
-                {label}
-                <span className="absolute inset-x-2.5 -bottom-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-expo group-hover:scale-x-100" />
-              </button>
-            ))}
-          </nav>
-
           <span className="mx-1 hidden h-4 w-px bg-line/15 sm:block" />
 
-          {/* language unicolor */}
+          {/* language */}
           <div className="hidden items-center sm:flex">
             <button onClick={() => language !== "es" && toggleLanguage()}
               className={`rounded-full px-2 py-1 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${language === "es" ? "text-ink" : "text-muted hover:text-ink"}`}>ES</button>
@@ -86,50 +76,55 @@ export default function Header() {
             {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
           </button>
 
-          {/* menu button (below lg) */}
-          <button onClick={() => setOpen((v) => !v)} aria-label="Menu"
-            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg lg:hidden">
-            {open ? <X size={15} /> : <Menu size={15} />}
+          {/* hamburger (all sizes) */}
+          <button onClick={() => setOpen((v) => !v)} data-cursor={nav.menu} aria-label="Menu"
+            className="grid h-8 w-8 place-items-center rounded-full bg-ink text-bg">
+            <span className="relative flex h-3.5 w-4 flex-col justify-center gap-[3px]">
+              <span className={`h-[1.7px] w-full origin-center bg-bg transition-transform duration-300 ease-expo ${open ? "translate-y-[4.7px] rotate-45" : ""}`} />
+              <span className={`h-[1.7px] w-full bg-bg transition-opacity duration-200 ${open ? "opacity-0" : ""}`} />
+              <span className={`h-[1.7px] w-full origin-center bg-bg transition-transform duration-300 ease-expo ${open ? "-translate-y-[4.7px] -rotate-45" : ""}`} />
+            </span>
           </button>
         </div>
       </header>
 
-      {/* Mobile expandable overlay */}
-      <div
-        ref={overlayRef}
-        style={{ clipPath: "inset(0 0 100% 0)", pointerEvents: "none" }}
-        className="fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 pb-8 pt-24 lg:hidden"
-      >
-        <nav className="flex flex-col">
-          {links.map(([id, label], i) => (
-            <button key={id} onClick={() => go(id)}
-              className="group flex items-center justify-between overflow-hidden border-b border-line/12 py-3 text-left sm:py-4">
-              <span className="menu-link-inner block">
-                <span className="display-hero text-4xl text-ink transition-colors duration-300 group-hover:text-accent sm:text-5xl">{label}</span>
-              </span>
-              <span className="menu-link-inner block label text-muted">0{i + 1}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="menu-foot flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <span className="label text-muted">{language === "es" ? "Escríbenos" : "Reach us"}</span>
-            <a href="mailto:stefanoabate.dev@gmail.com" className="font-display text-lg text-ink">stefanoabate.dev@gmail.com</a>
-          </div>
-          <div className="flex items-center gap-3">
-            {[[FaLinkedinIn, "https://www.linkedin.com/in/stefano-abate-75b362345"], [FaGithub, "https://github.com/StefanoAbate27"], [FaWhatsapp, "https://wa.me/584247582675"]].map(([Icon, href], i) => (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                className="grid h-11 w-11 place-items-center rounded-full border border-line/15 text-ink">
-                <Icon size={16} />
-              </a>
-            ))}
-            <button onClick={() => go("contacto")} className="ml-auto inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 label text-bg">
-              {nav.cta} <ArrowUpRight size={14} />
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* backdrop + expanding pill menu */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-[91] bg-bg/40 backdrop-blur-[2px]"
+            />
+            <motion.div
+              variants={container} initial="closed" animate="open" exit="closed"
+              style={{ transformOrigin: "top center" }}
+              className="fixed left-1/2 top-[74px] z-[92] w-[min(90vw,320px)] -translate-x-1/2"
+            >
+              <div className="flex flex-col gap-0.5 rounded-[1.8rem] border border-line/12 bg-bg/90 p-2.5 shadow-[0_30px_80px_-28px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+                {links.map(([id, label], i) => (
+                  <motion.button
+                    key={id} variants={item} onClick={() => go(id)}
+                    className="group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors hover:bg-ink/[0.05]"
+                  >
+                    <span className="font-mono text-[10px] text-accent">0{i + 1}</span>
+                    <span className="flex-1 font-display text-lg font-semibold text-ink/85 transition-colors group-hover:text-accent">{label}</span>
+                    <ArrowUpRight size={15} className="text-muted opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-accent group-hover:opacity-100" />
+                  </motion.button>
+                ))}
+                <motion.a
+                  variants={item} href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="mt-1.5 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-ink px-5 py-3.5 text-[12px] font-medium uppercase tracking-[0.14em] text-bg"
+                >
+                  {nav.cta} <ArrowUpRight size={13} />
+                </motion.a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }
