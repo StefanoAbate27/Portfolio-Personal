@@ -82,8 +82,8 @@ export default function Process() {
                   className="group flex w-full items-center gap-5 text-left md:flex-col md:items-center md:gap-0 md:text-center"
                 >
                   {/* node / the balloon's circle */}
-                  <span className={`relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border font-display text-sm font-semibold transition-all duration-300
-                    ${on ? "scale-110 border-accent bg-accent text-bg" : "border-line/20 bg-bg text-ink group-hover:border-accent"}`}>
+                  <span className={`relative grid h-14 w-14 shrink-0 place-items-center rounded-full border font-display text-sm font-semibold transition-all duration-300
+                    ${on ? "z-[50] scale-110 border-accent bg-accent text-bg" : "z-10 border-line/20 bg-bg text-ink group-hover:border-accent"}`}>
                     {s.num}
                     <span className={`absolute inset-0 -z-10 rounded-full bg-accent/30 blur-md transition-opacity duration-300 ${on ? "opacity-100" : "opacity-0"}`} />
                   </span>
@@ -93,25 +93,20 @@ export default function Process() {
                   </span>
                 </motion.button>
 
-                {/* Floating balloon — inflates from the circle, deflates back in */}
+                {/* Balloon — inflates directly from the circle (circle sits at its top) */}
                 <AnimatePresence>
                   {on && (
                     <motion.div
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
+                      initial={{ scaleY: 0, opacity: 0 }}
+                      animate={{ scaleY: 1, opacity: 1 }}
+                      exit={{ scaleY: 0, opacity: 0 }}
                       transition={balloonT}
                       style={{ transformOrigin: "top center" }}
-                      className="absolute left-0 top-full z-50 mt-4 w-[min(92vw,340px)] md:left-1/2 md:w-[290px] md:-translate-x-1/2"
+                      className="absolute left-0 top-0 z-40 w-[min(92vw,330px)] md:left-1/2 md:w-[300px] md:-translate-x-1/2"
                     >
-                      {/* tail pointing up to the circle */}
-                      <span className="absolute -top-1.5 left-[27px] h-3 w-3 rotate-45 border-l border-t border-line/15 bg-elevated md:left-1/2 md:-translate-x-1/2" />
-                      <div className="relative rounded-[1.4rem] border border-line/15 bg-elevated/95 p-5 text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-                        <div className="flex items-center gap-2">
-                          <span className="grid h-7 w-7 place-items-center rounded-full bg-accent font-display text-[11px] font-semibold text-bg">{s.num}</span>
-                          <span className="label text-accent">{s.week}</span>
-                        </div>
-                        <h3 className="mt-3 font-display text-xl font-semibold text-ink">{s.title}</h3>
+                      <div className="relative rounded-[1.4rem] border border-line/15 bg-elevated/95 px-5 pb-5 pt-[70px] text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                        <span className="label text-accent">{s.week}</span>
+                        <h3 className="mt-1 font-display text-xl font-semibold text-ink">{s.title}</h3>
                         <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{s.desc}</p>
                         <span className="mt-4 block label text-muted">{t.includes}</span>
                         <ul className="mt-2 space-y-1.5">
@@ -120,7 +115,7 @@ export default function Process() {
                               key={it}
                               initial={{ opacity: 0, x: 10 }}
                               animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.12 + k * 0.06, duration: 0.3 }}
+                              transition={{ delay: 0.14 + k * 0.06, duration: 0.3 }}
                               className="flex items-center gap-2.5 text-[13px] text-ink/85"
                             >
                               <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-accent/40 text-accent">
