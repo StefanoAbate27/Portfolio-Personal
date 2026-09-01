@@ -6,7 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 import SaaeLogo from "./SaaeLogo";
 
-const layoutT = { type: "spring", stiffness: 300, damping: 30 };
+const layoutT = { duration: 0.36, ease: [0.16, 1, 0.3, 1] };
 
 export default function Header() {
   const { language, toggleLanguage } = useLanguage();
