@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Eye } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
-import SaaeLogo from "./SaaeLogo";
 
 const DATA = {
   es: {
@@ -65,7 +64,7 @@ export default function Projects() {
   return (
     <div className="relative py-24 md:py-32" onMouseMove={onMove}>
       <div className="container-x">
-        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
           <div className="reveal">
             <span className="eyebrow">— {t.eyebrow}</span>
             <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
@@ -73,72 +72,72 @@ export default function Projects() {
           <p className="reveal max-w-xs text-sm leading-relaxed text-muted" data-delay="100">{t.lead}</p>
         </div>
 
-        <div className="flex flex-col gap-6 md:gap-8">
-          {t.projects.map((p, i) => {
-            const fromLeft = i % 2 === 0;
-            return (
-              <motion.a
-                key={p.title}
-                href={p.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor={t.demo}
-                initial={{ opacity: 0, x: fromLeft ? -70 : 70 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.8, ease }}
-                onMouseEnter={() => setActive(i)}
-                onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
-                className={`group relative block w-full max-w-3xl overflow-hidden rounded-2xl border border-line/15 bg-elevated/80 p-6 backdrop-blur-md transition-all duration-500 ease-expo hover:-translate-y-1 hover:border-accent/40 md:p-8 ${fromLeft ? "mr-auto" : "ml-auto"}`}
-              >
-                {/* chrome dots */}
-                <div className="mb-5 flex items-center gap-3">
-                  <span className="flex gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full border border-line/25" />
-                    <span className="h-2.5 w-2.5 rounded-full border border-line/25" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+        {/* uniform responsive grid */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
+          {t.projects.map((p, i) => (
+            <motion.a
+              key={p.title}
+              href={p.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor={t.demo}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease, delay: (i % 2) * 0.08 }}
+              onMouseEnter={() => setActive(i)}
+              onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-line/12 bg-elevated/60 p-6 backdrop-blur-sm transition-all duration-500 ease-expo hover:-translate-y-1.5 hover:border-accent/40 hover:bg-elevated/80 hover:shadow-[0_30px_70px_-34px_rgba(0,0,0,0.6)] md:p-7"
+            >
+              {/* top accent bar (project identity) */}
+              <span className={`pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${p.grad} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
+
+              {/* header */}
+              <div className="mb-6 flex items-center justify-between">
+                <span className="label text-accent">{p.cat}</span>
+                <span className="font-display text-xl font-semibold tabular-nums text-ink/15">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+
+              {/* title + desc */}
+              <h3 className="font-display text-2xl font-semibold text-ink transition-transform duration-500 ease-expo group-hover:translate-x-0.5 md:text-[1.75rem]">
+                {p.title}
+              </h3>
+              <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{p.desc}</p>
+
+              {/* tags */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                {p.tags.map((tag) => (
+                  <span key={tag} className="rounded-full border border-line/12 px-2.5 py-1 label text-muted">{tag}</span>
+                ))}
+              </div>
+
+              {/* footer */}
+              <div className="mt-6 flex items-center justify-between gap-3 border-t border-line/10 pt-4">
+                <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted/80">{p.url}</span>
+                <div className="flex shrink-0 items-center gap-2">
+                  {p.code && (
+                    <button type="button" aria-label="Code" onClick={(e) => { e.preventDefault(); window.open(p.code, "_blank"); }}
+                      className="grid h-9 w-9 place-items-center rounded-full border border-line/15 text-ink transition-colors hover:border-ink">
+                      <Github size={14} />
+                    </button>
+                  )}
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-bg transition-transform duration-500 ease-expo group-hover:rotate-45">
+                    <ArrowUpRight size={15} />
                   </span>
-                  <span className="flex-1 truncate rounded-md bg-bg/50 px-3 py-1 text-center text-[11px] text-muted">{p.url}</span>
-                  <span className="font-display text-4xl font-semibold text-ink/10 md:text-5xl">{String(i + 1).padStart(2, "0")}</span>
                 </div>
-
-                <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-                  <div className="min-w-0">
-                    <span className="label text-accent">{p.cat}</span>
-                    <h3 className="mt-2 font-display text-2xl font-semibold text-ink transition-transform duration-500 ease-expo group-hover:translate-x-1 md:text-4xl">{p.title}</h3>
-                    <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{p.desc}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {p.tags.map((tag) => (
-                        <span key={tag} className="rounded-full border border-line/15 px-3 py-1 label text-muted">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex shrink-0 items-center gap-2.5">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 label text-bg transition-transform duration-500 ease-expo group-hover:-translate-y-0.5">
-                      {t.demo} <ArrowUpRight size={14} />
-                    </span>
-                    {p.code && (
-                      <button type="button" onClick={(e) => { e.preventDefault(); window.open(p.code, "_blank"); }}
-                        className="grid h-10 w-10 place-items-center rounded-full border border-line/20 text-ink transition-colors hover:border-ink">
-                        <Github size={15} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </motion.a>
-            );
-          })}
+              </div>
+            </motion.a>
+          ))}
         </div>
       </div>
 
-      {/* Cursor-following smoke preview */}
+      {/* Cursor-following preview (desktop) */}
       <div ref={previewRef} className="pointer-events-none fixed left-0 top-0 z-[60] hidden lg:block">
         {t.projects.map((p, i) => (
           <div
             key={p.title}
-            className={`absolute left-0 top-0 aspect-[16/10] w-72 -translate-x-1/2 -translate-y-full overflow-hidden rounded-xl border border-line/20 shadow-2xl transition-all duration-300 ease-expo
-              ${active === i ? "scale-100 opacity-100 blur-0" : "pointer-events-none scale-75 opacity-0 blur-md"}`}
+            className={`absolute left-0 top-0 aspect-[16/10] w-64 -translate-x-1/2 -translate-y-[115%] overflow-hidden rounded-xl border border-line/20 shadow-2xl transition-all duration-300 ease-expo
+              ${active === i ? "scale-100 opacity-100 blur-0" : "scale-90 opacity-0 blur-md"}`}
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${p.grad}`}>
               <div className="absolute inset-x-0 top-0 flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
