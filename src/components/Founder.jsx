@@ -47,12 +47,14 @@ export default function Founder() {
         >
           <div className="group relative mx-auto max-w-sm">
             <div className="glass relative aspect-[4/5] overflow-hidden rounded-3xl">
-              <img src={heroImg} alt="Stefano Abate — CEO & Fundador de SAAE"
-                className="h-full w-full object-cover object-[50%_20%] grayscale-[0.1] transition-transform duration-[900ms] ease-expo group-hover:scale-[1.04]" />
+              <div data-zoom className="h-full w-full will-change-transform">
+                <img src={heroImg} alt="Stefano Abate — CEO & Fundador de SAAE"
+                  className="h-full w-full object-cover object-[50%_20%] grayscale-[0.1] transition-transform duration-[900ms] ease-expo group-hover:scale-[1.04]" />
+              </div>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent mix-blend-multiply" />
             </div>
             {/* signature chip */}
-            <div className="glass absolute -bottom-5 -right-4 flex items-center gap-2.5 rounded-2xl px-4 py-3">
+            <div data-parallax="-1.4" className="glass absolute -bottom-5 -right-4 flex items-center gap-2.5 rounded-2xl px-4 py-3">
               <SaaeLogo size={26} tone="auto" />
               <div>
                 <div className="text-sm font-bold leading-none tracking-tight text-ink">{t.name}</div>

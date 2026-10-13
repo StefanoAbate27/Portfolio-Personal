@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Global smooth-scroll (aboutluca-style inertia) powered by Lenis.
+ * Global smooth-scroll powered by Lenis, driven by GSAP's ticker so every
+ * ScrollTrigger (pins, scrubs, parallax) stays perfectly in sync with it.
  * Exposes window.__lenis so anchor links can scrollTo targets.
  */
 export default function useSmoothScroll() {
@@ -16,18 +21,15 @@ export default function useSmoothScroll() {
       smoothWheel: true,
       touchMultiplier: 1.6,
     });
-
     window.__lenis = lenis;
 
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
+    lenis.on("scroll", ScrollTrigger.update);
+    const tick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(tick);
       lenis.destroy();
       window.__lenis = null;
     };
@@ -39,7 +41,7 @@ export function scrollToId(id, offset = 0) {
   const el = document.getElementById(id);
   if (!el) return;
   if (window.__lenis) {
-    window.__lenis.scrollTo(el, { offset, duration: 1.3 });
+    window.__lenis.scrollTo(el, { offset, duration: 1.3, force: true });
   } else {
     const y = el.getBoundingClientRect().top + window.pageYOffset + offset;
     window.scrollTo({ top: y, behavior: "smooth" });

@@ -3,6 +3,9 @@ import { LanguageProvider } from "./context/LanguageContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import useSmoothScroll from "./hooks/useSmoothScroll";
 import useReveal from "./hooks/useReveal";
+import useScrollFx from "./hooks/useScrollFx";
+import { useLanguage } from "./context/LanguageContext";
+import ScrollProgress from "./components/ScrollProgress";
 
 import Preloader from "./components/Preloader";
 import CustomCursor from "./components/CustomCursor";
@@ -20,11 +23,14 @@ import Footer from "./components/Footer";
 function Site() {
   useSmoothScroll();
   useReveal();
+  const { language } = useLanguage();
+  useScrollFx([language]);
 
   return (
     <div className="grain relative min-h-screen">
       <ParticleField />
       <CustomCursor />
+      <ScrollProgress />
       <Header />
 
       <main className="relative z-10">

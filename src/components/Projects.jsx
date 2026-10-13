@@ -1,5 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 import { ArrowUpRight, Github, Eye } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -47,6 +51,28 @@ export default function Projects() {
   const previewRef = useRef(null);
   const pos = useRef({ x: 0, y: 0 });
   const rafRef = useRef(null);
+  const pinRef = useRef(null);
+  const trackRef = useRef(null);
+  const barRef = useRef(null);
+
+  // Escritorio: la sección se fija y las tarjetas avanzan en horizontal con el scroll
+  useLayoutEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
+      const track = trackRef.current;
+      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth + track.getBoundingClientRect().left + 48);
+      gsap.to(track, {
+        x: () => -dist(), ease: "none",
+        scrollTrigger: {
+          trigger: pinRef.current, start: "top top", end: () => `+=${dist()}`, pin: true, scrub: 0.6,
+          invalidateOnRefresh: true, anticipatePin: 1,
+          onUpdate: (st) => { if (barRef.current) barRef.current.style.transform = `scaleX(${st.progress})`; },
+        },
+      });
+    });
+    return () => mm.revert();
+  }, [language]);
 
   const onMove = (e) => {
     pos.current = { x: e.clientX, y: e.clientY };
@@ -62,7 +88,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="relative py-24 md:py-32" onMouseMove={onMove}>
+    <div ref={pinRef} className="relative py-24 md:py-32 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:overflow-hidden lg:py-16" onMouseMove={onMove}>
       <div className="container-x">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
           <div className="reveal">
@@ -72,7 +98,7 @@ export default function Projects() {
           <p className="reveal max-w-sm text-base font-medium leading-relaxed text-muted" data-delay="100">{t.lead}</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
+        <div ref={trackRef} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:w-max lg:gap-6">
           {t.projects.map((p, i) => (
             <motion.a
               key={p.title}
@@ -86,7 +112,7 @@ export default function Projects() {
               transition={{ duration: 0.6, ease, delay: (i % 2) * 0.08 }}
               onMouseEnter={() => setActive(i)}
               onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
-              className="glass glass-hover group relative flex flex-col overflow-hidden rounded-3xl p-7 md:p-8"
+              className="glass glass-hover group relative flex flex-col overflow-hidden rounded-3xl p-7 md:p-8 lg:w-[min(31vw,440px)] lg:shrink-0"
             >
               {/* project identity bar */}
               <span className={`pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${p.grad} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
@@ -122,6 +148,11 @@ export default function Projects() {
               </div>
             </motion.a>
           ))}
+        </div>
+
+        {/* progreso del recorrido horizontal (escritorio) */}
+        <div className="mt-10 hidden h-px w-full bg-line/15 lg:block">
+          <div ref={barRef} className="h-full origin-left scale-x-0 bg-accent" />
         </div>
       </div>
 

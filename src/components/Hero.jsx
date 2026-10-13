@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import {
   motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform,
 } from "framer-motion";
@@ -6,6 +6,9 @@ import { ArrowUpRight, ArrowDownRight, Lock } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 import SaaeLogo from "./SaaeLogo";
+
+const FounderCharacter = lazy(() => import("./FounderCharacter"));
+const hasWebGL = () => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (_) { return false; } };
 
 /* Hero con escenario fijado (al estilo de la página Smart de Scottish):
    una sola sección sticky donde el scroll recorre capítulos sobre el mismo
@@ -307,7 +310,7 @@ export default function Hero() {
   const rotX = useTransform([p, my], ([v, m]) => kf(v, K, [26, 0, 8, 8, 0, 6, 6, 0, 0]) - m * 3);
   const rotY = useTransform([p, mx], ([v, m]) => kf(v, K, [0, 0, -26, -26, 0, 24, 24, -8, -8]) + m * 4);
   const dx = useTransform(p, (v) => (wide ? `${kf(v, K, [0, 0, 15, 15, 0, -15, -15, 13, 13])}vw` : "0vw"));
-  const dy = useTransform(p, (v) => (wide ? `${kf(v, K, [43, 1, 1, 1, 1, 1, 1, 1, 1])}svh` : `${kf(v, K, [19, -10, -11, -11, -10, -11, -11, -11, -11])}svh`));
+  const dy = useTransform(p, (v) => (wide ? `${kf(v, K, [80, 1, 1, 1, 1, 1, 1, 1, 1])}svh` : `${kf(v, K, [70, -10, -11, -11, -10, -11, -11, -11, -11])}svh`));
   const scale = useTransform(p, (v) => kf(v, K, wide ? [0.84, 0.93, 0.84, 0.84, 0.9, 0.84, 0.84, 0.86, 0.86] : [0.94, 1, 0.98, 0.98, 1, 0.98, 0.98, 1, 1]));
   const explode = useTransform(p, (v) => kf(v, [0.14, 0.23, 0.37, 0.46], [0, 1, 1, 0]));
   const wireO = explode;
@@ -319,10 +322,11 @@ export default function Hero() {
   const grow = useTransform(p, [0.76, 0.88], [0, 1]);
   const live = useTransform(p, [0.8, 0.86], [0, 1]);
   const glow = useTransform(p, [0, 0.12, 0.6, 0.85, 1], [0.35, 0.8, 0.8, 1, 1]);
-  const heroScale = useTransform(p, [0.0, 0.07], [1, 0.94]);
+  const heroScale = useTransform(p, [0.0, 0.08], [1, 0.92]);
   const chipsP = useTransform(p, [0.8, 0.9], [0, 1]);
 
   const deviceFont = wide ? "min(0.62vw, 9px)" : "0.86vw";
+  const [webgl] = useState(() => typeof window !== "undefined" && hasWebGL());
 
   if (reduce) return <HeroStatic t={t} />;
 
@@ -397,13 +401,20 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* 0 · entrada */}
-        <Beat p={p} win={[-1, -0.5, 0.035, 0.08]} interactive className={`inset-x-0 px-6 text-center ${wide ? "top-[clamp(6.5rem,15svh,10rem)]" : "top-[clamp(6rem,15svh,8rem)]"}`}>
+        {/* 0 · entrada: el fundador (3D) apoyado sobre el titular */}
+        <Beat p={p} win={[-1, -0.5, 0.045, 0.09]} interactive className={`inset-x-0 px-5 text-center ${wide ? "bottom-[clamp(5.5rem,11svh,7.5rem)]" : "bottom-[clamp(5.5rem,12svh,7rem)]"}`}>
           <motion.div style={{ scale: heroScale }}>
-            <motion.span initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE, delay: 0.1 }} className="eyebrow">
-              {t.eyebrow}
-            </motion.span>
-            <h1 className="display-hero mx-auto mt-5 text-[clamp(2.5rem,7.6vw,6.2rem)] text-ink">
+            <h1 className="display-hero relative mx-auto text-[clamp(2.4rem,7.2vw,6rem)] text-ink">
+              {webgl && (
+                <div className={`absolute left-1/2 -translate-x-1/2 ${wide ? "h-[min(50svh,520px)] w-[min(70vw,860px)]" : "h-[38svh] w-[100vw]"}`}
+                  style={{ bottom: "calc(100% - 0.16em)" }}>
+                  <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: EASE, delay: 0.35 }} className="absolute inset-0">
+                    <Suspense fallback={null}>
+                      <FounderCharacter progress={p} className="!absolute inset-0" />
+                    </Suspense>
+                  </motion.div>
+                </div>
+              )}
               {[t.h1a, t.h1b].map((l, i) => (
                 <span key={i} className="block overflow-hidden pb-[0.06em]">
                   <motion.span className={`block ${i ? "text-accent" : ""}`} initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ duration: 1, ease: EASE, delay: 0.2 + i * 0.15 }}>{l}</motion.span>
@@ -411,7 +422,7 @@ export default function Hero() {
               ))}
             </h1>
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
-              className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              className="mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-9">
               <button onClick={() => scrollToId("contacto", 0)} data-cursor="Go" className="btn-primary">{t.cta1} <ArrowUpRight size={16} /></button>
               <button onClick={() => scrollToId("proyectos", 0)} data-cursor="View" className="btn-ghost">{t.cta2} <ArrowDownRight size={16} /></button>
             </motion.div>

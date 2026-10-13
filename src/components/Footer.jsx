@@ -68,7 +68,7 @@ export default function Footer() {
 
       {/* big faint wordmark (Scottish style) */}
       <div aria-hidden className="pointer-events-none mt-6 select-none text-center">
-        <span className="block text-[26vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-ink/[0.04]">SAAE</span>
+        <span data-wordmark className="block text-[26vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-ink/[0.04]">SAAE</span>
       </div>
     </footer>
   );
