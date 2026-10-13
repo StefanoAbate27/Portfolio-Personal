@@ -6,9 +6,7 @@ import { ArrowUpRight, ArrowDownRight, Lock } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 import SaaeLogo from "./SaaeLogo";
-
 const FounderCharacter = lazy(() => import("./FounderCharacter"));
-const hasWebGL = () => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (_) { return false; } };
 
 /* Hero con escenario fijado (al estilo de la página Smart de Scottish):
    una sola sección sticky donde el scroll recorre capítulos sobre el mismo
@@ -326,7 +324,6 @@ export default function Hero() {
   const chipsP = useTransform(p, [0.8, 0.9], [0, 1]);
 
   const deviceFont = wide ? "min(0.62vw, 9px)" : "0.86vw";
-  const [webgl] = useState(() => typeof window !== "undefined" && hasWebGL());
 
   if (reduce) return <HeroStatic t={t} />;
 
@@ -405,18 +402,16 @@ export default function Hero() {
         <Beat p={p} win={[-1, -0.5, 0.045, 0.09]} interactive className={`inset-x-0 px-5 text-center ${wide ? "bottom-[clamp(5.5rem,11svh,7.5rem)]" : "bottom-[clamp(5.5rem,12svh,7rem)]"}`}>
           <motion.div style={{ scale: heroScale }}>
             <h1 className="display-hero relative mx-auto text-[clamp(2.4rem,7.2vw,6rem)] text-ink">
-              {webgl && (
-                <div className={`absolute left-1/2 -translate-x-1/2 ${wide ? "h-[min(50svh,520px)] w-[min(70vw,860px)]" : "h-[38svh] w-[100vw]"}`}
-                  style={{ bottom: "calc(100% - 0.16em)" }}>
-                  <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: EASE, delay: 0.35 }} className="absolute inset-0">
-                    <Suspense fallback={null}>
-                      <FounderCharacter progress={p} className="!absolute inset-0" />
-                    </Suspense>
-                  </motion.div>
-                </div>
-              )}
+              {/* el fundador asoma por detrás del titular */}
+              <div className="absolute left-1/2 z-0 -translate-x-1/2"
+                style={{ bottom: "calc(100% - 0.62em)", height: wide ? "min(58svh, 600px)" : "44svh", aspectRatio: "822 / 1126",
+                  WebkitMaskImage: "linear-gradient(to bottom, #000 72%, transparent 97%)", maskImage: "linear-gradient(to bottom, #000 72%, transparent 97%)" }}>
+                <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3, ease: EASE, delay: 0.3 }} className="h-full w-full">
+                  <Suspense fallback={null}><FounderCharacter progress={p} className="!h-full !w-full" /></Suspense>
+                </motion.div>
+              </div>
               {[t.h1a, t.h1b].map((l, i) => (
-                <span key={i} className="block overflow-hidden pb-[0.06em]">
+                <span key={i} className="relative z-10 block overflow-hidden pb-[0.06em]">
                   <motion.span className={`block ${i ? "text-accent" : ""}`} initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ duration: 1, ease: EASE, delay: 0.2 + i * 0.15 }}>{l}</motion.span>
                 </span>
               ))}
