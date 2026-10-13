@@ -1,69 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "../context/LanguageContext";
 import SaaeLogo from "./SaaeLogo";
 
-/** Intro counter 0 → 100 with the SAAE isotype filling left→right beside it. */
+/**
+ * Preloader estilo Vanty: el isotipo se rellena de abajo hacia arriba sobre
+ * una versión tenue, y luego la cortina se desliza hacia arriba.
+ */
 export default function Preloader({ onDone }) {
-  const { language } = useLanguage();
-  const [count, setCount] = useState(0);
   const [gone, setGone] = useState(false);
-  const LOGO = 150;
+  const SIZE = 88;
 
   useEffect(() => {
-    let raf;
-    const start = performance.now();
-    const DURATION = 2000;
-    const tick = (now) => {
-      const p = Math.min((now - start) / DURATION, 1);
-      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-      setCount(Math.round(eased * 100));
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else setTimeout(() => setGone(true), 420);
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      setTimeout(() => setGone(true), 250);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // espera la carga + el relleno del logo (mín. ~1.8s, máx. 3s)
+    const minT = setTimeout(() => {
+      if (document.readyState === "complete") finish();
+      else window.addEventListener("load", finish, { once: true });
+    }, 1800);
+    const maxT = setTimeout(finish, 3000);
+    return () => {
+      clearTimeout(minT);
+      clearTimeout(maxT);
+      window.removeEventListener("load", finish);
+    };
   }, []);
 
   return (
     <AnimatePresence onExitComplete={onDone}>
       {!gone && (
         <motion.div
-          className="fixed inset-0 z-[10000] flex flex-col justify-between bg-bg px-6 py-6 md:px-10 md:py-8"
-          initial={{ opacity: 1 }}
+          className="fixed inset-0 z-[10000] grid place-items-center bg-bg"
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.9, ease: [0.7, 0, 0.2, 1] }}
+          transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
         >
-          <div className="flex items-center justify-between">
-            <span className="font-display text-sm font-semibold tracking-[0.16em] text-ink">SAAE</span>
-            <span className="label text-muted">{language === "es" ? "Cargando" : "Loading"}</span>
-          </div>
-
-          <div className="flex flex-1 items-center justify-center">
-            <div className="flex items-center gap-8 md:gap-14">
-              {/* Count (left) */}
-              <div className="flex items-end">
-                <span className="display-hero text-8xl leading-[0.8] text-ink md:text-[9rem]">
-                  {String(count).padStart(2, "0")}
-                </span>
-                <span className="mb-3 ml-1 text-lg text-accent md:mb-6">%</span>
-              </div>
-
-              {/* Filling logo (right, larger, fills left→right) */}
-              <div className="relative shrink-0" style={{ width: LOGO, height: LOGO }}>
-                <div className="absolute inset-0 opacity-20">
-                  <SaaeLogo size={LOGO} tone="auto" />
-                </div>
-                <div className="absolute inset-0 overflow-hidden" style={{ width: `${count}%` }}>
-                  <SaaeLogo size={LOGO} tone="auto" className="!max-w-none" />
-                </div>
-              </div>
+          <div className="relative" style={{ width: SIZE, height: SIZE }}>
+            <div className="absolute inset-0 opacity-20">
+              <SaaeLogo size={SIZE} tone="auto" />
             </div>
-          </div>
-
-          <div className="flex items-center justify-between label text-muted">
-            <span>{language === "es" ? "Estudio de Desarrollo Web" : "Web Development Studio"}</span>
-            <span>© 2025</span>
+            <motion.div
+              className="absolute inset-0"
+              initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+              animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+              transition={{ duration: 1.5, ease: [0.65, 0, 0.35, 1], delay: 0.15 }}
+            >
+              <SaaeLogo size={SIZE} tone="auto" />
+            </motion.div>
           </div>
         </motion.div>
       )}

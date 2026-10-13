@@ -23,9 +23,9 @@ export default {
         gold: '#D6A856',
       },
       fontFamily: {
-        display: ['Cinzel', 'serif'],
-        sans: ['Jost', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['Jost', 'ui-monospace', 'monospace'],
+        display: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['Inter', 'ui-monospace', 'monospace'],
       },
       letterSpacing: {
         tightest: '-0.045em',

@@ -44,8 +44,8 @@ export default function Process() {
     <div className="container-x py-24 md:py-32">
       <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
         <div className="reveal">
-          <span className="eyebrow">— {t.eyebrow}</span>
-          <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+          <span className="eyebrow">{t.eyebrow}</span>
+          <h2 className="display-hero mt-5 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
         </div>
         <p className="reveal max-w-xs text-sm leading-relaxed text-muted" data-delay="100">{t.lead}</p>
       </div>
@@ -89,7 +89,7 @@ export default function Process() {
                   </span>
                   <span className="md:mt-6">
                     <span className={`label transition-colors ${on ? "text-accent" : "text-muted"}`}>{s.week}</span>
-                    <span className={`mt-1.5 block font-display text-2xl font-semibold transition-colors md:text-3xl ${on ? "text-ink" : "text-ink/70 group-hover:text-ink"}`}>{s.title}</span>
+                    <span className={`mt-1.5 block text-2xl font-bold tracking-[-0.03em] transition-colors md:text-3xl ${on ? "text-ink" : "text-ink/70 group-hover:text-ink"}`}>{s.title}</span>
                   </span>
                 </motion.button>
 
@@ -104,9 +104,9 @@ export default function Process() {
                       style={{ transformOrigin: "top center" }}
                       className="absolute left-0 top-0 z-40 w-[min(92vw,330px)] md:left-1/2 md:w-[300px] md:-translate-x-1/2"
                     >
-                      <div className="relative rounded-[1.4rem] border border-line/15 bg-elevated/95 px-5 pb-5 pt-[70px] text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                      <div className="relative glass rounded-[1.4rem] bg-elevated/95 px-5 pb-5 pt-[70px] text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
                         <span className="label text-accent">{s.week}</span>
-                        <h3 className="mt-1 font-display text-xl font-semibold text-ink">{s.title}</h3>
+                        <h3 className="mt-1 text-xl font-bold tracking-tight text-ink">{s.title}</h3>
                         <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{s.desc}</p>
                         <span className="mt-4 block label text-muted">{t.includes}</span>
                         <ul className="mt-2 space-y-1.5">

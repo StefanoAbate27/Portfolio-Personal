@@ -92,10 +92,10 @@ export default function Contact() {
   return (
     <div className="container-x py-24 md:py-32">
       <div className="mb-14 reveal">
-        <span className="eyebrow">— {t.eyebrow}</span>
-        <h2 className="display-hero title-depth mt-5 text-ink">
+        <span className="eyebrow">{t.eyebrow}</span>
+        <h2 className="display-hero mt-5 text-ink">
           <span className="block text-5xl sm:text-7xl md:text-[6.5vw]">{t.big1}</span>
-          <span className="block text-5xl text-ink/85 sm:text-7xl md:text-[6.5vw]">{t.big2}</span>
+          <span className="block text-5xl text-accent sm:text-7xl md:text-[6.5vw]">{t.big2}</span>
         </h2>
       </div>
 
@@ -107,9 +107,9 @@ export default function Contact() {
           <ol className="mt-10 space-y-6">
             {t.steps.map(([title, d], i) => (
               <li key={i} className="flex gap-4">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line/20 font-display text-sm text-ink">{i + 1}</span>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/50 text-sm font-bold text-accent">{i + 1}</span>
                 <div>
-                  <h4 className="font-display text-base font-semibold text-ink">{title}</h4>
+                  <h4 className="text-base font-bold tracking-tight text-ink">{title}</h4>
                   <p className="mt-1 text-sm leading-relaxed text-muted">{d}</p>
                 </div>
               </li>
@@ -118,13 +118,13 @@ export default function Contact() {
 
           <div className="mt-10 space-y-3 border-t border-line/12 pt-8">
             <a href="mailto:stefanoabate.dev@gmail.com" data-cursor="Mail" className="group flex items-center gap-3 text-ink">
-              <Mail size={16} className="text-muted" /> <span className="font-display break-all">stefanoabate.dev@gmail.com</span>
+              <Mail size={16} className="text-muted" /> <span className="break-all font-medium">stefanoabate.dev@gmail.com</span>
             </a>
             <a href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer" data-cursor="Chat" className="group flex items-center gap-3 text-ink">
-              <FaWhatsapp size={16} className="text-muted" /> <span className="font-display">+58 424 758 2675</span>
+              <FaWhatsapp size={16} className="text-muted" /> <span className="font-medium">+58 424 758 2675</span>
             </a>
             <div className="flex items-center gap-3 text-ink">
-              <MapPin size={16} className="text-muted" /> <span className="font-display">San Cristóbal, Táchira — Venezuela</span>
+              <MapPin size={16} className="text-muted" /> <span className="font-medium">San Cristóbal, Táchira — Venezuela</span>
             </div>
           </div>
 
@@ -138,7 +138,7 @@ export default function Contact() {
         </div>
 
         {/* RIGHT — form */}
-        <motion.form onSubmit={sendWhatsApp} className="reveal card-surface p-6 md:p-8 lg:col-span-7" data-delay="120">
+        <motion.form onSubmit={sendWhatsApp} className="reveal glass rounded-3xl p-6 md:p-8 lg:col-span-7" data-delay="120">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <input value={form.name} onChange={set("name")} placeholder={t.name} className={inputCls} />
             <input value={form.email} onChange={set("email")} placeholder={t.email} type="email" className={inputCls} />

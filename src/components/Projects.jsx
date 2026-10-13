@@ -7,33 +7,33 @@ const DATA = {
   es: {
     eyebrow: "Trabajo seleccionado",
     title: "Proyectos",
-    lead: "Plataformas en producción. Pasa el cursor para previsualizar.",
-    demo: "Ver demo", code: "Código",
+    lead: "Plataformas reales en producción, diseñadas y desarrolladas de principio a fin.",
+    demo: "Ver proyecto",
     projects: [
-      { title: "Vanty Digital", cat: "Plataforma · EdTech", url: "vantydigital.com", desc: "Plataforma y academia online con membresías y panel.", tags: ["React", "Node", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#1B2A4A] to-[#2b3f6b]" },
-      { title: "Flowers by Me", cat: "E-commerce · Floristería", url: "flowersbyme.shop", desc: "Floristería con carrito, pagos Square y panel admin.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
+      { title: "Scottish Eyewear", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Tienda de gafas con catálogo, canal mayorista y CRM de gestión.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
+      { title: "Fidup", cat: "SaaS · Fidelización", url: "getfidup.com", desc: "Tarjetas de fidelidad digitales para Apple Wallet y Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
+      { title: "Tattoo AR", cat: "WebAR · Realidad aumentada", url: "tattoo-ar.vercel.app", desc: "Tatuajes que cobran vida con realidad aumentada, sin instalar apps.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
+      { title: "Vanty Digital", cat: "Plataforma · EdTech", url: "vantydigital.com", desc: "Agencia y academia online con membresías y panel de gestión.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
+      { title: "Flowers by Me", cat: "E-commerce · Floristería", url: "flowersbyme.shop", desc: "Floristería online con carrito, pagos con Square y panel admin.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
       { title: "Dashboard Financiero", cat: "Web App · Data", url: "dashboard.saae", desc: "Métricas e informes financieros en tiempo real.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
-      { title: "Tienda LUXE", cat: "E-commerce · Frontend", url: "luxe.store", desc: "Tienda moderna con carrito y pagos integrados.", tags: ["JS", "CSS", "HTML"], demo: "https://ecommerce-luxe-snowy.vercel.app/", code: "https://github.com/StefanoAbate27/Ecommerce-LUXE", grad: "from-[#4a3a24] to-[#a9803f]" },
-      { title: "Landing 360 SEC", cat: "Landing · CRO", url: "360sec.app", desc: "Landing de conversión, rápida y clara.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
+      { title: "Landing 360 SEC", cat: "Landing · Conversión", url: "360sec.app", desc: "Landing de conversión rápida y clara para captar clientes.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
       { title: "Control de Voluntariados", cat: "Escritorio · PC Táchira", url: "pc-tachira.app", desc: "App de escritorio con base de datos y reportes.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
-      { title: "Analizador de Datos", cat: "Python · Analytics", url: "analyzer.py", desc: "Visualización y análisis de datos con Python.", tags: ["Python", "Streamlit"], demo: "https://py-financial-data-analyzer-pnz.streamlit.app", code: "https://github.com/StefanoAbate27/PY-Financial-Data-Analyzer", grad: "from-[#2a2440] to-[#5a4a8b]" },
-      { title: "Portafolio Interactivo", cat: "Web · Motion", url: "portfolio.dev", desc: "Sitio con movimiento y animaciones fluidas.", tags: ["React", "Framer", "GSAP"], demo: "https://portfolio-five-gamma-zv3siuknw6.vercel.app/", code: "https://github.com/StefanoAbate27/Portfolio", grad: "from-[#1B2A4A] to-[#c99a46]" },
     ],
   },
   en: {
     eyebrow: "Selected work",
     title: "Projects",
-    lead: "Platforms in production. Hover to preview.",
-    demo: "View demo", code: "Code",
+    lead: "Real platforms in production, designed and built end to end.",
+    demo: "View project",
     projects: [
-      { title: "Vanty Digital", cat: "Platform · EdTech", url: "vantydigital.com", desc: "Platform and online academy with memberships and panel.", tags: ["React", "Node", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#1B2A4A] to-[#2b3f6b]" },
-      { title: "Flowers by Me", cat: "E-commerce · Florist", url: "flowersbyme.shop", desc: "Florist store with cart, Square payments and admin.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
+      { title: "Scottish Eyewear", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Eyewear store with catalog, wholesale channel and management CRM.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
+      { title: "Fidup", cat: "SaaS · Loyalty", url: "getfidup.com", desc: "Digital loyalty cards for Apple Wallet and Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
+      { title: "Tattoo AR", cat: "WebAR · Augmented reality", url: "tattoo-ar.vercel.app", desc: "Tattoos that come alive with augmented reality, no app install.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
+      { title: "Vanty Digital", cat: "Platform · EdTech", url: "vantydigital.com", desc: "Agency and online academy with memberships and management panel.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
+      { title: "Flowers by Me", cat: "E-commerce · Florist", url: "flowersbyme.shop", desc: "Online florist with cart, Square payments and admin panel.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
       { title: "Financial Dashboard", cat: "Web App · Data", url: "dashboard.saae", desc: "Real-time financial metrics and reporting.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
-      { title: "LUXE Store", cat: "E-commerce · Frontend", url: "luxe.store", desc: "Modern store with cart and integrated payments.", tags: ["JS", "CSS", "HTML"], demo: "https://ecommerce-luxe-snowy.vercel.app/", code: "https://github.com/StefanoAbate27/Ecommerce-LUXE", grad: "from-[#4a3a24] to-[#a9803f]" },
-      { title: "Landing 360 SEC", cat: "Landing · CRO", url: "360sec.app", desc: "Conversion landing — fast and clear.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
+      { title: "Landing 360 SEC", cat: "Landing · Conversion", url: "360sec.app", desc: "Fast, clear conversion landing to capture clients.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
       { title: "Volunteer Manager", cat: "Desktop · PC Táchira", url: "pc-tachira.app", desc: "Desktop app with database and reports.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
-      { title: "Data Analyzer", cat: "Python · Analytics", url: "analyzer.py", desc: "Data visualization and analysis with Python.", tags: ["Python", "Streamlit"], demo: "https://py-financial-data-analyzer-pnz.streamlit.app", code: "https://github.com/StefanoAbate27/PY-Financial-Data-Analyzer", grad: "from-[#2a2440] to-[#5a4a8b]" },
-      { title: "Interactive Portfolio", cat: "Web · Motion", url: "portfolio.dev", desc: "Site with motion and smooth animations.", tags: ["React", "Framer", "GSAP"], demo: "https://portfolio-five-gamma-zv3siuknw6.vercel.app/", code: "https://github.com/StefanoAbate27/Portfolio", grad: "from-[#1B2A4A] to-[#c99a46]" },
     ],
   },
 };
@@ -66,13 +66,12 @@ export default function Projects() {
       <div className="container-x">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
           <div className="reveal">
-            <span className="eyebrow">— {t.eyebrow}</span>
-            <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+            <span className="eyebrow">{t.eyebrow}</span>
+            <h2 className="display-hero mt-5 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
           </div>
-          <p className="reveal max-w-xs text-sm leading-relaxed text-muted" data-delay="100">{t.lead}</p>
+          <p className="reveal max-w-sm text-base font-medium leading-relaxed text-muted" data-delay="100">{t.lead}</p>
         </div>
 
-        {/* uniform responsive grid */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
           {t.projects.map((p, i) => (
             <motion.a
@@ -83,46 +82,41 @@ export default function Projects() {
               data-cursor={t.demo}
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.6, ease, delay: (i % 2) * 0.08 }}
               onMouseEnter={() => setActive(i)}
               onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-line/12 bg-elevated/60 p-6 backdrop-blur-sm transition-all duration-500 ease-expo hover:-translate-y-1.5 hover:border-accent/40 hover:bg-elevated/80 hover:shadow-[0_30px_70px_-34px_rgba(0,0,0,0.6)] md:p-7"
+              className="glass glass-hover group relative flex flex-col overflow-hidden rounded-3xl p-7 md:p-8"
             >
-              {/* top accent bar (project identity) */}
+              {/* project identity bar */}
               <span className={`pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${p.grad} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
 
-              {/* header */}
-              <div className="mb-6 flex items-center justify-between">
-                <span className="label text-accent">{p.cat}</span>
-                <span className="font-display text-xl font-semibold tabular-nums text-ink/15">{String(i + 1).padStart(2, "0")}</span>
+              <div className="flex items-start justify-between gap-4">
+                <span className="text-4xl font-light leading-none text-accent md:text-5xl">{String(i + 1).padStart(2, "0")}</span>
+                <span className="mt-1 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-muted md:text-[11px]">{p.cat}</span>
               </div>
 
-              {/* title + desc */}
-              <h3 className="font-display text-2xl font-semibold text-ink transition-transform duration-500 ease-expo group-hover:translate-x-0.5 md:text-[1.75rem]">
-                {p.title}
-              </h3>
-              <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{p.desc}</p>
+              <h3 className="mt-8 text-2xl font-bold tracking-[-0.03em] text-ink md:text-3xl">{p.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted md:text-base">{p.desc}</p>
 
-              {/* tags */}
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-6 flex flex-wrap gap-2">
                 {p.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-line/12 px-2.5 py-1 label text-muted">{tag}</span>
+                  <span key={tag} className="rounded-full border border-line/12 bg-bg/60 px-3 py-1.5 text-xs font-medium text-ink/80">{tag}</span>
                 ))}
               </div>
 
-              {/* footer */}
-              <div className="mt-6 flex items-center justify-between gap-3 border-t border-line/10 pt-4">
-                <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted/80">{p.url}</span>
-                <div className="flex shrink-0 items-center gap-2">
+              <div className="mt-7 flex items-center justify-between gap-3 border-t border-line/10 pt-5">
+                <span className="min-w-0 flex-1 truncate text-xs text-muted">{p.url}</span>
+                <div className="flex shrink-0 items-center gap-3">
                   {p.code && (
                     <button type="button" aria-label="Code" onClick={(e) => { e.preventDefault(); window.open(p.code, "_blank"); }}
                       className="grid h-9 w-9 place-items-center rounded-full border border-line/15 text-ink transition-colors hover:border-ink">
-                      <Github size={14} />
+                      <Github size={15} />
                     </button>
                   )}
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-bg transition-transform duration-500 ease-expo group-hover:rotate-45">
-                    <ArrowUpRight size={15} />
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-accent">
+                    {t.demo}
+                    <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </div>
@@ -145,17 +139,10 @@ export default function Projects() {
                 <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
                 <span className="ml-2 h-2 w-20 rounded-full bg-white/20" />
               </div>
-              <div className="absolute inset-x-4 top-9 flex gap-3">
-                <div className="h-12 w-12 rounded-lg bg-white/15" />
-                <div className="flex-1 space-y-2 pt-1">
-                  <div className="h-2.5 w-2/3 rounded bg-white/25" />
-                  <div className="h-2 w-1/2 rounded bg-white/15" />
-                </div>
-              </div>
               <div className="absolute inset-0 grid place-items-center">
-                <span className="font-display text-xl font-semibold uppercase tracking-widest text-white/90 drop-shadow">{p.title}</span>
+                <span className="text-xl font-bold uppercase tracking-tight text-white/90 drop-shadow">{p.title}</span>
               </div>
-              <div className="absolute bottom-2 left-3 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-white/70">
+              <div className="absolute bottom-2 left-3 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-white/70">
                 <Eye size={11} /> {p.cat}
               </div>
             </div>

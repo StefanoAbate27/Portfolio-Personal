@@ -44,12 +44,12 @@ export default function WhySaae() {
       <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
         {/* Left — pitch */}
         <div className="lg:col-span-5">
-          <span className="reveal eyebrow">— {t.eyebrow}</span>
-          <h2 className="reveal title-depth mt-4 display-hero text-4xl leading-[1.05] text-ink sm:text-5xl md:text-6xl" data-delay="60">
+          <span className="reveal eyebrow">{t.eyebrow}</span>
+          <h2 className="reveal mt-5 display-hero text-4xl leading-[1.0] text-ink sm:text-5xl md:text-6xl" data-delay="60">
             <span className="block">{t.h1}</span>
-            <span className="block text-ink/85">{t.h2}</span>
+            <span className="block text-accent">{t.h2}</span>
           </h2>
-          <p className="reveal mt-6 max-w-md text-base leading-relaxed text-muted md:text-lg" data-delay="140">{t.desc}</p>
+          <p className="reveal mt-6 max-w-md text-base font-medium leading-relaxed text-muted md:text-lg" data-delay="140">{t.desc}</p>
           <button onClick={() => scrollToId("contacto", -20)} data-cursor="Go" className="reveal btn-primary mt-8" data-delay="200">
             {t.cta} <ArrowUpRight size={15} />
           </button>
@@ -64,12 +64,12 @@ export default function WhySaae() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.7, ease, delay: i * 0.08 }}
-              className="group rounded-2xl border border-line/12 bg-surface/40 p-6 backdrop-blur-sm transition-all duration-500 ease-expo hover:-translate-y-1 hover:border-accent/40"
+              className="glass glass-hover group rounded-3xl p-7"
             >
               <div className="mb-5 grid h-12 w-12 place-items-center rounded-xl border border-line/12 text-ink transition-colors duration-300 group-hover:text-accent">
                 <Icon size={22} />
               </div>
-              <h3 className="mb-2 font-display text-lg font-semibold text-ink">{title}</h3>
+              <h3 className="mb-2 text-lg font-bold tracking-tight text-ink">{title}</h3>
               <p className="text-sm leading-relaxed text-muted">{desc}</p>
             </motion.div>
           ))}

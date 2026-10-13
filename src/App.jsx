@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LanguageProvider, useLanguage } from "./context/LanguageContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import useSmoothScroll from "./hooks/useSmoothScroll";
 import useReveal from "./hooks/useReveal";
@@ -16,28 +16,10 @@ import WhySaae from "./components/WhySaae";
 import Founder from "./components/Founder";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import SectionDivider from "./components/SectionDivider";
 
 function Site() {
-  const { language } = useLanguage();
   useSmoothScroll();
   useReveal();
-
-  const D = language === "es"
-    ? {
-        a: ["Estudio de Desarrollo Web", "Sistemas a medida", "Construido con maestría", "SAAE"],
-        b: ["El Fundador", "Stefano Abate", "CEO & Fundador", "Desde 2025"],
-        c: ["Sobre Nosotros", "Diseño", "Desarrollo", "Producto", "SAAE"],
-        d: ["Cómo trabajamos", "Del boceto al lanzamiento", "Entrega ágil", "SAAE"],
-        e: ["Trabajo seleccionado", "Web · Data · E-commerce", "Enviado a producción", "SAAE"],
-      }
-    : {
-        a: ["Web Development Studio", "Bespoke systems", "Built with mastery", "SAAE"],
-        b: ["The Founder", "Stefano Abate", "CEO & Founder", "Since 2025"],
-        c: ["About Us", "Design", "Development", "Product", "SAAE"],
-        d: ["How we work", "Sketch to launch", "Agile delivery", "SAAE"],
-        e: ["Selected work", "Web · Data · E-commerce", "Shipped to production", "SAAE"],
-      };
 
   return (
     <div className="grain relative min-h-screen">
@@ -50,37 +32,27 @@ function Site() {
           <Hero />
         </section>
 
-        <SectionDivider items={D.a} />
-
         <section id="fundador">
           <Founder />
         </section>
 
-        <SectionDivider items={D.c} reverse />
-
-        <section id="nosotros">
+        <section id="nosotros" className="section-alt">
           <Skills />
         </section>
-
-        <SectionDivider items={D.d} />
 
         <section id="proceso">
           <Process />
         </section>
 
-        <SectionDivider items={D.e} reverse />
-
-        <section id="proyectos">
+        <section id="proyectos" className="section-alt">
           <Projects />
         </section>
-
-        <SectionDivider items={D.a} />
 
         <section id="por-que">
           <WhySaae />
         </section>
 
-        <section id="contacto">
+        <section id="contacto" className="section-alt">
           <Contact />
         </section>
       </main>

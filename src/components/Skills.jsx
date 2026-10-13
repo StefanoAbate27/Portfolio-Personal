@@ -5,7 +5,6 @@ import {
   SiPostgresql, SiElectron, SiVite, SiStripe, SiVercel, SiSupabase, SiPython,
 } from "react-icons/si";
 import { useLanguage } from "../context/LanguageContext";
-import Marquee from "./Marquee";
 import SaaeLogo from "./SaaeLogo";
 
 const stack = [
@@ -161,26 +160,26 @@ export default function Skills() {
       <div className="container-x">
         {/* Header */}
         <div className="mb-14 reveal">
-          <span className="eyebrow">— {t.eyebrow}</span>
-          <h2 className="display-hero title-glow mt-4 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+          <span className="eyebrow">{t.eyebrow}</span>
+          <h2 className="display-hero mt-5 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
         </div>
 
-        {/* Intro + vector */}
+        {/* Intro + logo */}
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
           <div className="reveal lg:col-span-7">
-            <p className="max-w-xl text-lg leading-relaxed text-muted md:text-xl">{t.intro}</p>
-            <p className="mt-6 max-w-xl font-display text-xl italic text-ink/80">“{t.philosophy}”</p>
+            <p className="max-w-xl text-lg font-medium leading-relaxed tracking-tight text-ink/80 md:text-xl">{t.intro}</p>
+            <blockquote className="mt-7 max-w-xl border-l-2 border-accent pl-5 text-lg font-semibold leading-snug tracking-tight text-ink md:text-xl">
+              {t.philosophy}
+            </blockquote>
 
-            <div className="mt-10">
-              <span className="label text-muted">{t.valuesLabel}</span>
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {t.values.map(([vt, vd]) => (
-                  <div key={vt} className="rounded-2xl border border-line/12 bg-surface/40 p-5">
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                      <h4 className="font-display text-base font-semibold text-ink">{vt}</h4>
-                    </div>
-                    <p className="text-sm leading-relaxed text-muted">{vd}</p>
+            <div className="mt-12">
+              <span className="eyebrow">{t.valuesLabel}</span>
+              <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                {t.values.map(([vt, vd], i) => (
+                  <div key={vt} className="glass glass-hover rounded-2xl p-6">
+                    <span className="text-3xl font-light text-accent">0{i + 1}</span>
+                    <h4 className="mt-4 text-lg font-bold tracking-tight text-ink">{vt}</h4>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted">{vd}</p>
                   </div>
                 ))}
               </div>
@@ -193,38 +192,34 @@ export default function Skills() {
               <LogoVector />
             </div>
             <div className="mt-2 text-center">
-              <div className="font-display text-2xl font-semibold tracking-[0.14em] text-ink">SAAE</div>
-              <div className="mt-1 label text-muted">{language === "es" ? "Estudio" : "Studio"}</div>
+              <div className="text-2xl font-bold tracking-tight text-ink">SAAE</div>
+              <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.2em] text-accent">{language === "es" ? "Estudio" : "Studio"}</div>
             </div>
           </div>
         </div>
 
         {/* Services */}
-        <div className="mt-20 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line/12 bg-line/12 sm:grid-cols-2 lg:grid-cols-4">
-          {t.services.map(([title, desc], i) => (
-            <div key={title} className="reveal group relative bg-bg p-7 transition-colors duration-300 hover:bg-surface/60" data-delay={i * 70}>
-              <div className="mb-8 flex items-center justify-between">
-                <span className="label text-muted">0{i + 1}</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="mt-20">
+          <span className="reveal eyebrow">{language === "es" ? "Servicios" : "Services"}</span>
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5">
+            {t.services.map(([title, desc], i) => (
+              <div key={title} className="reveal glass glass-hover group flex gap-6 rounded-3xl p-7 md:p-8" data-delay={i * 70}>
+                <span className="text-4xl font-light leading-none text-accent md:text-5xl">0{i + 1}</span>
+                <div>
+                  <h3 className="text-xl font-bold tracking-tight text-ink md:text-2xl">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted md:text-base">{desc}</p>
+                </div>
               </div>
-              <h3 className="mb-3 font-display text-xl font-semibold text-ink">{title}</h3>
-              <p className="text-sm leading-relaxed text-muted">{desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Stack marquee — smaller & slower */}
-      <div className="mt-20 border-y border-line/12 py-3.5">
-        <Marquee items={stack.map((s) => s.name)} speed="slow" className="text-base font-medium uppercase tracking-[0.16em] text-muted md:text-lg" />
-      </div>
-
       {/* Tech cubes */}
-      <div className="container-x mt-16">
-        <div className="mb-10 flex items-center gap-2.5">
-          <SaaeLogo size={18} tone="auto" />
-          <span className="label text-muted">{t.stackTitle}</span>
-          <span className="ml-2 text-sm text-muted">— {t.stackNote}</span>
+      <div className="container-x mt-24">
+        <div className="mb-10 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <span className="eyebrow">{t.stackTitle}</span>
+          <span className="text-sm text-muted">{t.stackNote}</span>
         </div>
         <div className="mb-3 flex items-center gap-2 text-[11px] italic text-muted/70">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />

@@ -1,46 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================
-   SAAE · MANUAL DE MARCA 2026
-   Azul Marino #1B2A4A · Crema #E9E4D6 · Ocre #C99A46 · Arena #E0DAC8
-   El ocre SOLO como punto focal y micro-acentos.
-   Light  = fondo crema, identidad azul
-   Dark   = fondo azul (como el logo), identidad crema
+   SAAE · estilo corporativo (inspirado en Vanty)
+   Tipografía Inter · paleta SAAE: azul marino, crema, arena y ocre.
+   Light = crema cálido + tinta azul marino · Dark = azul noche + crema
    ============================================================ */
 :root {
-  --bg: 233 228 214;        /* #E9E4D6 crema papel */
-  --surface: 224 218 200;   /* #E0DAC8 arena (superficies secundarias) */
-  --elevated: 240 236 225;  /* crema clara para tarjetas */
-  --ink: 27 42 74;          /* #1B2A4A azul marino · identidad y texto */
-  --muted: 92 103 128;      /* azul desaturado para texto secundario */
-  --accent: 201 154 70;     /* #C99A46 ocre · SOLO punto y micro-acentos */
-  --line: 27 42 74;         /* hairlines (azul a baja opacidad) */
-  --cursor: 201 154 70;
+  --bg: 246 243 236;        /* #F6F3EC crema claro */
+  --surface: 236 231 219;   /* #ECE7DB arena — secciones alternas */
+  --elevated: 255 255 255;  /* tarjetas */
+  --ink: 20 28 48;          /* #141C30 azul marino profundo */
+  --muted: 96 104 122;
+  --accent: 166 124 46;     /* #A67C2E ocre SAAE (más contraste sobre crema) */
+  --line: 20 28 48;
+  --cursor: 166 124 46;
   color-scheme: light;
 }
 
 .dark {
-  --bg: 18 28 51;           /* #121C33 navy profundo (más contraste para el dorado) */
-  --surface: 26 40 71;      /* #1A2847 */
-  --elevated: 33 50 88;     /* #213258 */
-  --ink: 234 229 216;       /* crema (texto) */
-  --muted: 150 162 186;     /* crema-azul apagado */
-  --accent: 214 168 86;     /* #D6A856 dorado vivo — protagonista en oscuro */
-  --line: 234 229 216;      /* hairlines crema */
-  --cursor: 214 168 86;
+  --bg: 12 18 33;           /* #0C1221 azul noche */
+  --surface: 18 27 48;      /* #121B30 */
+  --elevated: 24 35 61;     /* #18233D */
+  --ink: 238 234 225;       /* crema */
+  --muted: 150 160 182;
+  --accent: 212 168 90;     /* #D4A85A ocre/dorado */
+  --line: 238 234 225;
+  --cursor: 212 168 90;
   color-scheme: dark;
-}
-
-/* Dark theme = navy + dorado protagonista + detalles crema.
-   Los titulares display pasan a dorado; el resto del texto queda crema. */
-.dark .display-hero { color: rgb(var(--accent)); }
-.dark .text-stroke {
-  -webkit-text-stroke: 1px rgb(var(--accent) / 0.7);
-  color: transparent;
 }
 
 * { box-sizing: border-box; }
@@ -49,7 +39,7 @@ html { overflow-x: hidden; }
 
 body {
   margin: 0;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: rgb(var(--bg));
   color: rgb(var(--ink));
   font-weight: 400;
@@ -64,7 +54,7 @@ body {
   body.custom-cursor, body.custom-cursor * { cursor: none !important; }
 }
 
-::selection { background: rgb(var(--ink)); color: rgb(var(--bg)); }
+::selection { background: rgb(var(--accent)); color: #fff; }
 
 /* Lenis */
 html.lenis, html.lenis body { height: auto; }
@@ -82,68 +72,75 @@ html.lenis, html.lenis body { height: auto; }
 @layer components {
   .container-x { @apply mx-auto w-full max-w-[1360px] px-6 md:px-10 lg:px-14; }
 
-  /* Cinzel — serif lapidaria: marca, titulares, cifras */
-  .font-display { font-family: 'Cinzel', serif; }
+  .font-display { font-family: 'Inter', sans-serif; letter-spacing: -0.025em; }
 
+  /* Titulares: Inter bold, tracking cerrado, mayúsculas (estilo Vanty) */
   .display-hero {
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    line-height: 0.98;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
     text-transform: uppercase;
   }
 
-  /* Jost versalitas espaciadas — labels / UI */
+  /* Etiqueta de sección: línea + texto en acento */
   .eyebrow {
-    font-family: 'Jost', sans-serif;
-    @apply text-[11px] md:text-xs font-medium uppercase tracking-[0.32em] text-muted;
+    @apply inline-flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-accent;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 1rem;
+    height: 1px;
+    background: currentColor;
   }
   .label {
-    font-family: 'Jost', sans-serif;
-    @apply text-[11px] font-medium uppercase tracking-[0.28em];
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em];
   }
 
   .btn-primary {
-    font-family: 'Jost', sans-serif;
-    @apply relative inline-flex items-center gap-2.5 rounded-full bg-ink px-7 py-3.5
-           text-[12px] font-medium uppercase tracking-[0.2em] text-bg
-           transition-transform duration-500 ease-expo hover:-translate-y-0.5;
+    @apply relative inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-bg
+           transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:text-white;
   }
 
   .btn-ghost {
-    font-family: 'Jost', sans-serif;
-    @apply relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5
-           text-[12px] font-medium uppercase tracking-[0.2em] text-ink
-           transition-colors duration-300 hover:border-ink;
-    border: 1px solid rgb(var(--line) / 0.25);
+    @apply relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-ink
+           transition-colors duration-300 hover:bg-ink hover:text-bg;
+    border: 1px solid rgb(var(--ink) / 0.8);
   }
 
-  .card-surface {
-    @apply rounded-2xl bg-elevated/70 backdrop-blur-sm;
-    border: 1px solid rgb(var(--line) / 0.12);
+  /* Tarjeta cristal esmerilado (liquid glass de Vanty) */
+  .card-surface,
+  .glass {
+    @apply rounded-3xl backdrop-blur-md;
+    background: linear-gradient(135deg, rgb(var(--elevated) / 0.78), rgb(var(--elevated) / 0.42));
+    border: 1px solid rgb(var(--line) / 0.09);
+    box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.18), 0 4px 8px -6px rgba(0, 0, 0, 0.06);
+  }
+  .dark .card-surface,
+  .dark .glass {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 36px -18px rgba(0, 0, 0, 0.7);
+  }
+  .glass-hover {
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease, border-color 0.45s ease, background 0.45s ease;
+  }
+  .glass-hover:hover {
+    transform: translateY(-6px);
+    border-color: rgb(var(--accent) / 0.35);
+    box-shadow: 0 28px 52px -24px rgba(0, 0, 0, 0.28), 0 8px 16px -10px rgba(0, 0, 0, 0.08);
   }
 }
 
-/* Outline serif for large type accents */
-.text-stroke {
-  -webkit-text-stroke: 1px rgb(var(--ink) / 0.45);
-  color: transparent;
+/* Sección alterna (arena), como el beige de Vanty */
+.section-alt {
+  background: rgb(var(--surface) / 0.88);
+  border-top: 1px solid rgb(var(--line) / 0.07);
+  border-bottom: 1px solid rgb(var(--line) / 0.07);
 }
-.dark .text-stroke { -webkit-text-stroke: 1px rgb(var(--ink) / 0.4); }
 
-/* Gold focal dot helper */
+/* Glow de títulos desactivado: estilo corporativo limpio */
+.title-glow, .title-depth { text-shadow: none; }
+
 .dot-gold { color: rgb(var(--accent)); }
-
-/* Title with soft golden glow (gentle illumination) + a touch of depth */
-.title-glow {
-  text-shadow: 0 0 26px rgb(var(--accent) / 0.28), 0 4px 16px rgb(var(--accent) / 0.20);
-}
-.dark .title-glow {
-  text-shadow: 0 0 32px rgb(var(--accent) / 0.42), 0 4px 18px rgb(var(--accent) / 0.30);
-}
-/* keep old name working as an alias */
-.title-depth { text-shadow: 0 0 26px rgb(var(--accent) / 0.28), 0 4px 16px rgb(var(--accent) / 0.20); }
-.dark .title-depth { text-shadow: 0 0 32px rgb(var(--accent) / 0.42), 0 4px 18px rgb(var(--accent) / 0.30); }
 
 /* Subtle paper grain */
 .grain::before {
@@ -152,11 +149,11 @@ html.lenis, html.lenis body { height: auto; }
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.16;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
-.dark .grain::before { mix-blend-mode: overlay; opacity: 0.22; }
+.dark .grain::before { mix-blend-mode: overlay; opacity: 0.12; }
 
 .reveal {
   opacity: 0;
