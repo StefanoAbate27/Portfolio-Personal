@@ -35,7 +35,7 @@
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
-html { overflow-x: hidden; }
+html { overflow-x: clip; }
 
 body {
   margin: 0;
@@ -47,7 +47,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
               color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -214,3 +214,8 @@ html.lenis, html.lenis body { height: auto; }
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Hero: anillo de los hotspots que respira + colores del panel de código */
+@keyframes hsBreathe { 0%, 100% { transform: scale(0.85); opacity: 0.9; } 50% { transform: scale(1.15); opacity: 0.35; } }
+.hs-breathe { animation: hsBreathe 2.2s ease-in-out infinite; }
+.c-k { color: #c792ea; } .c-f { color: #82aaff; } .c-s { color: #d4a85a; } .c-a { color: #f78c6c; } .c-t { color: rgba(255,255,255,0.82); }
