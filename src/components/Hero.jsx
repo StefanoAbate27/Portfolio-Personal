@@ -404,7 +404,7 @@ export default function Hero() {
             <h1 className="display-hero relative mx-auto text-[clamp(2.4rem,7.2vw,6rem)] text-ink">
               {/* el fundador asoma por detrás del titular */}
               <div className="absolute left-1/2 z-0 -translate-x-1/2"
-                style={{ bottom: "calc(100% - 0.62em)", height: wide ? "min(58svh, 600px)" : "44svh", aspectRatio: "822 / 1126",
+                style={{ bottom: "calc(100% - 0.62em)", height: wide ? "min(58svh, 600px)" : "44svh", aspectRatio: "1 / 1",
                   WebkitMaskImage: "linear-gradient(to bottom, #000 72%, transparent 97%)", maskImage: "linear-gradient(to bottom, #000 72%, transparent 97%)" }}>
                 <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3, ease: EASE, delay: 0.3 }} className="h-full w-full">
                   <Suspense fallback={null}><FounderCharacter progress={p} className="!h-full !w-full" /></Suspense>
