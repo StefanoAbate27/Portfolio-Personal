@@ -161,7 +161,7 @@ export default function ParticleField() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 opacity-60" aria-hidden>
+    <div className="pointer-events-none fixed inset-0 z-[80] opacity-30" aria-hidden>
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div
         ref={glowRef}

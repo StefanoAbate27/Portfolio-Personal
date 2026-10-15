@@ -219,3 +219,25 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes hsBreathe { 0%, 100% { transform: scale(0.85); opacity: 0.9; } 50% { transform: scale(1.15); opacity: 0.35; } }
 .hs-breathe { animation: hsBreathe 2.2s ease-in-out infinite; }
 .c-k { color: #c792ea; } .c-f { color: #82aaff; } .c-s { color: #d4a85a; } .c-a { color: #f78c6c; } .c-t { color: rgba(255,255,255,0.82); }
+
+/* Marco de la página (Dave) */
+:root { --frame: 6px; }
+@media (min-width: 768px) { :root { --frame: 10px; } }
+
+/* Nubes del hero: deriva lenta */
+@keyframes cloudDrift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-2.5%); } }
+.cloud-drift { animation: cloudDrift 38s ease-in-out infinite; }
+.cloud-drift-slow { animation: cloudDrift 60s ease-in-out infinite reverse; }
+
+/* Paneles apilados (transiciones estilo Valentin) */
+.panel { position: relative; background: rgb(var(--bg)); box-shadow: 0 -30px 60px -24px rgba(0, 0, 0, 0.35); }
+.panel.section-alt { background: rgb(var(--surface)); }
+.panel:not([data-stack="off"]) > *:not(.pin-spacer) { will-change: transform, filter; }
+#inicio.panel { box-shadow: none; }
+
+/* Fondo de la espiral de proyectos (siempre oscuro, rejilla tenue) */
+.spiral-bg {
+  background-color: #0b0f1c;
+  background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 64px 64px; background-position: center;
+}

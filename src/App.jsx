@@ -13,7 +13,8 @@ import ParticleField from "./components/ParticleField";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Skills from "./components/Skills";
-import Projects from "./components/Projects";
+import ProjectsSpiral from "./components/ProjectsSpiral";
+import SiteFrame from "./components/SiteFrame";
 import Process from "./components/Process";
 import WhySaae from "./components/WhySaae";
 import Founder from "./components/Founder";
@@ -31,34 +32,35 @@ function Site() {
       <ParticleField />
       <CustomCursor />
       <ScrollProgress />
+      <SiteFrame />
       <Header />
 
       <main className="relative z-10">
-        <section id="inicio">
+        <section id="inicio" className="panel">
           <Hero />
         </section>
 
-        <section id="fundador">
+        <section id="fundador" className="panel">
           <Founder />
         </section>
 
-        <section id="nosotros" className="section-alt">
+        <section id="nosotros" className="panel section-alt">
           <Skills />
         </section>
 
-        <section id="proceso">
+        <section id="proceso" className="panel">
           <Process />
         </section>
 
-        <section id="proyectos" className="section-alt">
-          <Projects />
+        <section id="proyectos" className="panel" data-stack="off">
+          <ProjectsSpiral />
         </section>
 
-        <section id="por-que">
+        <section id="por-que" className="panel">
           <WhySaae />
         </section>
 
-        <section id="contacto" className="section-alt">
+        <section id="contacto" className="panel section-alt">
           <Contact />
         </section>
       </main>

@@ -1,27 +1,24 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
 import { ArrowUpRight, Github, Eye } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
-const DATA = {
+export const DATA = {
   es: {
     eyebrow: "Trabajo seleccionado",
     title: "Proyectos",
     lead: "Plataformas reales en producción, diseñadas y desarrolladas de principio a fin.",
     demo: "Ver proyecto",
     projects: [
-      { title: "Scottish Eyewear", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Tienda de gafas con catálogo, canal mayorista y CRM de gestión.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
-      { title: "Fidup", cat: "SaaS · Fidelización", url: "getfidup.com", desc: "Tarjetas de fidelidad digitales para Apple Wallet y Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
-      { title: "Tattoo AR", cat: "WebAR · Realidad aumentada", url: "tattoo-ar.vercel.app", desc: "Tatuajes que cobran vida con realidad aumentada, sin instalar apps.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
-      { title: "Vanty Digital", cat: "Plataforma · EdTech", url: "vantydigital.com", desc: "Agencia y academia online con membresías y panel de gestión.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
-      { title: "Flowers by Me", cat: "E-commerce · Floristería", url: "flowersbyme.shop", desc: "Floristería online con carrito, pagos con Square y panel admin.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
-      { title: "Dashboard Financiero", cat: "Web App · Data", url: "dashboard.saae", desc: "Métricas e informes financieros en tiempo real.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
-      { title: "Landing 360 SEC", cat: "Landing · Conversión", url: "360sec.app", desc: "Landing de conversión rápida y clara para captar clientes.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
-      { title: "Control de Voluntariados", cat: "Escritorio · PC Táchira", url: "pc-tachira.app", desc: "App de escritorio con base de datos y reportes.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
+      { title: "Scottish Eyewear", img: "/projects/scottish.webp", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Tienda de gafas con catálogo, canal mayorista y CRM de gestión.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
+      { title: "Fidup", img: "/projects/fidup.webp", cat: "SaaS · Fidelización", url: "getfidup.com", desc: "Tarjetas de fidelidad digitales para Apple Wallet y Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
+      { title: "Tattoo AR", img: "/projects/tattoo.webp", cat: "WebAR · Realidad aumentada", url: "tattoo-ar.vercel.app", desc: "Tatuajes que cobran vida con realidad aumentada, sin instalar apps.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
+      { title: "Vanty Digital", img: "/projects/vanty.webp", cat: "Plataforma · EdTech", url: "vantydigital.com", desc: "Agencia y academia online con membresías y panel de gestión.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
+      { title: "Flowers by Me", img: "/projects/flowers.webp", cat: "E-commerce · Floristería", url: "flowersbyme.shop", desc: "Floristería online con carrito, pagos con Square y panel admin.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
+      { title: "Dashboard Financiero", img: "/projects/dashboard.webp", cat: "Web App · Data", url: "dashboard.saae", desc: "Métricas e informes financieros en tiempo real.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
+      { title: "Landing 360 SEC", img: "/projects/sec360.webp", cat: "Landing · Conversión", url: "360sec.app", desc: "Landing de conversión rápida y clara para captar clientes.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
+      { title: "Control de Voluntariados", img: "/projects/voluntariados.webp", cat: "Escritorio · PC Táchira", url: "pc-tachira.app", desc: "App de escritorio con base de datos y reportes.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
     ],
   },
   en: {
@@ -30,14 +27,14 @@ const DATA = {
     lead: "Real platforms in production, designed and built end to end.",
     demo: "View project",
     projects: [
-      { title: "Scottish Eyewear", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Eyewear store with catalog, wholesale channel and management CRM.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
-      { title: "Fidup", cat: "SaaS · Loyalty", url: "getfidup.com", desc: "Digital loyalty cards for Apple Wallet and Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
-      { title: "Tattoo AR", cat: "WebAR · Augmented reality", url: "tattoo-ar.vercel.app", desc: "Tattoos that come alive with augmented reality, no app install.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
-      { title: "Vanty Digital", cat: "Platform · EdTech", url: "vantydigital.com", desc: "Agency and online academy with memberships and management panel.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
-      { title: "Flowers by Me", cat: "E-commerce · Florist", url: "flowersbyme.shop", desc: "Online florist with cart, Square payments and admin panel.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
-      { title: "Financial Dashboard", cat: "Web App · Data", url: "dashboard.saae", desc: "Real-time financial metrics and reporting.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
-      { title: "Landing 360 SEC", cat: "Landing · Conversion", url: "360sec.app", desc: "Fast, clear conversion landing to capture clients.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
-      { title: "Volunteer Manager", cat: "Desktop · PC Táchira", url: "pc-tachira.app", desc: "Desktop app with database and reports.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
+      { title: "Scottish Eyewear", img: "/projects/scottish.webp", cat: "E-commerce · CRM", url: "scottisheyewear.com", desc: "Eyewear store with catalog, wholesale channel and management CRM.", tags: ["React", "TypeScript", "Supabase"], demo: "https://scottisheyewear.com", grad: "from-[#1f2d27] to-[#6a2a2f]" },
+      { title: "Fidup", img: "/projects/fidup.webp", cat: "SaaS · Loyalty", url: "getfidup.com", desc: "Digital loyalty cards for Apple Wallet and Google Wallet.", tags: ["Node.js", "Wallet", "Docker"], demo: "https://getfidup.com", grad: "from-[#0f2a2e] to-[#1f7a6b]" },
+      { title: "Tattoo AR", img: "/projects/tattoo.webp", cat: "WebAR · Augmented reality", url: "tattoo-ar.vercel.app", desc: "Tattoos that come alive with augmented reality, no app install.", tags: ["WebAR", "WebGL", "Supabase"], demo: "https://tattoo-ar.vercel.app", grad: "from-[#1a1325] to-[#5b2a6e]" },
+      { title: "Vanty Digital", img: "/projects/vanty.webp", cat: "Platform · EdTech", url: "vantydigital.com", desc: "Agency and online academy with memberships and management panel.", tags: ["React", "Node.js", "Supabase"], demo: "https://vantydigital.com", grad: "from-[#2a1416] to-[#6a2931]" },
+      { title: "Flowers by Me", img: "/projects/flowers.webp", cat: "E-commerce · Florist", url: "flowersbyme.shop", desc: "Online florist with cart, Square payments and admin panel.", tags: ["React", "Vite", "Supabase"], demo: "https://flowersbyme.shop", grad: "from-[#3a2a3f] to-[#7a4a5e]" },
+      { title: "Financial Dashboard", img: "/projects/dashboard.webp", cat: "Web App · Data", url: "dashboard.saae", desc: "Real-time financial metrics and reporting.", tags: ["React", "Tailwind", "Charts"], demo: "https://dashboard-finance-cuyr.vercel.app", code: "https://github.com/StefanoAbate27/Dashboard-Finance", grad: "from-[#1B2A4A] to-[#3557a3]" },
+      { title: "Landing 360 SEC", img: "/projects/sec360.webp", cat: "Landing · Conversion", url: "360sec.app", desc: "Fast, clear conversion landing to capture clients.", tags: ["React", "Vite", "Figma"], demo: "https://360sec.vercel.app", code: "https://github.com/StefanoAbate27/360sec", grad: "from-[#123040] to-[#2f6d86]" },
+      { title: "Volunteer Manager", img: "/projects/voluntariados.webp", cat: "Desktop · PC Táchira", url: "pc-tachira.app", desc: "Desktop app with database and reports.", tags: ["Electron", "React", "DB"], demo: "https://drive.google.com/file/d/1bd2NLuVbDrjiuU4neER2xHDuxumczn4D/view?usp=share_link", code: "https://github.com/StefanoAbate27/control-voluntariados-pc-tachira", grad: "from-[#1f3a34] to-[#3f7d6b]" },
     ],
   },
 };
@@ -51,28 +48,7 @@ export default function Projects() {
   const previewRef = useRef(null);
   const pos = useRef({ x: 0, y: 0 });
   const rafRef = useRef(null);
-  const pinRef = useRef(null);
-  const trackRef = useRef(null);
-  const barRef = useRef(null);
 
-  // Escritorio: la sección se fija y las tarjetas avanzan en horizontal con el scroll
-  useLayoutEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
-      const track = trackRef.current;
-      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth + track.getBoundingClientRect().left + 48);
-      gsap.to(track, {
-        x: () => -dist(), ease: "none",
-        scrollTrigger: {
-          trigger: pinRef.current, start: "top top", end: () => `+=${dist()}`, pin: true, scrub: 0.6,
-          invalidateOnRefresh: true, anticipatePin: 1,
-          onUpdate: (st) => { if (barRef.current) barRef.current.style.transform = `scaleX(${st.progress})`; },
-        },
-      });
-    });
-    return () => mm.revert();
-  }, [language]);
 
   const onMove = (e) => {
     pos.current = { x: e.clientX, y: e.clientY };
@@ -88,7 +64,7 @@ export default function Projects() {
   };
 
   return (
-    <div ref={pinRef} className="relative py-24 md:py-32 lg:flex lg:min-h-screen lg:flex-col lg:justify-center lg:overflow-hidden lg:py-16" onMouseMove={onMove}>
+    <div className="relative py-24 md:py-32" onMouseMove={onMove}>
       <div className="container-x">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-16">
           <div className="reveal">
@@ -98,7 +74,7 @@ export default function Projects() {
           <p className="reveal max-w-sm text-base font-medium leading-relaxed text-muted" data-delay="100">{t.lead}</p>
         </div>
 
-        <div ref={trackRef} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:flex lg:w-max lg:gap-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {t.projects.map((p, i) => (
             <motion.a
               key={p.title}
@@ -112,11 +88,14 @@ export default function Projects() {
               transition={{ duration: 0.6, ease, delay: (i % 2) * 0.08 }}
               onMouseEnter={() => setActive(i)}
               onMouseLeave={() => setActive((cur) => (cur === i ? null : cur))}
-              className="glass glass-hover group relative flex flex-col overflow-hidden rounded-3xl p-7 md:p-8 lg:w-[min(31vw,440px)] lg:shrink-0"
+              className="glass glass-hover group relative flex flex-col overflow-hidden rounded-3xl p-7 md:p-8"
             >
               {/* project identity bar */}
               <span className={`pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${p.grad} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
 
+              <div className="-mx-7 -mt-7 mb-6 aspect-[16/10] overflow-hidden border-b border-line/10 md:-mx-8 md:-mt-8">
+                <img src={p.img} alt={p.title} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-700 ease-expo group-hover:scale-[1.04]" />
+              </div>
               <div className="flex items-start justify-between gap-4">
                 <span className="text-4xl font-light leading-none text-accent md:text-5xl">{String(i + 1).padStart(2, "0")}</span>
                 <span className="mt-1 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-muted md:text-[11px]">{p.cat}</span>
@@ -150,10 +129,6 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* progreso del recorrido horizontal (escritorio) */}
-        <div className="mt-10 hidden h-px w-full bg-line/15 lg:block">
-          <div ref={barRef} className="h-full origin-left scale-x-0 bg-accent" />
-        </div>
       </div>
 
       {/* Cursor-following preview (desktop) */}
