@@ -16,7 +16,7 @@ export default function useScrollFx(deps = []) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const panels = [...document.querySelectorAll("main > section, body footer.panel")];
+    const panels = [...document.querySelectorAll("main section.panel, body footer.panel")];
     panels.forEach((p, i) => { p.style.zIndex = String(10 + i); });
 
     const ctx = gsap.context(() => {
@@ -26,14 +26,14 @@ export default function useScrollFx(deps = []) {
         const vh = () => window.innerHeight;
         const start = () => (el.offsetHeight <= vh() + 2 ? "top top" : "bottom bottom");
         const inner = el.firstElementChild;
-        ScrollTrigger.create({ trigger: el, start, end: () => `+=${vh()}`, pin: true, pinSpacing: false, invalidateOnRefresh: true });
+        ScrollTrigger.create({ trigger: el, start, end: () => `+=${vh()}`, pin: true, pinSpacing: false, invalidateOnRefresh: true, refreshPriority: -i });
         if (!inner) return;
         gsap.fromTo(inner,
           { scale: 1, filter: "blur(0px) brightness(1)" },
           {
             scale: 0.9, filter: "blur(7px) brightness(0.55)", ease: "none", immediateRender: false,
             transformOrigin: () => `50% ${Math.max(0, el.offsetHeight - vh() / 2)}px`,
-            scrollTrigger: { trigger: el, start, end: () => `+=${vh()}`, scrub: true, invalidateOnRefresh: true },
+            scrollTrigger: { trigger: el, start, end: () => `+=${vh()}`, scrub: true, invalidateOnRefresh: true, refreshPriority: -i },
           });
       });
 

@@ -45,7 +45,7 @@ export default function WhySaae() {
         {/* Left — pitch */}
         <div className="lg:col-span-5">
           <span className="reveal eyebrow">{t.eyebrow}</span>
-          <h2 className="reveal mt-5 display-hero text-4xl leading-[1.0] text-ink sm:text-5xl md:text-6xl" data-delay="60">
+          <h2 className="reveal mt-5 display-hero text-6xl text-ink sm:text-7xl md:text-8xl" data-delay="60">
             <span className="block">{t.h1}</span>
             <span className="block text-accent">{t.h2}</span>
           </h2>

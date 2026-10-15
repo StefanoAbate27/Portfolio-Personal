@@ -45,7 +45,7 @@ export default function Process() {
       <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
         <div className="reveal">
           <span className="eyebrow">{t.eyebrow}</span>
-          <h2 className="display-hero mt-5 text-5xl text-ink sm:text-6xl md:text-7xl">{t.title}</h2>
+          <h2 className="display-hero mt-5 text-7xl text-ink sm:text-8xl md:text-[9rem]">{t.title}</h2>
         </div>
         <p className="reveal max-w-xs text-sm leading-relaxed text-muted" data-delay="100">{t.lead}</p>
       </div>

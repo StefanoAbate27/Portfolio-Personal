@@ -150,7 +150,7 @@ function Founder({ framing }) {
 
     s.nod = Math.max(0, s.nod - dt * 1.5);
     const nod = Math.sin(s.nod * Math.PI);
-    const yaw = s.hx * 0.55, pitch = -s.hy * 0.28 + nod * 0.22, roll = -s.hx * 0.06;
+    const yaw = s.hx * 0.42, pitch = -s.hy * 0.22 + nod * 0.22, roll = -s.hx * 0.06;
     const apply = (name, f, extra = [0, 0, 0]) => {
       const b = rig.bones[name]; if (!b) return;
       q.e.set(pitch * f + extra[0], yaw * f + extra[1], roll * f + extra[2]);

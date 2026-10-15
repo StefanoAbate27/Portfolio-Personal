@@ -17,7 +17,7 @@ export default function Footer() {
   const linkCls = "text-left text-sm text-muted transition-colors hover:text-ink";
 
   return (
-    <footer className="panel relative overflow-hidden px-0 pb-10 pt-[clamp(4rem,9vw,7rem)]">
+    <footer className="panel theme-ink relative overflow-hidden px-0 pb-10 pt-[clamp(4rem,9vw,7rem)]">
       <div className="container-x">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line/10 py-[clamp(2.5rem,5vw,4rem)] md:grid-cols-4">
           {/* brand */}

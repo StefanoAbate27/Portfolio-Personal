@@ -190,12 +190,15 @@ export default function ProjectsSpiral() {
     const st = ScrollTrigger.create({
       trigger: root.current, start: "top top", end: () => `+=${window.innerHeight * (total - 1) * 0.42}`,
       pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+      // se crea tarde (carga diferida): calcular en su orden de página, antes que las secciones siguientes
+      refreshPriority: -[...document.querySelectorAll("main section.panel")].indexOf(root.current.closest("section")),
       onUpdate: (self) => api.current.setTarget?.(self.progress),
     });
     api.current.goTo = (idx) => {
       const y = st.start + (st.end - st.start) * (idx / (total - 1));
       window.__lenis ? window.__lenis.scrollTo(y, { duration: 1.2 }) : window.scrollTo({ top: y, behavior: "smooth" });
     };
+    ScrollTrigger.sort();
     ScrollTrigger.refresh();
     return () => st.kill();
   }, [mode, total]);
@@ -232,7 +235,7 @@ export default function ProjectsSpiral() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between px-6 pt-24 md:px-12 md:pt-28">
         <div>
           <span className="eyebrow !text-[#d4a85a]">{data.eyebrow}</span>
-          <h2 className="mt-3 text-4xl font-bold uppercase tracking-[-0.04em] md:text-5xl">{data.title}</h2>
+          <h2 className="display-hero mt-3 text-6xl md:text-8xl">{data.title}</h2>
         </div>
         <div className="pointer-events-auto">{Toggle}</div>
       </div>

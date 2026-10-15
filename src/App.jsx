@@ -40,27 +40,27 @@ function Site() {
           <Hero />
         </section>
 
-        <section id="fundador" className="panel">
+        <section id="fundador" className="panel theme-cream">
           <Founder />
         </section>
 
-        <section id="nosotros" className="panel section-alt">
+        <section id="nosotros" className="panel theme-navy">
           <Skills />
         </section>
 
-        <section id="proceso" className="panel">
+        <section id="proceso" className="panel theme-gold">
           <Process />
         </section>
 
-        <section id="proyectos" className="panel" data-stack="off">
+        <section id="proyectos" className="panel theme-ink" data-stack="off">
           <Suspense fallback={<div className="spiral-bg h-[100svh]" />}><ProjectsSpiral /></Suspense>
         </section>
 
-        <section id="por-que" className="panel">
+        <section id="por-que" className="panel theme-cream">
           <WhySaae />
         </section>
 
-        <section id="contacto" className="panel section-alt">
+        <section id="contacto" className="panel theme-navy">
           <Contact />
         </section>
       </main>

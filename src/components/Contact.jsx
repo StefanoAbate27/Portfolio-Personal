@@ -94,8 +94,8 @@ export default function Contact() {
       <div className="mb-14 reveal">
         <span className="eyebrow">{t.eyebrow}</span>
         <h2 className="display-hero mt-5 text-ink">
-          <span className="block text-5xl sm:text-7xl md:text-[6.5vw]">{t.big1}</span>
-          <span className="block text-5xl text-accent sm:text-7xl md:text-[6.5vw]">{t.big2}</span>
+          <span className="block text-6xl sm:text-8xl md:text-[8.5vw]">{t.big1}</span>
+          <span className="block text-6xl text-accent sm:text-8xl md:text-[8.5vw]">{t.big2}</span>
         </h2>
       </div>
 
