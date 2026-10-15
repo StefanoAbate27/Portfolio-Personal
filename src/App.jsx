@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import useSmoothScroll from "./hooks/useSmoothScroll";
@@ -13,7 +13,7 @@ import ParticleField from "./components/ParticleField";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Skills from "./components/Skills";
-import ProjectsSpiral from "./components/ProjectsSpiral";
+const ProjectsSpiral = lazy(() => import("./components/ProjectsSpiral"));
 import SiteFrame from "./components/SiteFrame";
 import Process from "./components/Process";
 import WhySaae from "./components/WhySaae";
@@ -53,7 +53,7 @@ function Site() {
         </section>
 
         <section id="proyectos" className="panel" data-stack="off">
-          <ProjectsSpiral />
+          <Suspense fallback={<div className="spiral-bg h-[100svh]" />}><ProjectsSpiral /></Suspense>
         </section>
 
         <section id="por-que" className="panel">
