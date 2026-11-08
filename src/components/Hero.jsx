@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 
-import FounderIllustration from "./FounderIllustration";
+const FounderRender = lazy(() => import("./FounderRender"));
 
 /* Hero al estilo de daveholloway.uk: cielo ilustrado con nubes planas en capas
    (parallax con el ratón y deriva lenta), tarjeta "¡HOLA!" con borde y línea
@@ -101,11 +101,11 @@ export default function Hero() {
       </motion.svg>
 
       {/* fundador ilustrado */}
-      <div className="absolute -bottom-[2%] left-1/2 h-[54%] -translate-x-1/2 sm:h-[72%] md:left-auto md:right-[2vw] md:h-[92%] md:translate-x-0 lg:right-[5vw]"
-        style={{ aspectRatio: "1000 / 1100" }}>
+      <div className="absolute -bottom-[1%] left-1/2 h-[46%] -translate-x-1/2 sm:h-[70%] md:left-auto md:-right-[2vw] md:h-[104%] md:translate-x-0 lg:right-0"
+        style={{ aspectRatio: "1 / 1" }}>
         <motion.div initial={{ y: "22%", opacity: 0 }} animate={show ? { y: "0%", opacity: 1 } : {}}
           transition={{ duration: 1.2, ease: EASE, delay: 0.15 }} className="h-full w-full">
-          <FounderIllustration className="h-full w-full" />
+          <Suspense fallback={null}><FounderRender className="h-full w-full" /></Suspense>
         </motion.div>
       </div>
 
