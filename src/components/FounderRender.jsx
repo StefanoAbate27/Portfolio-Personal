@@ -37,17 +37,14 @@ const FRAG = /* glsl */ `
   uniform vec4 uBox0, uBox1;      // x0, x1, y0, y1 (uv) de la abertura
   uniform vec2 uGaze; uniform float uBlink;
   varying vec2 vUv;
-  vec3 eyeColor(vec2 uv, vec4 e, vec4 box, float side, float k) {
-    vec2 c = vec2((box.x + box.y) * 0.5, (box.z + box.w) * 0.5);
+  vec3 eyeColor(vec3 base, vec2 uv, vec4 e, vec4 box, float side, float k) {
     vec2 h = vec2((box.y - box.x) * 0.5, (box.w - box.z) * 0.5);
-    float d = length((uv - c) / h);
-    vec3 sclera = mix(vec3(0.97, 0.94, 0.91), vec3(0.80, 0.72, 0.68), smoothstep(0.35, 1.05, d));
-    sclera *= mix(0.72, 1.0, smoothstep(0.0, 0.5, k));            // sombra del párpado superior
-    vec2 ic = e.xy + uGaze * vec2(h.x * 0.42, h.y * 0.32);
+    vec2 ic = e.xy + uGaze * vec2(h.x * 0.36, h.y * 0.22);
     vec2 q = (uv - ic) / (2.0 * e.w) + 0.5;
     vec4 ir = (q.x > 0.0 && q.x < 1.0 && q.y > 0.0 && q.y < 1.0) ? texture2D(uIris, vec2(side * 0.5 + q.x * 0.5, q.y)) : vec4(0.0);
-    vec3 col = mix(sclera, ir.rgb * mix(0.8, 1.0, smoothstep(0.0, 0.45, k)), ir.a);
-    return col;
+    // sombra de las pestañas/párpado sobre el iris (más oscuro arriba)
+    vec3 iris = ir.rgb * mix(0.62, 1.0, smoothstep(0.02, 0.4, k));
+    return mix(base, iris, ir.a);
   }
   void main() {
     vec4 c = texture2D(uColor, vUv);
@@ -58,7 +55,7 @@ const FRAG = /* glsl */ `
       float k = maps.b;
       bool left = vUv.x < 0.54;
       vec4 e = left ? uEye0 : uEye1; vec4 box = left ? uBox0 : uBox1;
-      vec3 eye = eyeColor(vUv, e, box, left ? 0.0 : 1.0, k);
+      vec3 eye = eyeColor(c.rgb, vUv, e, box, left ? 0.0 : 1.0, k);
       if (k < uBlink) {
         // párpado: piel real tomada justo encima del ojo
         eye = texture2D(uColor, vec2(vUv.x, box.w + 0.012 + (box.w - vUv.y) * 0.25)).rgb * 0.97;
