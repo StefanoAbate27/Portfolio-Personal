@@ -1,10 +1,10 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { scrollToId } from "../hooks/useSmoothScroll";
 
-const FounderCharacter = lazy(() => import("./FounderCharacter"));
+import FounderIllustration from "./FounderIllustration";
 
 /* Hero al estilo de daveholloway.uk: cielo ilustrado con nubes planas en capas
    (parallax con el ratón y deriva lenta), tarjeta "¡HOLA!" con borde y línea
@@ -100,16 +100,14 @@ export default function Hero() {
         <Cloud x={1250} y={940} s={1.8} fill="#34539f" flip />
       </motion.svg>
 
-      {/* fundador 3D */}
-      <motion.div
-        initial={{ y: "18%", opacity: 0 }} animate={show ? { y: "0%", opacity: 1 } : {}}
-        transition={{ duration: 1.3, ease: EASE, delay: 0.15 }}
-        className="absolute -bottom-[9%] right-0 h-[64%] w-full sm:h-[84%] md:-bottom-[13%] md:h-[108%] md:w-[60vw] lg:w-[min(62vw,1040px)]"
-      >
-        <Suspense fallback={null}>
-          <FounderCharacter framing="hero" className="h-full w-full" />
-        </Suspense>
-      </motion.div>
+      {/* fundador ilustrado */}
+      <div className="absolute -bottom-[2%] left-1/2 h-[54%] -translate-x-1/2 sm:h-[72%] md:left-auto md:right-[2vw] md:h-[92%] md:translate-x-0 lg:right-[5vw]"
+        style={{ aspectRatio: "1000 / 1100" }}>
+        <motion.div initial={{ y: "22%", opacity: 0 }} animate={show ? { y: "0%", opacity: 1 } : {}}
+          transition={{ duration: 1.2, ease: EASE, delay: 0.15 }} className="h-full w-full">
+          <FounderIllustration className="h-full w-full" />
+        </motion.div>
+      </div>
 
       {/* tarjeta ¡HOLA! */}
       <div className="relative z-10 flex h-full items-start px-5 pt-24 sm:px-8 md:items-center md:px-[5vw] md:pt-0">

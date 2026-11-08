@@ -19,7 +19,7 @@ const R = 3.3;          // radio del cilindro de la espiral
 const STEP = 0.66;      // giro entre tarjetas (rad): mayor que el ancho angular de una tarjeta (0,58) para que no se crucen
 const DY = 0.5;         // subida entre tarjetas
 const CW = 1.9, CH = CW / 1.6;
-const REPEAT = 2;       // vueltas de proyectos (más densidad visual)
+const REPEAT = 1;       // cada proyecto aparece una sola vez
 
 const VERT = /* glsl */ `
   varying vec2 vUv; varying float vFacing;
