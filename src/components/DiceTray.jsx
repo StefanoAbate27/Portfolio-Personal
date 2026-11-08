@@ -85,7 +85,7 @@ export default function DiceTray({ items, labels }) {
         if (sp > 25) { b.ry += b.vx * dt * 0.55; b.rx -= b.vy * dt * 0.55; b.rz += b.vx * dt * 0.05; b.sleep = 0; }
         else {
           b.sleep = Math.min(1, b.sleep + dt * 2);
-          const snap = (a) => Math.round(a / 90) * 90;
+          const snap = (a) => Math.round(a / 360) * 360;   // todas las caras llevan el mismo icono: se asienta siempre derecho
           b.rx += (snap(b.rx) - b.rx) * 0.12; b.ry += (snap(b.ry) - b.ry) * 0.12; b.rz += (0 - b.rz) * 0.08;
         }
       }
