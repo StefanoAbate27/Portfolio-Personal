@@ -264,3 +264,20 @@ html.lenis, html.lenis body { height: auto; }
   background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
   background-size: 64px 64px; background-position: center;
 }
+
+/* ===== Dados de tecnologías (mesa con física) ===== */
+.dice { will-change: transform; }
+.dice-cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.dice-face {
+  position: absolute; inset: 0; display: grid; place-items: center; border-radius: 14px;
+  background: rgb(var(--elevated)); color: rgb(var(--ink));
+  border: 2px solid rgb(var(--edge)); box-shadow: inset 0 -6px 0 rgb(var(--edge) / 0.18), inset 0 0 18px rgb(var(--ink) / 0.06);
+  backface-visibility: hidden;
+}
+.dice:hover .dice-face { color: rgb(var(--accent)); }
+.dice-face.f { transform: translateZ(37px); }
+.dice-face.b { transform: rotateY(180deg) translateZ(37px); }
+.dice-face.r { transform: rotateY(90deg) translateZ(37px); }
+.dice-face.l { transform: rotateY(-90deg) translateZ(37px); }
+.dice-face.t { transform: rotateX(90deg) translateZ(37px); }
+.dice-face.d { transform: rotateX(-90deg) translateZ(37px); }

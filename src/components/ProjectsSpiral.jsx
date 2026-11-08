@@ -114,8 +114,8 @@ export default function ProjectsSpiral() {
       renderer.setSize(w, h, false);
       renderer.domElement.style.width = "100%"; renderer.domElement.style.height = "100%";
       camera.aspect = w / h;
-      camera.position.set(0, 0.15, R + (w / h < 1 ? 7.6 : 5.4));
-      camera.lookAt(0, 0, 0);
+      camera.position.set(0, 0.36, R + (w / h < 1 ? 7.6 : 5.4));
+      camera.lookAt(0, 0.24, 0);                // la espiral queda algo más abajo, libre del título
       camera.updateProjectionMatrix();
     };
     resize();
@@ -127,12 +127,46 @@ export default function ProjectsSpiral() {
       ndc.set(s.mx, s.my);
     };
     const onLeave = () => ndc.set(-9, -9);
+    // arrastrar para girar (horizontal o vertical), con inercia; un clic sin arrastre abre/centra
+    const dr = { on: false, x: 0, y: 0, moved: 0, hist: [] };
+    const scrollBy = (px, duration) => {
+      const L = window.__lenis; if (!L) return;
+      const y = Math.max(api.current.start ?? 0, Math.min(api.current.end ?? 1e9, L.targetScroll + px));
+      duration ? L.scrollTo(y, { duration, force: true }) : L.scrollTo(y, { immediate: true, force: true });
+    };
+    const onDown = (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      dr.on = true; dr.x = e.clientX; dr.y = e.clientY; dr.moved = 0; dr.hist = [{ x: e.clientX, y: e.clientY, t: performance.now() }];
+      wrap.setPointerCapture?.(e.pointerId);
+    };
+    const onDrag = (e) => {
+      if (!dr.on) return;
+      const dx = e.clientX - dr.x, dy = e.clientY - dr.y; dr.x = e.clientX; dr.y = e.clientY;
+      const touch = e.pointerType === "touch";
+      const d = touch ? dx : (Math.abs(dx) > Math.abs(dy) ? dx : dy * 0.8);
+      dr.moved += Math.abs(dx) + Math.abs(dy);
+      if (dr.moved > 6) { scrollBy(-d / 240 * (api.current.perCard || 300)); s.changed = performance.now(); }
+      dr.hist.push({ x: e.clientX, y: e.clientY, t: performance.now() }); if (dr.hist.length > 6) dr.hist.shift();
+    };
+    const onUp = () => {
+      if (!dr.on) return; dr.on = false;
+      const a = dr.hist[0], b = dr.hist[dr.hist.length - 1], dt = Math.max(16, b.t - a.t);
+      const vx = (b.x - a.x) / dt, vy = (b.y - a.y) / dt;
+      const v = Math.abs(vx) > Math.abs(vy) ? vx : vy * 0.8;
+      if (dr.moved > 6 && Math.abs(v) > 0.3) scrollBy(-v * 260 / 240 * (api.current.perCard || 300), 0.9);
+      s.dragged = dr.moved > 6; setTimeout(() => { s.dragged = false; }, 0);
+    };
     const onClick = () => {
-      if (s.hovered < 0) return;
+      if (s.dragged || s.hovered < 0) return;
       const f = Math.round(s.f);
       if (s.hovered === f) window.open(cards[f].p.demo, "_blank", "noopener");
       else api.current.goTo?.(s.hovered);
     };
+    wrap.addEventListener("pointerdown", onDown);
+    wrap.addEventListener("pointermove", onDrag);
+    wrap.addEventListener("pointerup", onUp);
+    wrap.addEventListener("pointercancel", onUp);
+    wrap.style.touchAction = "pan-y";
     wrap.addEventListener("pointermove", onMove);
     wrap.addEventListener("pointerleave", onLeave);
     wrap.addEventListener("click", onClick);
@@ -153,7 +187,7 @@ export default function ProjectsSpiral() {
       ray.setFromCamera(ndc, camera);
       const hit = ray.intersectObjects(meshes, false).find((h) => h.object.material.uniforms.uAlpha.value > 0.2);
       s.hovered = hit ? hit.object.userData.idx : -1;
-      wrap.style.cursor = s.hovered >= 0 ? "pointer" : "";
+      wrap.style.cursor = dr.on && dr.moved > 6 ? "grabbing" : s.hovered >= 0 ? "pointer" : "grab";
 
       meshes.forEach((m) => {
         const d = Math.abs(m.userData.idx - f);
@@ -171,6 +205,7 @@ export default function ProjectsSpiral() {
       });
 
       const a = ((Math.round(f) % projects.length) + projects.length) % projects.length;
+      api.current.cur = Math.round(f);
       if (a !== s.lastActive) { s.lastActive = a; setActive(a); }
       renderer.render(scene, camera);
     };
@@ -179,6 +214,7 @@ export default function ProjectsSpiral() {
     return () => {
       cancelAnimationFrame(s.raf); ro.disconnect();
       wrap.removeEventListener("pointermove", onMove); wrap.removeEventListener("pointerleave", onLeave); wrap.removeEventListener("click", onClick);
+      wrap.removeEventListener("pointerdown", onDown); wrap.removeEventListener("pointermove", onDrag); wrap.removeEventListener("pointerup", onUp); wrap.removeEventListener("pointercancel", onUp);
       geo.dispose(); meshes.forEach((m) => m.material.dispose()); Object.values(texCache).forEach((t) => t.dispose());
       renderer.dispose(); renderer.domElement.remove();
     };
@@ -195,12 +231,26 @@ export default function ProjectsSpiral() {
       onUpdate: (self) => api.current.setTarget?.(self.progress),
     });
     api.current.goTo = (idx) => {
+      idx = Math.max(0, Math.min(total - 1, idx));
       const y = st.start + (st.end - st.start) * (idx / (total - 1));
-      window.__lenis ? window.__lenis.scrollTo(y, { duration: 1.2 }) : window.scrollTo({ top: y, behavior: "smooth" });
+      window.__lenis ? window.__lenis.scrollTo(y, { duration: 1.1, force: true }) : window.scrollTo({ top: y, behavior: "smooth" });
     };
+    const sync = () => {};
+    api.current.st = st;
+    Object.defineProperties(api.current, {
+      start: { get: () => st.start, configurable: true }, end: { get: () => st.end, configurable: true },
+      perCard: { get: () => (st.end - st.start) / (total - 1), configurable: true },
+    });
+    const onKey = (e) => {
+      if (!st.isActive) return;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); api.current.goTo(api.current.cur + 1); }
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); api.current.goTo(api.current.cur - 1); }
+    };
+    window.addEventListener("keydown", onKey);
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
-    return () => st.kill();
+    sync();
+    return () => { st.kill(); window.removeEventListener("keydown", onKey); };
   }, [mode, total]);
 
   const toggle = (m) => { if (m !== mode) { setMode(m); setTimeout(() => ScrollTrigger.refresh(), 60); } };
@@ -235,18 +285,29 @@ export default function ProjectsSpiral() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between px-6 pt-24 md:px-12 md:pt-28">
         <div>
           <span className="eyebrow !text-[#d4a85a]">{data.eyebrow}</span>
-          <h2 className="display-hero mt-3 text-6xl md:text-8xl">{data.title}</h2>
+          <h2 className="display-hero mt-3 text-5xl md:text-7xl">{data.title}</h2>
         </div>
         <div className="pointer-events-auto">{Toggle}</div>
       </div>
 
       {/* contador */}
-      <div className="pointer-events-none absolute bottom-8 left-6 z-10 font-mono text-sm tabular-nums text-[#f4efe4]/70 md:bottom-10 md:left-12">
+      <div className="pointer-events-none absolute bottom-8 left-6 z-10 font-mono md:!bottom-16 text-sm tabular-nums text-[#f4efe4]/70 md:bottom-10 md:left-12">
         <span className="text-[#f4efe4]">{String(active + 1).padStart(2, "0")}</span> / {String(projects.length).padStart(2, "0")}
       </div>
 
+      {/* flechas anterior / siguiente + pista */}
+      <div className="absolute bottom-7 right-6 z-10 flex items-center gap-2 md:bottom-16 md:right-12">
+        <span className="mr-2 hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-[#f4efe4]/55 lg:inline">{es ? "Arrastra para girar" : "Drag to spin"}</span>
+        {[["prev", -1, "M15 6l-6 6 6 6"], ["next", 1, "M9 6l6 6-6 6"]].map(([k, d, p]) => (
+          <button key={k} aria-label={k} onClick={() => api.current.goTo?.((api.current.cur ?? 0) + d)} data-cursor={d < 0 ? "←" : "→"}
+            className="grid h-11 w-11 place-items-center rounded-full border-2 border-[#f4efe4]/70 text-[#f4efe4] transition-colors hover:bg-[#f4efe4] hover:text-[#0a0f1d]">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d={p} /></svg>
+          </button>
+        ))}
+      </div>
+
       {/* etiqueta del proyecto activo */}
-      <div className="absolute inset-x-0 bottom-7 z-10 flex justify-center md:bottom-9">
+      <div className="pointer-events-none absolute inset-x-0 bottom-24 z-10 flex justify-center sm:bottom-7 md:bottom-9 [&>*]:pointer-events-auto">
         <AnimatePresence mode="wait">
           <motion.a key={cur.title} href={cur.demo} target="_blank" rel="noopener noreferrer" data-cursor={data.demo}
             initial={{ y: 18, opacity: 0, scale: 0.94 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: -12, opacity: 0, scale: 0.96 }}

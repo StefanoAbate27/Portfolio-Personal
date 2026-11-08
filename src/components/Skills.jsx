@@ -1,5 +1,5 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import React from "react";
+import DiceTray from "./DiceTray";
 import {
   SiReact, SiJavascript, SiTypescript, SiNodedotjs, SiTailwindcss, SiFigma,
   SiPostgresql, SiElectron, SiVite, SiStripe, SiVercel, SiSupabase, SiPython,
@@ -81,79 +81,12 @@ function LogoVector() {
   );
 }
 
-function TechCube({ Icon, i, reorderTick, onGrab, onRelease, dragRef }) {
-  const controls = useAnimation();
-  const rnd = useMemo(() => ({
-    x: (Math.random() - 0.5) * 240,
-    y: (Math.random() - 0.5) * 130,
-    rot: (Math.random() - 0.5) * 140,
-    rest: (Math.random() - 0.5) * 12,
-  }), []);
-
-  // entrance: fall in and land scattered / disordered
-  useEffect(() => {
-    controls.start({
-      x: rnd.x, y: rnd.y, rotate: rnd.rot, opacity: 1,
-      transition: { type: "spring", stiffness: 190, damping: 13, mass: 1, delay: i * 0.05 },
-    });
-  }, []); // eslint-disable-line
-
-  // reorder to the grid whenever the tick advances
-  useEffect(() => {
-    if (reorderTick > 0) {
-      controls.start({
-        x: 0, y: 0, rotate: rnd.rest, opacity: 1,
-        transition: { type: "spring", stiffness: 170, damping: 15, mass: 1, delay: i * 0.03 },
-      });
-    }
-  }, [reorderTick]); // eslint-disable-line
-
-  return (
-    <motion.div
-      initial={{ y: -420, opacity: 0, rotate: rnd.rot }}
-      animate={controls}
-      drag
-      dragConstraints={dragRef}
-      dragElastic={0.5}
-      dragMomentum
-      onDragStart={onGrab}
-      onDragEnd={onRelease}
-      whileDrag={{ scale: 1.18, zIndex: 50, cursor: "grabbing" }}
-      whileHover={{ scale: 1.08 }}
-      className="scene mx-auto cursor-grab active:cursor-grabbing"
-      style={{ "--cs": "76px" }}
-    >
-      <div className="cube" style={{ animationDelay: `${-i * 0.8}s` }}>
-        {["f", "b", "r", "l", "t", "d"].map((face) => (
-          <div key={face} className={`cube-face ${face}`}>
-            <Icon size={30} />
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
 export default function Skills() {
   const { language } = useLanguage();
   const t = content[language] || content.es;
-  const cubesRef = useRef(null);
-  const [reorderTick, setReorderTick] = useState(0);
-  const reorderTimer = useRef(null);
-
-  const scheduleReorder = (delay) => {
-    clearTimeout(reorderTimer.current);
-    reorderTimer.current = setTimeout(() => setReorderTick((n) => n + 1), delay);
-  };
-  useEffect(() => () => clearTimeout(reorderTimer.current), []);
-
-  const orderNow = () => {
-    clearTimeout(reorderTimer.current);
-    setReorderTick((n) => n + 1);
-  };
-  const onGrab = () => clearTimeout(reorderTimer.current);
-  const onRelease = () => scheduleReorder(3000); // reorder 3s after the last throw
-  const labelsOn = reorderTick > 0;
+  const diceLabels = language === "es"
+    ? { throw: "Lanzar dados", order: "Ordenar", hint: "Arrastra un dado y suéltalo para lanzarlo · doble clic para ordenar" }
+    : { throw: "Roll the dice", order: "Arrange", hint: "Drag a die and let go to throw it · double-click to arrange" };
 
   return (
     <div className="py-24 md:py-32">
@@ -215,30 +148,13 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* Tech cubes */}
-      <div className="container-x mt-24">
+      {/* Tecnologías: mesa de dados con física */}
+      <div className="container-x mt-24 pb-[18vh]">
         <div className="mb-10 flex flex-wrap items-baseline gap-x-4 gap-y-2">
           <span className="eyebrow">{t.stackTitle}</span>
           <span className="text-sm text-muted">{t.stackNote}</span>
         </div>
-        <div className="mb-3 flex items-center gap-2 text-[11px] italic text-muted/70">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-          {reorderTick === 0
-            ? (language === "es" ? "· Haz clic para ordenarlos ·" : "· Click to arrange them ·")
-            : (language === "es" ? "· Arrástralos y lánzalos — se reordenan solos ·" : "· Drag & throw them — they tidy up on their own ·")}
-        </div>
-        <div
-          ref={cubesRef}
-          onClick={orderNow}
-          className="relative grid cursor-pointer grid-cols-2 justify-items-center gap-y-14 overflow-visible pt-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
-        >
-          {stack.map(({ name, icon: Icon }, i) => (
-            <div key={name} className="flex flex-col items-center gap-4">
-              <TechCube Icon={Icon} i={i} reorderTick={reorderTick} onGrab={onGrab} onRelease={onRelease} dragRef={cubesRef} />
-              <span className={`pointer-events-none text-[11px] text-muted transition-opacity duration-500 ${labelsOn ? "opacity-100" : "opacity-0"}`}>{name}</span>
-            </div>
-          ))}
-        </div>
+        <DiceTray items={stack} labels={diceLabels} />
       </div>
     </div>
   );
