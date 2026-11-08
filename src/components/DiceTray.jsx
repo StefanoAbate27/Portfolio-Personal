@@ -16,30 +16,41 @@ export default function DiceTray({ items, labels }) {
   const els = useRef([]);
   const st = useRef(null);
   const [hover, setHover] = useState(-1);
+  const [names, setNames] = useState(null);      // posiciones de los nombres al ordenar
 
   useEffect(() => {
     const box = tray.current;
     const W = () => box.clientWidth, H = () => box.clientHeight;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const bodies = items.map((_, i) => ({
-      x: R + Math.random() * Math.max(10, W() - 2 * R), y: -SIZE - Math.random() * 400,
+      x: R + Math.random() * Math.max(10, W() - 2 * R), y: R + Math.random() * 60,
       vx: (Math.random() - 0.5) * 300, vy: 0, rx: Math.random() * 360, ry: Math.random() * 360, rz: (Math.random() - 0.5) * 40,
       held: false, sleep: 0, tx: null, ty: null,
     }));
     const s = { bodies, drag: -1, px: 0, py: 0, hist: [], raf: 0, last: performance.now(), vis: false, ordered: false };
     st.current = s;
 
+    // cuadrícula centrada (horizontal y vertical) con hueco para el nombre bajo cada dado
+    const CH = SIZE + 54;
     const gridTarget = (i) => {
-      const maxCols = Math.max(2, Math.min(items.length, Math.floor(W() / (SIZE + 34))));
+      const CW = Math.min(SIZE + 40, (W() - 12) / 3);                    // al menos 3 columnas en móvil
+      const maxCols = Math.max(3, Math.min(items.length, Math.floor((W() - 12) / CW)));
       const rows = Math.ceil(items.length / maxCols), cols = Math.ceil(items.length / rows);
-      const gw = cols * (SIZE + 34), c = i % cols, r = Math.floor(i / cols);
-      return { x: (W() - gw) / 2 + (SIZE + 34) * (c + 0.5), y: H() - (rows - r) * (SIZE + 30) + 4 };
+      const c = i % cols, r = Math.floor(i / cols);
+      const inRow = Math.min(cols, items.length - r * cols);              // última fila también centrada
+      const x0 = (W() - inRow * CW) / 2, y0 = (H() - rows * CH) / 2;
+      return { x: x0 + CW * (c + 0.5), y: y0 + CH * r + SIZE / 2 + 6 };
     };
-    s.order = () => { s.ordered = true; bodies.forEach((b, i) => { const t = gridTarget(i); b.tx = t.x; b.ty = t.y; b.sleep = 0; }); };
+    s.order = () => {
+      s.ordered = true;
+      const pos = bodies.map((b, i) => { const t = gridTarget(i); b.tx = t.x; b.ty = t.y; b.sleep = 0; return t; });
+      setNames(pos);
+    };
     s.throwAll = () => {
-      s.ordered = false;
-      bodies.forEach((b) => { b.tx = b.ty = null; b.vx = (Math.random() - 0.5) * 1600; b.vy = -900 - Math.random() * 900; b.sleep = 0; });
+      s.ordered = false; setNames(null);
+      bodies.forEach((b) => { b.tx = b.ty = null; b.vx = (Math.random() - 0.5) * 1100; b.vy = -500 - Math.random() * 650; b.sleep = 0; });
     };
+    s.unorder = () => { if (s.ordered) { s.ordered = false; setNames(null); bodies.forEach((b) => { b.tx = b.ty = null; }); } };
 
     const step = (dt) => {
       const w = W(), h = H();
@@ -51,7 +62,8 @@ export default function DiceTray({ items, labels }) {
         } else b.vy += G * dt;
         b.vx *= FRICTION; b.vy *= FRICTION;
         b.x += b.vx * dt; b.y += b.vy * dt;
-        // paredes y suelo (el techo queda abierto para lanzar)
+        // paredes, techo y suelo: los dados nunca salen del cuadro
+        if (b.y < R && b.tx == null) { b.y = R; b.vy = Math.abs(b.vy) * BOUNCE; }
         if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx) * BOUNCE; }
         if (b.x > w - R) { b.x = w - R; b.vx = -Math.abs(b.vx) * BOUNCE; }
         if (b.y > h - R) {
@@ -82,11 +94,12 @@ export default function DiceTray({ items, labels }) {
       for (const b of bodies) {
         const sp = Math.hypot(b.vx, b.vy);
         if (b.held) { b.rx += b.vy * dt * 0.6; b.ry += b.vx * dt * 0.6; continue; }
-        if (sp > 25) { b.ry += b.vx * dt * 0.55; b.rx -= b.vy * dt * 0.55; b.rz += b.vx * dt * 0.05; b.sleep = 0; }
+        if (sp > 25 && b.tx == null) { b.ry += b.vx * dt * 0.55; b.rx -= b.vy * dt * 0.55; b.rz += b.vx * dt * 0.05; b.sleep = 0; }
         else {
           b.sleep = Math.min(1, b.sleep + dt * 2);
           const snap = (a) => Math.round(a / 360) * 360;   // todas las caras llevan el mismo icono: se asienta siempre derecho
-          b.rx += (snap(b.rx) - b.rx) * 0.12; b.ry += (snap(b.ry) - b.ry) * 0.12; b.rz += (0 - b.rz) * 0.08;
+          const k = b.tx != null ? 0.06 : 0.12;   // al ordenar se endereza con un giro suave
+          b.rx += (snap(b.rx) - b.rx) * k; b.ry += (snap(b.ry) - b.ry) * k; b.rz += (0 - b.rz) * 0.08;
         }
       }
     };
@@ -113,7 +126,7 @@ export default function DiceTray({ items, labels }) {
     const down = (e) => {
       const i = Number(e.currentTarget.dataset.i);
       const b = bodies[i]; const p = local(e);
-      s.drag = i; b.held = true; b.tx = b.ty = null; s.ordered = false;
+      s.unorder(); s.drag = i; b.held = true;
       s.ox = b.x - p.x; s.oy = b.y - p.y; s.hist = [{ ...p, t: performance.now() }];
       e.currentTarget.setPointerCapture(e.pointerId);
       e.preventDefault();
@@ -121,15 +134,15 @@ export default function DiceTray({ items, labels }) {
     const move = (e) => {
       if (s.drag < 0) return;
       const b = bodies[s.drag], p = local(e);
-      b.x = p.x + s.ox; b.y = p.y + s.oy; b.vx = b.vy = 0;
+      b.x = Math.max(R, Math.min(W() - R, p.x + s.ox)); b.y = Math.max(R, Math.min(H() - R, p.y + s.oy)); b.vx = b.vy = 0;
       s.hist.push({ ...p, t: performance.now() }); if (s.hist.length > 6) s.hist.shift();
     };
     const up = () => {
       if (s.drag < 0) return;
       const b = bodies[s.drag], h0 = s.hist[0], h1 = s.hist[s.hist.length - 1];
       const dt = Math.max(16, h1.t - h0.t) / 1000;
-      b.vx = Math.max(-3500, Math.min(3500, (h1.x - h0.x) / dt));
-      b.vy = Math.max(-3500, Math.min(3500, (h1.y - h0.y) / dt));
+      b.vx = Math.max(-2200, Math.min(2200, (h1.x - h0.x) / dt));
+      b.vy = Math.max(-2200, Math.min(2200, (h1.y - h0.y) / dt));
       b.held = false; s.drag = -1;
     };
     els.current.forEach((el) => { el.addEventListener("pointerdown", down); el.addEventListener("pointermove", move); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up); });
@@ -158,6 +171,10 @@ export default function DiceTray({ items, labels }) {
         {/* etiqueta del dado señalado */}
         <div className="pointer-events-none absolute left-1/2 top-4 z-40 -translate-x-1/2 rounded-full bg-ink px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-bg transition-opacity duration-200"
           style={{ opacity: hover >= 0 ? 1 : 0 }}>{hover >= 0 ? items[hover].name : ""}</div>
+        {names && names.map((p, i) => (
+          <span key={items[i].name} className="dice-label pointer-events-none absolute z-[5] -translate-x-1/2 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.12em] text-ink/80"
+            style={{ left: p.x, top: p.y + SIZE / 2 + 12, animationDelay: `${0.25 + i * 0.03}s` }}>{items[i].name}</span>
+        ))}
         {items.map(({ name, icon: Icon }, i) => (
           <div key={name} ref={(el) => { els.current[i] = el; }} data-i={i} data-cursor={name}
             onPointerEnter={() => setHover(i)} onPointerLeave={() => setHover((h) => (h === i ? -1 : h))}

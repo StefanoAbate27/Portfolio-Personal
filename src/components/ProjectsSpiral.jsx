@@ -31,7 +31,7 @@ const VERT = /* glsl */ `
     gl_Position = projectionMatrix * mv;
   }`;
 const FRAG = /* glsl */ `
-  uniform sampler2D uMap; uniform float uBlur; uniform float uAlpha; uniform float uDim; uniform float uHover;
+  uniform sampler2D uMap; uniform float uBlur; uniform float uAlpha; uniform float uDim; uniform float uHover; uniform vec3 uBg;
   varying vec2 vUv; varying float vFacing;
   float sdRound(vec2 p, vec2 b, float r) { vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
   void main() {
@@ -41,7 +41,7 @@ const FRAG = /* glsl */ `
     if (edge < 0.01) discard;
     vec2 uv = mix(vec2(0.5), vUv, 1.0 - uHover * 0.04);         // zoom suave al pasar el ratón
     vec3 c = texture2D(uMap, uv, uBlur * 5.0).rgb;
-    c *= mix(1.0, 0.45, uDim);
+    c = mix(c, uBg, uDim * 0.6);
     float side = smoothstep(0.18, 0.45, vFacing);          // de canto: se desvanece (sin franjas)
     if (edge * uAlpha * side < 0.01) discard;
     gl_FragColor = vec4(c, edge * uAlpha * side);
@@ -83,6 +83,15 @@ export default function ProjectsSpiral() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 60);
     const spiral = new THREE.Group(); scene.add(spiral);
+    // color de fondo de la sección (cambia con el tema)
+    const bgColor = new THREE.Color();
+    const readBg = () => {
+      const v = getComputedStyle(root.current).getPropertyValue("--bg").trim().split(/\s+/).map(Number);
+      bgColor.setRGB(v[0] / 255, v[1] / 255, v[2] / 255, THREE.SRGBColorSpace);
+    };
+    readBg();
+    const themeObs = new MutationObserver(readBg);
+    themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     const geo = curvedPlane();
     const loader = new THREE.TextureLoader();
     const texCache = {};
@@ -95,7 +104,7 @@ export default function ProjectsSpiral() {
       }
       const mat = new THREE.ShaderMaterial({
         vertexShader: VERT, fragmentShader: FRAG, transparent: true, side: THREE.DoubleSide,
-        uniforms: { uMap: { value: texCache[url] }, uBlur: { value: 0 }, uAlpha: { value: 1 }, uDim: { value: 0 }, uHover: { value: 0 } },
+        uniforms: { uMap: { value: texCache[url] }, uBlur: { value: 0 }, uAlpha: { value: 1 }, uDim: { value: 0 }, uHover: { value: 0 }, uBg: { value: bgColor } },
       });
       const m = new THREE.Mesh(geo, mat);
       const a = c.i * STEP;
@@ -212,7 +221,7 @@ export default function ProjectsSpiral() {
     loop();
 
     return () => {
-      cancelAnimationFrame(s.raf); ro.disconnect();
+      cancelAnimationFrame(s.raf); ro.disconnect(); themeObs.disconnect();
       wrap.removeEventListener("pointermove", onMove); wrap.removeEventListener("pointerleave", onLeave); wrap.removeEventListener("click", onClick);
       wrap.removeEventListener("pointerdown", onDown); wrap.removeEventListener("pointermove", onDrag); wrap.removeEventListener("pointerup", onUp); wrap.removeEventListener("pointercancel", onUp);
       geo.dispose(); meshes.forEach((m) => m.material.dispose()); Object.values(texCache).forEach((t) => t.dispose());
@@ -277,30 +286,30 @@ export default function ProjectsSpiral() {
   }
 
   return (
-    <div ref={root} className="spiral-bg relative h-[100svh] overflow-hidden text-[#f4efe4]">
+    <div ref={root} className="spiral-bg relative h-[100svh] overflow-hidden text-ink">
       <div ref={canvasWrap} className="absolute inset-0" />
 
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-56 bg-gradient-to-b from-[#0b0f1c] via-[#0b0f1c]/70 to-transparent md:h-64" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-56 bg-gradient-to-b from-bg via-bg/70 to-transparent md:h-64" />
       {/* cabecera */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between px-6 pt-24 md:px-12 md:pt-28">
         <div>
-          <span className="eyebrow !text-[#d4a85a]">{data.eyebrow}</span>
+          <span className="eyebrow">{data.eyebrow}</span>
           <h2 className="display-hero mt-3 text-5xl md:text-7xl">{data.title}</h2>
         </div>
         <div className="pointer-events-auto">{Toggle}</div>
       </div>
 
       {/* contador */}
-      <div className="pointer-events-none absolute bottom-8 left-6 z-10 font-mono md:!bottom-16 text-sm tabular-nums text-[#f4efe4]/70 md:bottom-10 md:left-12">
-        <span className="text-[#f4efe4]">{String(active + 1).padStart(2, "0")}</span> / {String(projects.length).padStart(2, "0")}
+      <div className="pointer-events-none absolute bottom-8 left-6 z-10 font-mono md:!bottom-16 text-sm tabular-nums text-muted md:bottom-10 md:left-12">
+        <span className="text-ink">{String(active + 1).padStart(2, "0")}</span> / {String(projects.length).padStart(2, "0")}
       </div>
 
       {/* flechas anterior / siguiente + pista */}
       <div className="absolute bottom-7 right-6 z-10 flex items-center gap-2 md:bottom-16 md:right-12">
-        <span className="mr-2 hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-[#f4efe4]/55 lg:inline">{es ? "Arrastra para girar" : "Drag to spin"}</span>
+        <span className="mr-2 hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-muted lg:inline">{es ? "Arrastra para girar" : "Drag to spin"}</span>
         {[["prev", -1, "M15 6l-6 6 6 6"], ["next", 1, "M9 6l6 6-6 6"]].map(([k, d, p]) => (
           <button key={k} aria-label={k} onClick={() => api.current.goTo?.((api.current.cur ?? 0) + d)} data-cursor={d < 0 ? "←" : "→"}
-            className="grid h-11 w-11 place-items-center rounded-full border-2 border-[#f4efe4]/70 text-[#f4efe4] transition-colors hover:bg-[#f4efe4] hover:text-[#0a0f1d]">
+            className="grid h-11 w-11 place-items-center rounded-full border-2 border-ink/70 text-ink transition-colors hover:bg-ink hover:text-bg">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d={p} /></svg>
           </button>
         ))}
@@ -312,11 +321,11 @@ export default function ProjectsSpiral() {
           <motion.a key={cur.title} href={cur.demo} target="_blank" rel="noopener noreferrer" data-cursor={data.demo}
             initial={{ y: 18, opacity: 0, scale: 0.94 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: -12, opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-3 rounded-2xl bg-[#f4efe4] p-1.5 pr-4 text-[#0a0f1d] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.6)]">
+            className="flex items-center gap-3 rounded-2xl bg-elevated p-1.5 pr-4 text-ink" style={{ border: "2px solid rgb(var(--edge))", boxShadow: "4px 4px 0 rgb(var(--edge))" }}>
             <img src={cur.img} alt="" className="h-11 w-11 rounded-xl object-cover object-top" />
             <span className="flex flex-col leading-tight">
               <span className="text-[15px] font-bold">{cur.title}</span>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0a0f1d]/55">{cur.cat}</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{cur.cat}</span>
             </span>
             <ArrowUpRight size={18} className="ml-1" />
           </motion.a>

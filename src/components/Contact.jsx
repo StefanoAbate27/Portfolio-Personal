@@ -1,188 +1,77 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { ArrowRight, ChevronDown, Mail } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
-import { Mail, MapPin, Check } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
+/* Contacto al estilo de vantydigital.com: titular grande en dos líneas, una frase
+   corta y un formulario limpio de campos subrayados. Envía por WhatsApp o correo. */
 export default function Contact() {
   const { language } = useLanguage();
-  const [form, setForm] = useState({ name: "", email: "", type: "", budget: "", msg: "" });
-  const [loading, setLoading] = useState(false);
+  const es = language === "es";
+  const [f, setF] = useState({ name: "", email: "", type: "", msg: "" });
+  const [err, setErr] = useState(false);
 
-  const t = {
-    es: {
-      eyebrow: "Contacto",
-      big1: "Empecemos",
-      big2: "un proyecto",
-      desc: "Cuéntanos tu idea. Te enviamos una propuesta clara.",
-      steps: [
-        ["Cuéntanos tu idea", "Tu objetivo y presupuesto en el formulario."],
-        ["Cotización en 24h", "Alcance, plazo y precio, sin compromiso."],
-        ["Kickoff y entrega", "Arrancamos y lanzamos sin demoras."],
-      ],
-      typeLabel: "Tipo de proyecto",
-      types: ["Landing", "Web App", "E-commerce", "Sistema interno"],
-      budgetLabel: "Presupuesto aproximado",
-      budgets: ["< $500", "$500 – $1.5k", "$1.5k – $5k", "$5k +"],
-      name: "Tu nombre", email: "Tu correo", message: "Cuéntanos sobre tu proyecto",
-      send: "Enviar por WhatsApp", sendMail: "Enviar por correo", sending: "Enviando...",
-      or: "o",
-      fill: "Completa nombre, correo y mensaje.",
-      subject: "Nuevo proyecto para SAAE",
-      avail: "Disponible para nuevos proyectos",
-    },
-    en: {
-      eyebrow: "Contact",
-      big1: "Let's start",
-      big2: "a project",
-      desc: "Tell us your idea. We send you a clear proposal.",
-      steps: [
-        ["Tell us your idea", "Your goal and budget in the form."],
-        ["Quote in 24h", "Scope, timeline and price, no commitment."],
-        ["Kickoff & delivery", "We start and launch without delays."],
-      ],
-      typeLabel: "Project type",
-      types: ["Landing", "Web App", "E-commerce", "Internal system"],
-      budgetLabel: "Approximate budget",
-      budgets: ["< $500", "$500 – $1.5k", "$1.5k – $5k", "$5k +"],
-      name: "Your name", email: "Your email", message: "Tell us about your project",
-      send: "Send via WhatsApp", sendMail: "Send via email", sending: "Sending...",
-      or: "or",
-      fill: "Fill name, email and message.",
-      subject: "New project for SAAE",
-      avail: "Available for new projects",
-    },
-  }[language];
-
-  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const buildMessage = () =>
-    (language === "es" ? "Hola SAAE, soy " : "Hi SAAE, I'm ") +
-    `${form.name} (${form.email}).\n` +
-    (language === "es" ? "Tipo" : "Type") + `: ${form.type || "—"} · ` +
-    (language === "es" ? "Presupuesto" : "Budget") + `: ${form.budget || "—"}\n` +
-    (language === "es" ? "Proyecto" : "Project") + `: ${form.msg}`;
-
-  const valid = () => {
-    if (!form.name || !form.email || !form.msg) { alert(t.fill); return false; }
-    return true;
+  const t = es ? {
+    eyebrow: "Siguiente paso", a: "Es momento de", b: "construir tu proyecto",
+    lead: "Cuéntanos qué necesitas y te respondemos en menos de 24 h.",
+    name: "Nombre", email: "Correo electrónico", type: "¿Qué necesitas?",
+    types: ["Página web / landing", "Tienda online", "Aplicación web", "Sistema interno", "Aún no lo tengo claro"],
+    msg: "Cuéntanos brevemente tu idea", send: "Enviar por WhatsApp", mail: "o envíalo por correo",
+    fill: "Completa tu nombre, correo y mensaje.", subject: "Nuevo proyecto para SAAE", hi: "Hola SAAE, soy",
+  } : {
+    eyebrow: "Next step", a: "It's time to", b: "build your project",
+    lead: "Tell us what you need and we'll reply within 24 h.",
+    name: "Name", email: "Email", type: "What do you need?",
+    types: ["Website / landing", "Online store", "Web application", "Internal system", "Not sure yet"],
+    msg: "Briefly tell us your idea", send: "Send via WhatsApp", mail: "or send it by email",
+    fill: "Fill in your name, email and message.", subject: "New project for SAAE", hi: "Hi SAAE, I'm",
   };
 
-  const sendWhatsApp = (e) => {
-    e.preventDefault();
-    if (!valid()) return;
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      window.open(`https://wa.me/584247582675?text=${encodeURIComponent(buildMessage())}`, "_blank");
-      setForm({ name: "", email: "", type: "", budget: "", msg: "" });
-    }, 500);
-  };
+  const set = (k) => (e) => { setF((s) => ({ ...s, [k]: e.target.value })); setErr(false); };
+  const body = () => `${t.hi} ${f.name} (${f.email}).\n${f.type ? f.type + "\n" : ""}${f.msg}`;
+  const ok = () => { const v = f.name && f.email && f.msg; setErr(!v); return v; };
+  const wa = (e) => { e.preventDefault(); if (ok()) window.open(`https://wa.me/584247582675?text=${encodeURIComponent(body())}`, "_blank"); };
+  const mail = () => { if (ok()) window.location.href = `mailto:stefanoabate.dev@gmail.com?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(body())}`; };
 
-  const sendEmail = () => {
-    if (!valid()) return;
-    const url = `mailto:stefanoabate.dev@gmail.com?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(buildMessage())}`;
-    window.location.href = url;
-  };
-
-  const inputCls = "w-full rounded-xl border border-line/15 bg-bg/60 px-4 py-3.5 text-ink placeholder:text-muted/70 outline-none transition focus:border-ink";
-  const chip = (active) =>
-    `rounded-full border px-4 py-2 label transition-colors ${active ? "border-ink bg-ink text-bg" : "border-line/20 text-muted hover:border-ink hover:text-ink"}`;
+  const field = "w-full border-b-2 border-line/20 bg-transparent py-4 text-lg text-ink outline-none transition-colors placeholder:text-muted focus:border-ink md:text-xl";
 
   return (
-    <div className="container-x py-24 md:py-32">
-      <div className="mb-14 reveal">
-        <span className="eyebrow">{t.eyebrow}</span>
-        <h2 className="display-hero mt-5 text-ink">
-          <span className="block text-6xl sm:text-8xl md:text-[8.5vw]">{t.big1}</span>
-          <span className="block text-6xl text-accent sm:text-8xl md:text-[8.5vw]">{t.big2}</span>
-        </h2>
-      </div>
-
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-        {/* LEFT — text / funnel */}
-        <div className="reveal lg:col-span-5">
-          <p className="max-w-md text-base leading-relaxed text-muted md:text-lg">{t.desc}</p>
-
-          <ol className="mt-10 space-y-6">
-            {t.steps.map(([title, d], i) => (
-              <li key={i} className="flex gap-4">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/50 text-sm font-bold text-accent">{i + 1}</span>
-                <div>
-                  <h4 className="text-base font-bold tracking-tight text-ink">{title}</h4>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">{d}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          <div className="mt-10 space-y-3 border-t border-line/12 pt-8">
-            <a href="mailto:stefanoabate.dev@gmail.com" data-cursor="Mail" className="group flex items-center gap-3 text-ink">
-              <Mail size={16} className="text-muted" /> <span className="break-all font-medium">stefanoabate.dev@gmail.com</span>
-            </a>
-            <a href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer" data-cursor="Chat" className="group flex items-center gap-3 text-ink">
-              <FaWhatsapp size={16} className="text-muted" /> <span className="font-medium">+58 424 758 2675</span>
-            </a>
-            <div className="flex items-center gap-3 text-ink">
-              <MapPin size={16} className="text-muted" /> <span className="font-medium">San Cristóbal, Táchira — Venezuela</span>
-            </div>
-          </div>
-
-          <div className="mt-8 inline-flex items-center gap-2.5 rounded-full border border-line/15 px-4 py-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            <span className="label text-muted">{t.avail}</span>
+    <div className="container-x py-24 md:py-40">
+      <div className="flex flex-col justify-between gap-16 lg:flex-row lg:gap-20">
+        <div className="lg:w-[50%]">
+          <span className="eyebrow reveal">{t.eyebrow}</span>
+          <h2 className="display-hero mt-6 text-ink">
+            <span className="block text-5xl sm:text-6xl lg:text-[3.4rem] xl:text-[4.1rem]">{t.a}</span>
+            <span className="block text-5xl text-accent sm:text-6xl lg:text-[3.4rem] xl:text-[4.1rem]">{t.b}</span>
+          </h2>
+          <p className="reveal mt-8 max-w-md text-lg font-medium text-muted md:text-xl">{t.lead}</p>
+          <div className="reveal mt-10 flex flex-col gap-3 text-base font-semibold text-ink">
+            <a href="mailto:stefanoabate.dev@gmail.com" className="inline-flex w-fit items-center gap-3 transition-colors hover:text-accent"><Mail size={18} /> stefanoabate.dev@gmail.com</a>
+            <a href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer" className="inline-flex w-fit items-center gap-3 transition-colors hover:text-accent"><FaWhatsapp size={18} /> +58 424 758 2675</a>
           </div>
         </div>
 
-        {/* RIGHT — form */}
-        <motion.form onSubmit={sendWhatsApp} className="reveal glass rounded-3xl p-6 md:p-8 lg:col-span-7" data-delay="120">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <input value={form.name} onChange={set("name")} placeholder={t.name} className={inputCls} />
-            <input value={form.email} onChange={set("email")} placeholder={t.email} type="email" className={inputCls} />
+        <form onSubmit={wa} className="reveal flex w-full flex-col gap-6 md:gap-8 lg:w-[50%] lg:pt-10" data-delay="120">
+          <div className="flex flex-col gap-6 sm:flex-row md:gap-8">
+            <input className={field} placeholder={t.name} value={f.name} onChange={set("name")} />
+            <input className={field} type="email" placeholder={t.email} value={f.email} onChange={set("email")} />
           </div>
-
-          <div className="mt-6">
-            <span className="label text-muted">{t.typeLabel}</span>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {t.types.map((ty) => (
-                <button type="button" key={ty} onClick={() => setForm((f) => ({ ...f, type: ty }))} className={chip(form.type === ty)}>
-                  {form.type === ty && <Check size={12} className="mr-1 inline" />}{ty}
-                </button>
-              ))}
-            </div>
+          <div className="relative">
+            <select className={`${field} cursor-pointer appearance-none pr-10 ${f.type ? "" : "text-muted"}`} value={f.type} onChange={set("type")}>
+              <option value="" disabled>{t.type}</option>
+              {t.types.map((o) => <option key={o} value={o} className="bg-bg text-ink">{o}</option>)}
+            </select>
+            <ChevronDown size={20} className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-muted" />
           </div>
-
-          <div className="mt-6">
-            <span className="label text-muted">{t.budgetLabel}</span>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {t.budgets.map((b) => (
-                <button type="button" key={b} onClick={() => setForm((f) => ({ ...f, budget: b }))}
-                  className={`rounded-xl border px-3 py-3 text-center label transition-colors ${form.budget === b ? "border-accent bg-accent/10 text-ink" : "border-line/20 text-muted hover:border-ink hover:text-ink"}`}>
-                  {b}
-                </button>
-              ))}
-            </div>
+          <textarea className={`${field} resize-none`} rows={3} placeholder={t.msg} value={f.msg} onChange={set("msg")} />
+          {err && <p className="text-sm font-semibold text-[#c2410c]">{t.fill}</p>}
+          <div className="mt-2 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <button type="submit" data-cursor="Go" className="btn-primary w-full justify-center !px-9 !py-4 !text-sm uppercase tracking-widest sm:w-fit">
+              <FaWhatsapp size={17} /> {t.send} <ArrowRight size={16} />
+            </button>
+            <button type="button" onClick={mail} className="text-sm font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline">{t.mail}</button>
           </div>
-
-          <textarea value={form.msg} onChange={set("msg")} rows="4" placeholder={t.message} className={`mt-6 ${inputCls} resize-none`} />
-
-          <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-            <motion.button type="submit" disabled={loading} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} data-cursor="WhatsApp"
-              className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-full bg-ink px-7 py-4 label text-bg transition disabled:opacity-50">
-              <FaWhatsapp className="text-base" />
-              {loading ? t.sending : t.send}
-            </motion.button>
-            <span className="text-center label text-muted sm:px-1">{t.or}</span>
-            <motion.button type="button" onClick={sendEmail} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} data-cursor="Mail"
-              className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-full border border-line/25 px-7 py-4 label text-ink transition hover:border-ink">
-              <Mail className="text-base" size={16} />
-              {t.sendMail}
-            </motion.button>
-          </div>
-        </motion.form>
+        </form>
       </div>
     </div>
   );

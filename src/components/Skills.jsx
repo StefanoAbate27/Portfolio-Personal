@@ -20,7 +20,7 @@ const content = {
   es: {
     eyebrow: "Sobre Nosotros",
     title: "El Estudio",
-    intro: "Estudio de desarrollo web fundado en 2025. Construimos plataformas a medida — no plantillas — que impulsan tu negocio.",
+    intro: "Estudio de desarrollo web fundado en 2024. Construimos plataformas a medida — no plantillas — que impulsan tu negocio.",
     philosophy: "El buen software se nota cuando no se nota.",
     valuesLabel: "Nuestros valores",
     values: [
@@ -40,7 +40,7 @@ const content = {
   en: {
     eyebrow: "About Us",
     title: "The Studio",
-    intro: "Web development studio founded in 2025. We build bespoke platforms — not templates — that drive your business.",
+    intro: "Web development studio founded in 2024. We build bespoke platforms — not templates — that drive your business.",
     philosophy: "Good software is noticed when it goes unnoticed.",
     valuesLabel: "Our values",
     values: [

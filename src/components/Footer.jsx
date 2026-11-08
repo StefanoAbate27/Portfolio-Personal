@@ -17,9 +17,9 @@ export default function Footer() {
   const linkCls = "text-left text-sm text-muted transition-colors hover:text-ink";
 
   return (
-    <footer className="panel theme-ink relative overflow-hidden px-0 pb-10 pt-[clamp(4rem,9vw,7rem)]">
+    <footer className="panel theme-ink relative overflow-hidden px-0 pb-24 pt-10 md:pb-20">
       <div className="container-x">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line/10 py-[clamp(2.5rem,5vw,4rem)] md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-[clamp(2.5rem,5vw,4rem)] md:grid-cols-4">
           {/* brand */}
           <div className="col-span-2 md:col-span-2">
             <div className="flex items-center gap-2.5 text-ink">
@@ -66,10 +66,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* big faint wordmark (Scottish style) */}
-      <div aria-hidden className="pointer-events-none mt-6 select-none text-center">
-        <span data-wordmark className="block text-[26vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-ink/[0.04]">SAAE</span>
-      </div>
     </footer>
   );
 }

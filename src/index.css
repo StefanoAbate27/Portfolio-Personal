@@ -143,17 +143,33 @@ html.lenis, html.lenis body { height: auto; }
   --bg: 18 24 41; --surface: 24 31 52; --elevated: 30 39 64;
   --ink: 244 239 228; --muted: 160 168 190; --accent: 212 168 90; --line: 244 239 228; --edge: 4 7 15;
 }
+/* Tema claro: cada bloque mantiene su tono pero en versión clara */
 .theme-navy {
+  --bg: 228 236 250; --surface: 214 225 246; --elevated: 255 255 255;
+  --ink: 16 26 58; --muted: 78 92 126; --accent: 45 74 152; --line: 16 26 58; --edge: 10 15 29;
+  color-scheme: light;
+}
+.theme-gold {
+  --bg: 247 234 206; --surface: 240 222 184; --elevated: 255 250 238;
+  --ink: 10 15 29; --muted: 98 80 50; --accent: 150 102 28; --line: 10 15 29; --edge: 10 15 29;
+  color-scheme: light;
+}
+.theme-ink {
+  --bg: 252 250 245; --surface: 243 239 230; --elevated: 255 255 255;
+  --ink: 14 20 38; --muted: 96 104 122; --accent: 166 116 36; --line: 14 20 38; --edge: 10 15 29;
+  color-scheme: light;
+}
+/* Tema oscuro: bloques de color profundos */
+.dark .theme-navy {
   --bg: 31 50 112; --surface: 38 60 130; --elevated: 45 72 150;
   --ink: 244 239 228; --muted: 190 202 232; --accent: 230 186 102; --line: 244 239 228; --edge: 10 15 29;
   color-scheme: dark;
 }
-.theme-gold {
+.dark .theme-gold {
   --bg: 214 170 92; --surface: 224 184 112; --elevated: 240 210 150;
   --ink: 10 15 29; --muted: 70 56 34; --accent: 31 50 112; --line: 10 15 29; --edge: 10 15 29;
-  color-scheme: light;
 }
-.theme-ink {
+.dark .theme-ink {
   --bg: 11 15 28; --surface: 17 22 38; --elevated: 22 29 50;
   --ink: 244 239 228; --muted: 150 160 182; --accent: 212 168 90; --line: 244 239 228; --edge: 0 0 0;
   color-scheme: dark;
@@ -260,8 +276,8 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Fondo de la espiral de proyectos (siempre oscuro, rejilla tenue) */
 .spiral-bg {
-  background-color: #0b0f1c;
-  background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-color: rgb(var(--bg));
+  background-image: linear-gradient(rgb(var(--ink) / 0.045) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--ink) / 0.045) 1px, transparent 1px);
   background-size: 64px 64px; background-position: center;
 }
 
@@ -281,3 +297,17 @@ html.lenis, html.lenis body { height: auto; }
 .dice-face.l { transform: rotateY(-90deg) translateZ(37px); }
 .dice-face.t { transform: rotateX(90deg) translateZ(37px); }
 .dice-face.d { transform: rotateX(-90deg) translateZ(37px); }
+@keyframes diceLabelIn { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.dice-label { opacity: 0; animation: diceLabelIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Cielo del hero: día en tema claro, noche en oscuro */
+.hero-sky {
+  --sky1: #7fb0ea; --sky2: #cfe3fb; --band1: #b9d6f7; --band2: #dcebfc;
+  --cloudA: #a9cbf2; --cloudB: #d3e6fb; --cloudC: #f1f7fe;
+  --card-bg: rgb(255 255 255 / 0.62); --card-text: #16203f; --ghost: #16203f;
+}
+.dark .hero-sky {
+  --sky1: #18285c; --sky2: #2d4a98; --band1: #33529f; --band2: #3a5bb0;
+  --cloudA: #22397a; --cloudB: #2a448f; --cloudC: #34539f;
+  --card-bg: rgb(32 58 130 / 0.55); --card-text: #f4efe4; --ghost: #f4efe4;
+}

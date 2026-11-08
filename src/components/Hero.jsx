@@ -29,7 +29,7 @@ const COPY = {
 /* Nube plana: unión de círculos sobre una base redondeada (todo del mismo color). */
 function Cloud({ x, y, s = 1, fill, flip = false }) {
   return (
-    <g transform={`translate(${x} ${y}) scale(${flip ? -s : s} ${s})`} fill={fill}>
+    <g transform={`translate(${x} ${y}) scale(${flip ? -s : s} ${s})`} style={{ fill }}>
       <rect x="-210" y="-10" width="470" height="80" rx="40" />
       <circle cx="-120" cy="0" r="70" />
       <circle cx="-20" cy="-55" r="100" />
@@ -72,32 +72,32 @@ export default function Hero() {
   const letters = t.hey.split("");
 
   return (
-    <div className="hero-sky relative h-[100svh] min-h-[560px] overflow-hidden text-[#f4efe4]">
+    <div className="hero-sky relative h-[100svh] min-h-[560px] overflow-hidden" style={{ color: "var(--card-text)" }}>
       {/* cielo */}
       <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#18285c" />
-            <stop offset="1" stopColor="#2d4a98" />
+            <stop offset="0" style={{ stopColor: "var(--sky1)" }} />
+            <stop offset="1" style={{ stopColor: "var(--sky2)" }} />
           </linearGradient>
         </defs>
         <rect width="1600" height="1000" fill="url(#sky)" />
         {/* bandas de luz, como el cielo de la ilustración */}
-        <path d="M-50 640 C 400 560, 900 600, 1650 520 L1650 600 C 1000 680, 450 650, -50 720 Z" fill="#33529f" opacity="0.55" />
-        <path d="M-50 760 C 500 690, 1000 740, 1650 660 L1650 700 C 1000 790, 520 750, -50 820 Z" fill="#3a5bb0" opacity="0.45" />
+        <path d="M-50 640 C 400 560, 900 600, 1650 520 L1650 600 C 1000 680, 450 650, -50 720 Z" style={{ fill: "var(--band1)" }} opacity="0.55" />
+        <path d="M-50 760 C 500 690, 1000 740, 1650 660 L1650 700 C 1000 790, 520 750, -50 820 Z" style={{ fill: "var(--band2)" }} opacity="0.45" />
       </svg>
       <div className="cloud-drift-slow absolute inset-0"><motion.svg aria-hidden style={back} className="absolute inset-[-4%] h-[108%] w-[108%]" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
-        <Cloud x={260} y={210} s={1.25} fill="#22397a" />
-        <Cloud x={1280} y={170} s={1.05} fill="#22397a" flip />
-        <Cloud x={820} y={120} s={0.7} fill="#213677" />
+        <Cloud x={260} y={210} s={1.25} fill="var(--cloudA)" />
+        <Cloud x={1280} y={170} s={1.05} fill="var(--cloudA)" flip />
+        <Cloud x={820} y={120} s={0.7} fill="var(--cloudA)" />
       </motion.svg></div>
       <div className="cloud-drift absolute inset-0"><motion.svg aria-hidden style={mid} className="absolute inset-[-6%] h-[112%] w-[112%]" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
-        <Cloud x={120} y={480} s={1.6} fill="#2a448f" />
-        <Cloud x={1450} y={430} s={1.35} fill="#2a448f" flip />
+        <Cloud x={120} y={480} s={1.6} fill="var(--cloudB)" />
+        <Cloud x={1450} y={430} s={1.35} fill="var(--cloudB)" flip />
       </motion.svg></div>
       <motion.svg aria-hidden style={front} className="absolute inset-[-8%] h-[116%] w-[116%]" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
-        <Cloud x={420} y={900} s={2.1} fill="#34539f" />
-        <Cloud x={1250} y={940} s={1.8} fill="#34539f" flip />
+        <Cloud x={420} y={900} s={2.1} fill="var(--cloudC)" />
+        <Cloud x={1250} y={940} s={1.8} fill="var(--cloudC)" flip />
       </motion.svg>
 
       {/* fundador ilustrado */}
@@ -114,8 +114,8 @@ export default function Hero() {
         <motion.div
           initial={{ scale: 0.7, opacity: 0 }} animate={show ? { scale: 1, opacity: 1 } : {}}
           transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
-          style={{ transformOrigin: "0% 50%" }}
-          className="w-full max-w-[34rem] rounded-xl border-2 border-[#0a0f1d] bg-[#203a82]/55 backdrop-blur-[2px] md:mt-24"
+          style={{ transformOrigin: "0% 50%", background: "var(--card-bg)" }}
+          className="w-full max-w-[34rem] rounded-xl border-2 border-[#0a0f1d] backdrop-blur-[3px] md:mt-24"
         >
           <h1 className="flex px-6 pb-7 pt-6 text-[clamp(3.6rem,10vw,8.2rem)] font-black leading-[0.82] md:pb-9 tracking-[-0.04em] text-[#0a0f1d] sm:px-8 md:pt-8" aria-label={t.hey}>
             {letters.map((ch, i) => (
@@ -129,14 +129,14 @@ export default function Hero() {
           <div className="border-t-2 border-dashed border-[#0a0f1d]" />
           <motion.div initial={{ opacity: 0, y: 12 }} animate={show ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, ease: EASE, delay: 0.95 }}
             className="px-6 pb-6 pt-5 sm:px-8 md:pb-8">
-            <p className="text-[0.95rem] leading-relaxed text-[#f4efe4]/90 md:text-[1.05rem] [&_b]:font-bold [&_b]:text-[#f4efe4]">{t.body}</p>
+            <p className="text-[0.95rem] leading-relaxed md:text-[1.05rem] [&_b]:font-bold">{t.body}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <button onClick={() => scrollToId("contacto", 0)} data-cursor="Go"
                 className="inline-flex items-center gap-2 rounded-full border-2 border-[#0a0f1d] bg-[#f4efe4] px-5 py-2.5 text-sm font-bold text-[#0a0f1d] transition-colors hover:bg-[#d4a85a]">
                 {t.cta1} <ArrowUpRight size={16} />
               </button>
               <button onClick={() => scrollToId("proyectos", 0)} data-cursor="View"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-[#f4efe4]/80 px-5 py-2.5 text-sm font-bold text-[#f4efe4] transition-colors hover:bg-[#f4efe4] hover:text-[#0a0f1d]">
+                className="inline-flex items-center gap-2 rounded-full border-2 border-[color:var(--ghost)] px-5 py-2.5 text-sm font-bold transition-colors hover:bg-[#0a0f1d] hover:text-[#f4efe4]">
                 {t.cta2} <ArrowDownRight size={16} />
               </button>
             </div>
