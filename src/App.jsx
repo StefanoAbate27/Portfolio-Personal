@@ -40,12 +40,12 @@ function Site() {
           <Hero />
         </section>
 
-        <section id="fundador" className="panel theme-cream">
-          <Founder />
+        <section id="nosotros" className="panel theme-cream">
+          <Skills />
         </section>
 
-        <section id="nosotros" className="panel theme-navy">
-          <Skills />
+        <section id="fundador" className="panel theme-navy">
+          <Founder />
         </section>
 
         <section id="proceso" className="panel theme-gold">

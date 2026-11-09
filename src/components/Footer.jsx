@@ -11,8 +11,8 @@ export default function Footer() {
   const es = language === "es";
 
   const nav = es
-    ? [["fundador", "Fundador"], ["nosotros", "Nosotros"], ["proceso", "Proceso"], ["proyectos", "Proyectos"], ["contacto", "Contacto"]]
-    : [["fundador", "Founder"], ["nosotros", "About"], ["proceso", "Process"], ["proyectos", "Work"], ["contacto", "Contact"]];
+    ? [["nosotros", "Nosotros"], ["fundador", "Fundador"], ["proceso", "Proceso"], ["proyectos", "Proyectos"], ["contacto", "Contacto"]]
+    : [["nosotros", "About"], ["fundador", "Founder"], ["proceso", "Process"], ["proyectos", "Work"], ["contacto", "Contact"]];
 
   const linkCls = "inline-block py-2 text-left text-sm text-muted transition-colors hover:text-ink md:py-0";
 

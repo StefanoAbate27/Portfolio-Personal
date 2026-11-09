@@ -24,12 +24,12 @@ export default function Header() {
     es: {
       menu: "Menú", close: "Cerrar", talk: "Hablemos", connect: "Conecta con nosotros",
       light: "Tema claro", dark: "Tema oscuro",
-      links: [["inicio", "Inicio"], ["fundador", "Fundador"], ["nosotros", "Nosotros"], ["proceso", "Proceso"], ["proyectos", "Proyectos"], ["por-que", "Por qué SAAE"], ["contacto", "Contacto"]],
+      links: [["inicio", "Inicio"], ["nosotros", "Nosotros"], ["fundador", "Fundador"], ["proceso", "Proceso"], ["proyectos", "Proyectos"], ["por-que", "Por qué SAAE"], ["contacto", "Contacto"]],
     },
     en: {
       menu: "Menu", close: "Close", talk: "Let's talk", connect: "Connect with us",
       light: "Light theme", dark: "Dark theme",
-      links: [["inicio", "Home"], ["fundador", "Founder"], ["nosotros", "About"], ["proceso", "Process"], ["proyectos", "Work"], ["por-que", "Why SAAE"], ["contacto", "Contact"]],
+      links: [["inicio", "Home"], ["nosotros", "About"], ["fundador", "Founder"], ["proceso", "Process"], ["proyectos", "Work"], ["por-que", "Why SAAE"], ["contacto", "Contact"]],
     },
   }[language];
 

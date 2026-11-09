@@ -16,12 +16,12 @@ const EASE = [0.16, 1, 0.3, 1];
 const COPY = {
   es: {
     hey: "¡HOLA!",
-    body: <>Has llegado a <b>SAAE</b>, el estudio de <b>Stefano Abate</b>, CEO &amp; fundador. Diseñamos y desarrollamos software a medida que hace crecer negocios. Explora nuestro trabajo.</>,
+    body: <>Somos <b>SAAE</b>, un estudio de desarrollo web. Diseñamos y construimos plataformas a medida que hacen crecer negocios. Explora nuestro trabajo.</>,
     cta1: "Empezar un proyecto", cta2: "Ver trabajo",
   },
   en: {
     hey: "HEY!",
-    body: <>You've arrived at <b>SAAE</b>, the studio of <b>Stefano Abate</b>, CEO &amp; founder. We design and build bespoke software that grows businesses. Feel free to explore our work.</>,
+    body: <>We are <b>SAAE</b>, a web development studio. We design and build bespoke platforms that grow businesses. Explore our work.</>,
     cta1: "Start a project", cta2: "See work",
   },
 };
