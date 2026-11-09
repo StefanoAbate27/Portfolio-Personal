@@ -270,7 +270,7 @@ export default function ProjectsSpiral() {
       {[["spiral", es ? "espiral" : "spiral"], ["list", es ? "lista" : "list"]].map(([k, label], i) => (
         <React.Fragment key={k}>
           {i > 0 && <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />}
-          <button onClick={() => toggle(k)} className={`transition-opacity ${mode === k ? "opacity-100" : "opacity-45 hover:opacity-80"}`}>{label}</button>
+          <button onClick={() => toggle(k)} className={`px-1 py-3 transition-opacity ${mode === k ? "opacity-100" : "opacity-45 hover:opacity-80"}`}>{label}</button>
         </React.Fragment>
       ))}
     </div>

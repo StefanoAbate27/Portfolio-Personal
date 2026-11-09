@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
@@ -37,6 +37,13 @@ export default function Process() {
   const { language } = useLanguage();
   const t = content[language] || content.es;
   const [active, setActive] = useState(null);
+  // en táctil, tocar fuera de la fase abierta la cierra
+  useEffect(() => {
+    if (active === null) return;
+    const close = (e) => { if (e.pointerType !== "mouse" && !e.target.closest?.("[data-step]")) setActive(null); };
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, [active]);
   const steps = t.steps;
   const pct = active === null ? 0 : (active / (steps.length - 1)) * 100;
 
@@ -67,9 +74,10 @@ export default function Process() {
             return (
               <div
                 key={s.num}
+                data-step
                 className="relative"
-                onMouseEnter={() => setActive(i)}
-                onMouseLeave={() => setActive(null)}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}
+                onPointerLeave={(e) => e.pointerType === "mouse" && setActive(null)}
               >
                 <motion.button
                   type="button"
@@ -104,7 +112,7 @@ export default function Process() {
                       style={{ transformOrigin: "top center" }}
                       className="absolute left-0 top-0 z-40 w-[min(92vw,330px)] md:left-1/2 md:w-[300px] md:-translate-x-1/2"
                     >
-                      <div className="relative glass rounded-[1.4rem] bg-elevated/95 px-5 pb-5 pt-[70px] text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                      <div className="relative glass rounded-[1.4rem] !bg-elevated px-5 pb-5 pt-[70px] text-left shadow-[0_30px_70px_-24px_rgba(0,0,0,0.6)]">
                         <span className="label text-accent">{s.week}</span>
                         <h3 className="mt-1 text-xl font-bold tracking-tight text-ink">{s.title}</h3>
                         <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{s.desc}</p>

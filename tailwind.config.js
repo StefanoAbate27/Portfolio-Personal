@@ -7,6 +7,7 @@ export default {
   ],
   theme: {
     extend: {
+      screens: { land: { raw: "(orientation: landscape) and (min-width: 640px)" }, short: { raw: "(orientation: landscape) and (max-height: 560px)" } },
       colors: {
         bg: 'rgb(var(--bg) / <alpha-value>)',
         surface: 'rgb(var(--surface) / <alpha-value>)',

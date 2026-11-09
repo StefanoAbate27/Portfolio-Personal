@@ -119,6 +119,7 @@ export default function FounderRender({ className = "" }) {
     };
     const onDown = () => { s.nod = 1; s.blink = 1; };
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onMove, { passive: true });   // en táctil mira hacia donde tocas
     el.addEventListener("pointerdown", onDown);
     const io = new IntersectionObserver(([en]) => { s.vis = en.isIntersecting; });
     io.observe(el);
@@ -133,9 +134,9 @@ export default function FounderRender({ className = "" }) {
       s.hx += (tx - s.hx) * 0.07; s.hy += (ty - s.hy) * 0.07;
       s.nod = Math.max(0, s.nod - 0.02);
       const nod = Math.sin(s.nod * Math.PI);
-      uni.uYaw.value = s.hx * 0.3 + Math.sin(t * 0.6) * 0.012;
-      uni.uPitch.value = s.hy * 0.14 + nod * 0.12;
-      uni.uBody.value = s.hx * 0.05;
+      uni.uYaw.value = s.hx * 0.12 + Math.sin(t * 0.6) * 0.008;      // giro contenido: el render se mantiene intacto
+      uni.uPitch.value = s.hy * 0.06 + nod * 0.08;
+      uni.uBody.value = s.hx * 0.025;
       uni.uBreath.value = Math.sin(t * 1.6);
       uni.uGaze.value.set(Math.max(-1, Math.min(1, s.hx * 1.3)), Math.max(-1, Math.min(1, -s.hy * 1.3)));
       if (now > s.blinkAt) { s.blink = 1; s.blinkAt = now + 2600 + Math.random() * 3400; }
@@ -148,7 +149,7 @@ export default function FounderRender({ className = "" }) {
 
     return () => {
       cancelAnimationFrame(s.raf); ro.disconnect(); io.disconnect();
-      window.removeEventListener("pointermove", onMove); el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerdown", onMove); el.removeEventListener("pointerdown", onDown);
       mesh.geometry.dispose(); mat.dispose(); Object.values(uni).forEach((u) => u.value?.isTexture && u.value.dispose());
       renderer.dispose(); renderer.domElement.remove();
     };

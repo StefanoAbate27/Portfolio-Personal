@@ -14,7 +14,7 @@ export default function Footer() {
     ? [["fundador", "Fundador"], ["nosotros", "Nosotros"], ["proceso", "Proceso"], ["proyectos", "Proyectos"], ["contacto", "Contacto"]]
     : [["fundador", "Founder"], ["nosotros", "About"], ["proceso", "Process"], ["proyectos", "Work"], ["contacto", "Contact"]];
 
-  const linkCls = "text-left text-sm text-muted transition-colors hover:text-ink";
+  const linkCls = "inline-block py-2 text-left text-sm text-muted transition-colors hover:text-ink md:py-0";
 
   return (
     <footer className="panel theme-ink relative overflow-hidden px-0 pb-24 pt-10 md:pb-20">
@@ -36,7 +36,7 @@ export default function Footer() {
           {/* navigation */}
           <div>
             <p className="eyebrow">{es ? "Navegación" : "Navigation"}</p>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-4 space-y-1 md:space-y-2.5">
               {nav.map(([id, label]) => (
                 <li key={id}>
                   <button onClick={() => scrollToId(id, -20)} data-cursor="Ir" className={linkCls}>{label}</button>
@@ -48,7 +48,7 @@ export default function Footer() {
           {/* contact */}
           <div>
             <p className="eyebrow">{es ? "Contacto" : "Contact"}</p>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-4 space-y-1 md:space-y-2.5">
               <li><a href="mailto:stefanoabate.dev@gmail.com" className={`${linkCls} break-all`}>stefanoabate.dev@gmail.com</a></li>
               <li><a href="https://wa.me/584247582675" target="_blank" rel="noopener noreferrer" className={linkCls}>+58 424 758 2675</a></li>
               <li><span className="text-sm text-muted">San Cristóbal, Venezuela</span></li>
@@ -59,7 +59,7 @@ export default function Footer() {
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line/10 pt-6 text-xs text-muted">
           <span>© {year} SAAE — {es ? "Todos los derechos reservados" : "All rights reserved"}</span>
           <button onClick={() => scrollToId("inicio", -20)} data-cursor="Top"
-            className="group inline-flex items-center gap-2 font-semibold text-ink transition-colors hover:text-accent">
+            className="group inline-flex items-center gap-2 py-3 font-semibold text-ink transition-colors hover:text-accent md:py-0">
             {es ? "Volver arriba" : "Back to top"}
             <ArrowUp size={14} className="transition-transform group-hover:-translate-y-0.5" />
           </button>

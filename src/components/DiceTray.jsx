@@ -33,13 +33,15 @@ export default function DiceTray({ items, labels }) {
     // cuadrícula centrada (horizontal y vertical) con hueco para el nombre bajo cada dado
     const CH = SIZE + 54;
     const gridTarget = (i) => {
-      const CW = Math.min(SIZE + 40, (W() - 12) / 3);                    // al menos 3 columnas en móvil
-      const maxCols = Math.max(3, Math.min(items.length, Math.floor((W() - 12) / CW)));
+      // columnas: las que quepan (mín. 3), y más si la mesa es baja y no entran las filas
+      const rowsFit = Math.max(1, Math.floor((H() - 8) / CH));
+      const maxCols = Math.max(3, Math.ceil(items.length / rowsFit), Math.min(items.length, Math.floor((W() - 12) / (SIZE + 40))));
       const rows = Math.ceil(items.length / maxCols), cols = Math.ceil(items.length / rows);
+      const CW = Math.min(SIZE + 40, (W() - 12) / cols);
       const c = i % cols, r = Math.floor(i / cols);
       const inRow = Math.min(cols, items.length - r * cols);              // última fila también centrada
       const x0 = (W() - inRow * CW) / 2, y0 = (H() - rows * CH) / 2;
-      return { x: x0 + CW * (c + 0.5), y: y0 + CH * r + SIZE / 2 + 6 };
+      return { x: x0 + CW * (c + 0.5), y: y0 + CH * r + SIZE / 2 + 6, cw: CW };
     };
     s.order = () => {
       s.ordered = true;
@@ -166,14 +168,14 @@ export default function DiceTray({ items, labels }) {
         <span className="text-[11px] italic text-muted">{labels.hint}</span>
       </div>
       <div ref={tray} onDoubleClick={() => st.current?.order()}
-        className="relative h-[540px] select-none overflow-hidden rounded-2xl sm:h-[440px] md:h-[460px]"
+        className="relative h-[540px] select-none overflow-hidden rounded-2xl sm:h-[440px] md:h-[460px] short:!h-[80svh]"
         style={{ border: "2px solid rgb(var(--edge))", boxShadow: "6px 6px 0 rgb(var(--edge))", background: "radial-gradient(ellipse at 50% 120%, rgb(var(--elevated)) 0%, rgb(var(--surface)) 70%)" }}>
         {/* etiqueta del dado señalado */}
         <div className="pointer-events-none absolute left-1/2 top-4 z-40 -translate-x-1/2 rounded-full bg-ink px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-bg transition-opacity duration-200"
           style={{ opacity: hover >= 0 ? 1 : 0 }}>{hover >= 0 ? items[hover].name : ""}</div>
         {names && names.map((p, i) => (
           <span key={items[i].name} className="dice-label pointer-events-none absolute z-[5] -translate-x-1/2 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.12em] text-ink/80"
-            style={{ left: p.x, top: p.y + SIZE / 2 + 12, animationDelay: `${0.25 + i * 0.03}s` }}>{items[i].name}</span>
+            style={{ left: p.x, top: p.y + SIZE / 2 + 12, animationDelay: `${0.25 + i * 0.03}s`, ...(p.cw < 92 ? { fontSize: Math.min(8.5, p.cw / 11), letterSpacing: 0 } : null) }}>{items[i].name}</span>
         ))}
         {items.map(({ name, icon: Icon }, i) => (
           <div key={name} ref={(el) => { els.current[i] = el; }} data-i={i} data-cursor={name}

@@ -72,7 +72,7 @@ export default function Hero() {
   const letters = t.hey.split("");
 
   return (
-    <div className="hero-sky relative h-[100svh] min-h-[560px] overflow-hidden" style={{ color: "var(--card-text)" }}>
+    <div className="hero-sky relative flex h-[100svh] min-h-[540px] flex-col overflow-hidden land:block short:min-h-0" style={{ color: "var(--card-text)" }}>
       {/* cielo */}
       <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
         <defs>
@@ -101,23 +101,25 @@ export default function Hero() {
       </motion.svg>
 
       {/* fundador ilustrado */}
-      <div className="absolute -bottom-[1%] left-1/2 h-[46%] -translate-x-1/2 sm:h-[70%] md:left-auto md:-right-[2vw] md:h-[104%] md:translate-x-0 lg:right-0"
+      <div className="relative order-2 min-h-[170px] flex-1 land:absolute land:inset-y-0 land:right-0 land:w-[54vw]">
+       <div className="absolute bottom-0 left-1/2 h-full max-w-full -translate-x-1/2 land:left-auto land:right-0 land:h-[104%] land:translate-x-0"
         style={{ aspectRatio: "1 / 1" }}>
         <motion.div initial={{ y: "22%", opacity: 0 }} animate={show ? { y: "0%", opacity: 1 } : {}}
           transition={{ duration: 1.2, ease: EASE, delay: 0.15 }} className="h-full w-full">
           <Suspense fallback={null}><FounderRender className="h-full w-full" /></Suspense>
         </motion.div>
+       </div>
       </div>
 
       {/* tarjeta ¡HOLA! */}
-      <div className="relative z-10 flex h-full items-start px-5 pt-24 sm:px-8 md:items-center md:px-[5vw] md:pt-0">
+      <div className="relative z-10 order-1 flex shrink-0 items-start px-5 pt-20 sm:px-8 sm:pt-24 land:h-full land:items-center land:px-[5vw] land:pt-16 short:!pt-12">
         <motion.div
           initial={{ scale: 0.7, opacity: 0 }} animate={show ? { scale: 1, opacity: 1 } : {}}
           transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
           style={{ transformOrigin: "0% 50%", background: "var(--card-bg)" }}
-          className="w-full max-w-[34rem] rounded-xl border-2 border-[#0a0f1d] backdrop-blur-[3px] md:mt-24"
+          className="w-full max-w-[34rem] rounded-xl border-2 border-[#0a0f1d] backdrop-blur-[3px] land:max-w-[min(34rem,42vw)] short:!max-w-[50vw]"
         >
-          <h1 className="flex px-6 pb-7 pt-6 text-[clamp(3.6rem,10vw,8.2rem)] font-black leading-[0.82] md:pb-9 tracking-[-0.04em] text-[#0a0f1d] sm:px-8 md:pt-8" aria-label={t.hey}>
+          <h1 className="flex px-5 pb-5 pt-5 sm:pb-7 sm:pt-6 short:!pb-3 short:!pt-3 text-[clamp(2.2rem,min(10vw,11svh),7.4rem)] font-black leading-[0.82] md:pb-9 tracking-[-0.04em] text-[#0a0f1d] sm:px-8 md:pt-8" aria-label={t.hey}>
             {letters.map((ch, i) => (
               <motion.span key={i} aria-hidden className="inline-block"
                 initial={{ y: "-120%", rotate: -12, opacity: 0 }} animate={show ? { y: "0%", rotate: 0, opacity: 1 } : {}}
@@ -128,9 +130,9 @@ export default function Hero() {
           </h1>
           <div className="border-t-2 border-dashed border-[#0a0f1d]" />
           <motion.div initial={{ opacity: 0, y: 12 }} animate={show ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, ease: EASE, delay: 0.95 }}
-            className="px-6 pb-6 pt-5 sm:px-8 md:pb-8">
-            <p className="text-[0.95rem] leading-relaxed md:text-[1.05rem] [&_b]:font-bold">{t.body}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            className="px-5 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-5 md:pb-8 short:!pb-3 short:!pt-3">
+            <p className="text-[0.9rem] leading-relaxed sm:text-[0.95rem] md:text-[1.05rem] short:!text-[0.8rem] short:!leading-snug [&_b]:font-bold">{t.body}</p>
+            <div className="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-3 short:!mt-2 short:flex-nowrap short:[&>button]:whitespace-nowrap short:[&>button]:!px-3 short:[&>button]:!py-1.5 short:[&>button]:!text-[11px]">
               <button onClick={() => scrollToId("contacto", 0)} data-cursor="Go"
                 className="inline-flex items-center gap-2 rounded-full border-2 border-[#0a0f1d] bg-[#f4efe4] px-5 py-2.5 text-sm font-bold text-[#0a0f1d] transition-colors hover:bg-[#d4a85a]">
                 {t.cta1} <ArrowUpRight size={16} />

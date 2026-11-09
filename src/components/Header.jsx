@@ -101,7 +101,7 @@ export default function Header() {
       {/* menú a pantalla completa */}
       <div ref={overlayRef} className="pointer-events-none fixed inset-0 z-[90] flex flex-col items-center justify-center bg-bg">
         <nav className="mx-auto w-full max-w-7xl px-6 md:px-10">
-          <ul className="flex flex-col gap-1 text-[2.1rem] font-bold uppercase leading-[1.05] tracking-tighter text-ink sm:text-5xl md:gap-2 md:text-6xl lg:text-7xl">
+          <ul className="flex flex-col gap-1 text-[2.1rem] font-bold uppercase leading-[1.05] tracking-tighter text-ink sm:text-5xl md:gap-2 md:text-6xl lg:text-7xl short:!gap-0 short:!text-[min(7.5svh,2.4rem)]">
             {t.links.map(([id, label], i) => (
               <li key={id} className="overflow-hidden">
                 <button onClick={() => go(id)} data-cursor="Ir"

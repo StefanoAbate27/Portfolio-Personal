@@ -18,6 +18,8 @@ export const SOCIALS = [
 export default function SocialFlip({ items = SOCIALS, className = "" }) {
   const [hovered, setHovered] = useState(false);
   const [tip, setTip] = useState(null);
+  // sin ratón no hay "pasar por encima": se muestran directamente los iconos
+  const [touch] = useState(() => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches);
 
   return (
     <div
@@ -57,7 +59,7 @@ export default function SocialFlip({ items = SOCIALS, className = "" }) {
           <motion.span
             className="relative block h-full w-full"
             initial={false}
-            animate={{ rotateY: hovered ? 180 : 0 }}
+            animate={{ rotateY: hovered || touch ? 180 : 0 }}
             transition={{ type: "spring", stiffness: 120, damping: 15, delay: i * 0.07 }}
             style={{ transformStyle: "preserve-3d" }}
           >

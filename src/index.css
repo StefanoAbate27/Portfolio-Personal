@@ -311,3 +311,13 @@ html.lenis, html.lenis body { height: auto; }
   --cloudA: #22397a; --cloudB: #2a448f; --cloudC: #34539f;
   --card-bg: rgb(32 58 130 / 0.55); --card-text: #f4efe4; --ghost: #f4efe4;
 }
+
+/* Barra de presupuesto (contacto) */
+.budget-range { -webkit-appearance: none; appearance: none; height: 8px; border-radius: 9999px; cursor: pointer; touch-action: pan-y;
+  background: linear-gradient(to right, rgb(var(--accent)) 0 var(--p), rgb(var(--ink) / 0.15) var(--p) 100%);
+  border: 2px solid rgb(var(--edge)); }
+.budget-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; border-radius: 9999px;
+  background: rgb(var(--elevated)); border: 3px solid rgb(var(--edge)); box-shadow: 3px 3px 0 rgb(var(--edge)); transition: transform .15s; }
+.budget-range::-webkit-slider-thumb:hover { transform: scale(1.12); }
+.budget-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 9999px; background: rgb(var(--elevated)); border: 3px solid rgb(var(--edge)); box-shadow: 3px 3px 0 rgb(var(--edge)); }
+.budget-range:focus-visible { outline: 3px solid rgb(var(--accent) / 0.5); outline-offset: 4px; }
